@@ -40,7 +40,7 @@ Use separate projects for the two clients. The installer creates a project, an a
 1. Open the generated project folder in the selected agent.
 2. Confirm project trust and the requested local MCP permissions.
 3. Start a new task to load the project configuration and Skills.
-4. Ask: “Check that Pallas tools and both Pallas Skills are available, then help me analyze my advertising data.”
+4. Ask: “Check that Pallas tools and both Pallas Skills are available, then help me prepare my media account connection.”
 
 The agent should verify actual tool availability. An installation diagnostic alone does not establish that the client has loaded the MCP server. No separate MCP terminal needs to remain open.
 
@@ -52,13 +52,27 @@ npx pallas-ads doctor --directory "$HOME/pallas-codex"
 
 Substitute your actual project path. For help, contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
 
-## Use Pallas
+## Authorize a media account
 
-Provide the path to your advertising CSV or XLSX export and ask:
+Follow [AUTHORIZATION.md](AUTHORIZATION.md) to check the connection setup, complete browser sign-in and consent, and select an accessible advertising account. Installing or activating Pallas does not grant media access. If you only need to analyze an exported file, you can skip authorization.
 
-> Analyze this file with Pallas. Preview its account, date range, fields, currency, timezone, and missing values. After I confirm the interpretation, import it and create a report with performance, changes, and recommended next steps.
+## Analyze your data
 
-See [FILE_IMPORT.md](FILE_IMPORT.md) for export preparation. To connect a live account, follow [AUTHORIZATION.md](AUTHORIZATION.md); installing or activating Pallas does not grant media access.
+For a connected account, ask:
+
+> Use Pallas to read the last seven complete days of performance data from the account I authorized. Confirm the account, dates, currency, timezone, and data coverage, then analyze performance and changes and generate an HTML report with recommended next steps.
+
+For an export, attach your CSV or XLSX if the agent supports local file attachments, or provide its local path:
+
+> Analyze this advertising export with Pallas. Preview its account, date range, fields, currency, timezone, and missing values. After I confirm the interpretation, import it and create a report with performance, changes, and recommended next steps.
+
+See [FILE_IMPORT.md](FILE_IMPORT.md) for export preparation.
+
+## Set up recurring checks
+
+Once an analysis succeeds, ask your agent to schedule the same workflow if it supports scheduled tasks. Confirm the account, reporting period, timezone, frequency, and notification preferences. Each live run should retrieve fresh data and report authorization or retrieval failures explicitly.
+
+The agent owns the schedule. Its scheduled execution environment must be able to access the Pallas project, runtime, and connection; keep the required machine or environment available. File-based runs need updated exports to reflect new data. See the [recurring-check example](README.md#5-set-up-recurring-checks).
 
 ## Maintain an installation
 

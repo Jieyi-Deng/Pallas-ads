@@ -26,7 +26,7 @@ Installation runs only when `install` is invoked; the package has no npm install
 
 Keep the project and the adjacent `-runtime` and optional `-runtime-tools` directories in place. Imported data and reports are stored in the project's `.pallas` directory. Each installation uses a new or empty dedicated project; it does not merge arbitrary existing projects.
 
-Open the generated folder in your agent, confirm trust, and start a new task. Provide your own advertising export as described in [FILE_IMPORT.md](FILE_IMPORT.md). For live accounts, follow [AUTHORIZATION.md](AUTHORIZATION.md).
+Open the generated folder in your agent, confirm trust, and start a new task. Follow [AUTHORIZATION.md](AUTHORIZATION.md) to connect a media account, then analyze its data or provide your own export as described in [FILE_IMPORT.md](FILE_IMPORT.md). File-only analysis can skip authorization. After a successful analysis, use the [recurring-check workflow](README.md#5-set-up-recurring-checks) if your agent supports scheduling.
 
 ## Diagnose
 

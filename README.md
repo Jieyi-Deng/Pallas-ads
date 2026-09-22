@@ -8,7 +8,7 @@
 
 **English** | [简体中文](README.zh-CN.md) · [Website](https://pallas-ads.com/) · [npm](https://www.npmjs.com/package/pallas-ads)
 
-Pallas brings advertising data analysis to Codex and Claude Code. Work with your Meta, Google Ads, and TikTok Ads exports, or connect an available media account, and ask questions in natural language. Pallas checks the data, calculates performance metrics, and produces reports with evidence you can trace back to the source.
+Pallas brings advertising data analysis to Codex and Claude Code. Connect an available Meta, Google Ads, or TikTok Ads account, or provide an advertising export, and ask questions in natural language. Pallas checks the data, calculates performance metrics, and produces reports with evidence you can trace back to the source.
 
 Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and its approach to advertising analysis.
 
@@ -39,25 +39,45 @@ See the [installation guide](INSTALL.md) for client-specific commands.
 
 Open the folder printed by the installer in Codex or Claude Code. Confirm project trust and any requested MCP permissions, then start a new task so Pallas tools and Skills can load.
 
-> Check that Pallas and its workflow and analysis Skills are available in this project. Tell me whether I can start analyzing my advertising data.
+> Check that Pallas and its workflow and analysis Skills are available in this project. Then help me prepare the media account connection I want to use.
 
 Activation means loading Pallas in your agent. Media account authorization is a separate step below.
 
-## 3. Analyze your data
+## 3. Authorize a media account
 
-Give your agent the local path to a CSV or XLSX export from your advertising platform:
+Ask your agent to connect the platform you want to analyze:
 
-> Use Pallas to analyze my advertising export at /path/to/my-ad-export.csv. First show me the account, date range, field mappings, currency, timezone, and missing data. After I confirm, import it and generate a report covering performance, changes, and recommended next steps. Link the HTML report when it is ready.
+> Help me connect my Meta / Google Ads / TikTok Ads account to Pallas. Check the connection setup for this agent, guide me through browser authorization, and list the accounts I can access. Let me choose the account before reading its performance data.
+
+For a configured connection, complete the platform's sign-in and consent screens, then return to your agent and select the account. If connection setup or account access is needed, follow the [media authorization guide](AUTHORIZATION.md) or contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
+
+If you only want to analyze an uploaded export, skip account authorization and use the file option in the next step.
+
+## 4. Analyze your data
+
+Choose a connected advertising account or upload an advertising export.
+
+### Read a connected account
+
+> Use Pallas to read performance data from my authorized advertising account for the last seven complete days. Confirm the account, reporting dates, currency, timezone, and available data. Analyze performance and changes, explain the evidence behind your findings, and generate an HTML report with recommended next steps.
+
+Your agent retrieves data through the configured media connection and explains its coverage before drawing conclusions. You can continue asking questions about the account and report in the same conversation.
+
+### Upload an advertising export
+
+Attach your CSV or XLSX export if your agent supports local file attachments, or provide its local file path:
+
+> Use Pallas to analyze my uploaded advertising export. First show me the account, date range, field mappings, currency, timezone, and missing data. After I confirm, import it and generate a report covering performance, changes, and recommended next steps. Link the HTML report when it is ready.
 
 Pallas previews the interpretation before saving the import. You confirm what the data represents, and your agent returns the report and explains the findings. See [preparing an advertising export](FILE_IMPORT.md).
 
-## 4. Authorize a media account
+## 5. Set up recurring checks
 
-For live account data, ask your agent:
+After a successful analysis, use your agent's scheduling feature, where available, to repeat the workflow in the same Pallas project:
 
-> Help me connect my Meta / Google Ads / TikTok Ads account to Pallas. Check the connection setup for this agent, guide me through browser authorization, and list the accounts I can access. Let me choose the account and reporting period before reading its performance data.
+> Help me set up a daily check at 9:00 a.m. in my timezone for the advertising account we just analyzed. Confirm the timezone, account, reporting period, and notification preferences with me. On each run, use Pallas to read fresh data, summarize performance changes, and save a report. Report authorization or data retrieval failures explicitly.
 
-For a configured connection, complete the platform's sign-in and consent screens, return to your agent, and select the account to analyze. If connection setup or account access is needed, follow the [media authorization guide](AUTHORIZATION.md) or contact [support@pallas-ads.com](mailto:support@pallas-ads.com). File analysis can be used independently of account authorization.
+The agent manages the schedule; Pallas performs the analysis. Confirm that scheduled runs can access the project, runtime, and authorized connection, and keep the required machine or execution environment available. For file-based checks, supply an updated export before each run: rereading a saved file does not fetch new account data.
 
 ## Keep Pallas up to date
 
