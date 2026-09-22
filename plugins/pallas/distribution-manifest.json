@@ -1,7 +1,7 @@
 {
   "files": {
-    ".claude-plugin/plugin.json": "ecbdeb2066aede20773d70bd8644d21ad5b7d593cce8849766664644ea6b42d7",
-    ".codex-plugin/plugin.json": "2ba91ff0b06981540245fd3c4ad6bf90c5815d1525669b4526a465297b2b9f4a",
+    ".claude-plugin/plugin.json": "94b75e3ddb317d05e7b17f5651cc7425ee41b7a69e4ae2e29575037d366f78d2",
+    ".codex-plugin/plugin.json": "df1d338a13a2f80bfdd65790f2a2790848648fca731ae1231b7970e502b93d58",
     ".mcp.json": "372a7f8c1e988f58480012e741582e13bb1c9c2b2611432f365ae132f519cfe5",
     "LICENSE": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b",
     "NOTICE": "e8fe35ea6ebaac031f3051f4aac22efec72e09bd9c003ad76afd15e428f1da15",
@@ -16,7 +16,7 @@
     "scripts/pallas.mjs": "dde5b98c030a95810945a017a8bf993061e6b728c9cbb5633bf68a1198de9b3f",
     "scripts/project.py": "2042dc36caf4c27f2c894a0fd07c272a19c6ee17a693409f951af91236eb5a76",
     "scripts/serve.py": "19dbc6599defa301526c950840e29a06cf4bfb1fc8a9dfb2585bd4960e8cc552",
-    "skills/pallas-analysis/SKILL.md": "b0c1e4d3f4ba08c6c0f4c981f99b77e32c7ecee832a489321408bdc1d28539fe",
+    "skills/pallas-analysis/SKILL.md": "19a0967d00bfd99960b0b44888cddaf3ca41ca29ca65d31c139ee9475a344014",
     "skills/pallas-analysis/assets/report.html": "64c5ef444aaefeda49fb5f548c82c3d5d16b1055fb2cd22223368e9475e81b59",
     "skills/pallas-analysis/references/report-template.md": "85e514440fce4934e227e63986533ea9ce9e691b7f62504e63795cdf4e03825d",
     "skills/pallas-setup/SKILL.md": "2fd65a91ae5c5d25b6cddd05b2378c0cf6b59c5a499cae7f20a0319cd3f1689f",

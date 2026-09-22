@@ -78,6 +78,17 @@ is not proof of auction competition, and CTR decline alone does not prove creati
 Campaign mix contributions, daily MAD screening and period halves are descriptive, not causal
 or statistically significant. Do not extrapolate absent conversion/retention evidence.
 
+In `diagnostics.change.campaign_contributions`, `within_cpc` is a click-share-weighted
+contribution to the **account's CPC change**, not that campaign's own CPC change.
+`mix_cpc` is the contribution from changing click shares, not a budget-allocation measurement.
+To state a campaign's own before/after CPC, sum its spend and clicks within each comparison
+window from retained campaign-day evidence, then divide; full-period campaign totals cannot
+supply those window values. Keep account contributions separate from campaign metric deltas.
+A zero mix contribution does not establish that budgets were unchanged or irrelevant.
+An empty `anomalies` list does not prove anomaly screening ran or that performance was normal:
+the daily spend MAD screen needs at least 14 usable days and nonzero MAD. With a shorter
+snapshot, describe observed changes without claiming a passed anomaly check.
+
 For restart requests, review `restart_experiments`: connect each proposal to the actual goal and
 confirmed business KPI, identify the test variable, primary metric and quality guardrail. Exact
 budget and success thresholds require business constraints; do not invent them or change ads.
