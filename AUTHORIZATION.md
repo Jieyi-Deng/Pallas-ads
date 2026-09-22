@@ -1,5 +1,7 @@
 # Connect an advertising account
 
+Native plugin users: complete [installation and activation](PLUGIN_INSTALL.md) first. Plugin installation does not grant media access. The setup Skill configures Claude Code Meta when requested and preserves existing Codex connections.
+
 Account authorization allows an available media connection to read data you can access. It is separate from installing and activating Pallas. You can analyze a local advertising export without connecting a media account.
 
 ## Start in your agent

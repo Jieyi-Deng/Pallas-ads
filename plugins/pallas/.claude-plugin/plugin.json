@@ -1,0 +1,22 @@
+{
+  "name": "pallas",
+  "version": "0.1.0",
+  "description": "Analyze advertising accounts and exports with evidence-based reports in your agent.",
+  "author": {
+    "name": "Pallas",
+    "email": "support@pallas-ads.com",
+    "url": "https://pallas-ads.com/"
+  },
+  "homepage": "https://pallas-ads.com/",
+  "repository": "https://github.com/Jieyi-Deng/Pallas-ads",
+  "license": "Apache-2.0",
+  "keywords": [
+    "advertising",
+    "analytics",
+    "meta",
+    "google-ads",
+    "tiktok"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.claude.json"
+}

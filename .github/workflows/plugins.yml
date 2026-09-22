@@ -1,0 +1,32 @@
+name: Plugin checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/plugins.test.mjs
+      - run: node plugins/pallas/scripts/pallas.mjs --help
+  macos-runtime:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Prepare and probe an isolated project
+        env:
+          PALLAS_DATA_HOME: ${{ runner.temp }}/pallas-plugin-runtime
+        run: |
+          node plugins/pallas/scripts/pallas.mjs setup --client codex --project "$RUNNER_TEMP/pallas-test" --python "$(command -v python)"
+          node plugins/pallas/scripts/pallas.mjs doctor --project "$RUNNER_TEMP/pallas-test"
+          node test/plugin-smoke.mjs "$RUNNER_TEMP/pallas-test"
+          node plugins/pallas/scripts/pallas.mjs deactivate --project "$RUNNER_TEMP/pallas-test"

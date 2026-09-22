@@ -1,5 +1,7 @@
 # Install and activate Pallas
 
+For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This page covers the npm project installation; use one entry per project.
+
 Pallas runs inside a dedicated project in Codex or Claude Code. You can follow these steps yourself or give this page to your agent.
 
 ## Requirements

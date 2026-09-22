@@ -21,27 +21,37 @@ Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and i
 
 ## 1. Install
 
-You need **macOS, Node.js 22 or later, and Codex or Claude Code**. Run:
+You need **macOS, Node.js 22 or later, and Codex or Claude Code** with plugin support.
+
+Ask your agent:
+
+> Install the Pallas plugin from https://github.com/Jieyi-Deng/Pallas-ads using PLUGIN_INSTALL.md, then use its setup Skill to prepare this project.
+
+Or add the source and install directly:
+
+**Codex terminal**
 
 ```sh
-npx pallas-ads install
+codex plugin marketplace add Jieyi-Deng/Pallas-ads
+codex plugin add pallas@pallas-ads
 ```
 
-Choose your agent and a new project folder. Pallas sets up its runtime, MCP connection, and analysis Skills; Python is prepared automatically when needed.
+**Claude Code**
 
-You can also ask your agent to install it:
+```text
+/plugin marketplace add Jieyi-Deng/Pallas-ads
+/plugin install pallas@pallas-ads
+```
 
-> Install Pallas for my current agent using https://github.com/Jieyi-Deng/Pallas-ads/blob/main/INSTALL.md. Create a new Pallas project, check the installation, and tell me which folder to open to activate it.
-
-See the [installation guide](INSTALL.md) for client-specific commands.
+See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx pallas-ads install`, remains available for projects using the project-based installation.
 
 ## 2. Activate in your agent
 
-Open the folder printed by the installer in Codex or Claude Code. Confirm project trust and any requested MCP permissions, then start a new task so Pallas tools and Skills can load.
+Open your intended project and ask the `pallas-setup` Skill to prepare it. Confirm project trust and any requested permissions, then reload or start a new task.
 
-> Check that Pallas and its workflow and analysis Skills are available in this project. Then help me prepare the media account connection I want to use.
+> Prepare Pallas in this project and verify that its tools and setup, workflow, and analysis Skills are available. Then help me prepare the media account connection I want to use.
 
-Activation means loading Pallas in your agent. Media account authorization is a separate step below.
+Setup prepares the runtime and binds Pallas to your project. Media account authorization is a separate step below.
 
 ## 3. Authorize a media account
 
@@ -81,11 +91,9 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 ## Keep Pallas up to date
 
-```sh
-npx pallas-ads@latest update --directory /path/to/your-pallas-project
-```
+Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
-Restart your agent task after updating. See [installer commands](NPM_INSTALLER.md) for diagnostics and maintenance, and [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
 
 ## Your data
 

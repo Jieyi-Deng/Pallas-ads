@@ -1,0 +1,27 @@
+{
+  "files": {
+    ".claude-plugin/plugin.json": "ecbdeb2066aede20773d70bd8644d21ad5b7d593cce8849766664644ea6b42d7",
+    ".codex-plugin/plugin.json": "2ba91ff0b06981540245fd3c4ad6bf90c5815d1525669b4526a465297b2b9f4a",
+    ".mcp.json": "372a7f8c1e988f58480012e741582e13bb1c9c2b2611432f365ae132f519cfe5",
+    "LICENSE": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b",
+    "NOTICE": "e8fe35ea6ebaac031f3051f4aac22efec72e09bd9c003ad76afd15e428f1da15",
+    "TRADEMARKS.md": "b065dde881aa2a2ece0c19326cc9ef1b3718683dd566c2e41e033c2478c3eadf",
+    "assets/pallas-logo.png": "97a1dafc51ddae22a2da80cd4d35fd63219a138eac982b9f0ed5abf170b6ff11",
+    "mcp.claude.json": "62c22fd9ec8fb34ab3b4042a0699fdae9861b5ac6c81f53e25d102e5fe9b2c2a",
+    "resources/install_macos.py": "729e077f3abb2983c5ad6551a4c03e60a23cfa020199d462e92ede545d3581b8",
+    "resources/npm-runtime.json": "954c1d0e319d446e817327f475e36b9da05e7c18730113069f4efcf1d1f09503",
+    "resources/pallas_ads-0.2.0a1-py3-none-any.whl": "1eaf69945a04199061825c2475d4ca367c04604b1bb71fc10a4c49cb25ed3380",
+    "resources/release-manifest.json": "2bb76827ca1b0f372ae652bbdbabac67217f075d87581fc9972514a3d9b57673",
+    "scripts/installer.mjs": "aae77c761a096596baf3ac4c235485a978c8280ff82d7b4b08a5fda8c5690dd5",
+    "scripts/pallas.mjs": "dde5b98c030a95810945a017a8bf993061e6b728c9cbb5633bf68a1198de9b3f",
+    "scripts/project.py": "2042dc36caf4c27f2c894a0fd07c272a19c6ee17a693409f951af91236eb5a76",
+    "scripts/serve.py": "19dbc6599defa301526c950840e29a06cf4bfb1fc8a9dfb2585bd4960e8cc552",
+    "skills/pallas-analysis/SKILL.md": "b0c1e4d3f4ba08c6c0f4c981f99b77e32c7ecee832a489321408bdc1d28539fe",
+    "skills/pallas-analysis/assets/report.html": "64c5ef444aaefeda49fb5f548c82c3d5d16b1055fb2cd22223368e9475e81b59",
+    "skills/pallas-analysis/references/report-template.md": "85e514440fce4934e227e63986533ea9ce9e691b7f62504e63795cdf4e03825d",
+    "skills/pallas-setup/SKILL.md": "2fd65a91ae5c5d25b6cddd05b2378c0cf6b59c5a499cae7f20a0319cd3f1689f",
+    "skills/pallas-workflow/SKILL.md": "1b5be3a023258def63c6b312405fa960846eb31b3f0a19e1cea774e329ed4484",
+    "skills/pallas-workflow/references/file-import.md": "83b5099fdf3147390d9bee2eb11699c2719f1186c33bc3cffd1f6e0c1ddfcab5",
+    "skills/pallas-workflow/references/meta-host.md": "944c1896ec174fceace2e98271afca28596ceb8fc8543d9a9019d7c01661c489"
+  }
+}
