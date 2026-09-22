@@ -8,15 +8,15 @@
 
 ## 一条 npm 命令安装
 
-已提供 npm 格式安装器，当前可以直接从 GitHub 运行：
+npm 安装器已发布，直接运行：
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+npx pallas-ads install
 ```
 
 选择 Codex / Claude Code 和新的项目目录后，安装器自动处理 Python、MCP 与两套 Skills。需要 macOS（Apple Silicon / Intel）和 Node.js 22+，无需提前安装 Python。安装后在 Agent 打开生成项目并确认信任。
 
-npm registry 的短命令 `npx pallas-ads install` 正等待发布者完成 npm 的安全验证；目前请使用上面的 GitHub 命令。支持 `doctor` 和 `update`，详见 [npm 安装器说明](NPM_INSTALLER.md)。现有 ZIP 入口仍保留。
+已发布到 [npm](https://www.npmjs.com/package/pallas-ads)：安装器版本 `0.2.0-alpha.1`，内含运行时 `0.2.0a1`。普通用户无需 npm 账号。支持 `doctor` 和 `update`，详见 [安装器说明](NPM_INSTALLER.md)。GitHub 命令 `npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install` 和原 ZIP 继续可用。
 
 ## 让 Agent 安装
 

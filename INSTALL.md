@@ -5,16 +5,16 @@
 Requires macOS and Node.js 22+. Python is provisioned automatically when needed. No npm login is needed to install public packages.
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+npx pallas-ads install
 ```
 
 For non-interactive agent use:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install --client codex --directory "$HOME/pallas-codex"
+npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
-Use `--client claude` for Claude Code. Choose a new/empty project. Follow the completion message: open that folder in the agent, confirm trust and start a new task. See [NPM_INSTALLER.md](NPM_INSTALLER.md) for runtime handling, diagnostics and updates. npm registry publication is pending publisher security verification; use this GitHub command until the README confirms the short registry command is available.
+Use `--client claude` for Claude Code. Choose a new/empty project. Follow the completion message: open that folder in the agent, confirm trust and start a new task. See [NPM_INSTALLER.md](NPM_INSTALLER.md) for runtime handling, diagnostics and updates. The npm package is published as `pallas-ads@0.2.0-alpha.1`. Use that explicit version to pin installation; the GitHub alternative is `npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install`.
 
 ## Alternative original ZIP route
 

@@ -8,15 +8,15 @@ This is the **public distribution repository**. The full development repository 
 
 ## Install with one npm command
 
-The npm-format installer can currently run directly from GitHub:
+Install the published npm package:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+npx pallas-ads install
 ```
 
 Choose Codex or Claude Code and a new project directory. The launcher provisions Python if needed and installs the runtime, MCP and both Skills. Requires macOS (Apple Silicon / Intel) and Node.js 22+; Python does not need to be installed beforehand. Open and trust the generated project afterward.
 
-The registry shorthand `npx pallas-ads install` awaits the publisher's npm security verification. Use the GitHub command above meanwhile. See [installer details](NPM_INSTALLER.md) for `doctor` and `update`. The existing ZIP route remains available.
+Published as [pallas-ads on npm](https://www.npmjs.com/package/pallas-ads), version `0.2.0-alpha.1`, wrapping runtime `0.2.0a1`. No npm account is required to install. See [installer details](NPM_INSTALLER.md) for `doctor` and `update`. GitHub (`npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install`) and the original ZIP remain alternative routes.
 
 ## Install through your agent
 

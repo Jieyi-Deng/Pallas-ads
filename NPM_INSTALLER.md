@@ -6,7 +6,7 @@ A small Node.js launcher installs the existing Python Pallas runtime, local MCP 
 
 ## Install
 
-After npm registry publication:
+Published npm entry:
 
 ```sh
 npx pallas-ads install
@@ -18,7 +18,7 @@ The interactive installer asks for Codex or Claude Code and a new project direct
 npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
-The equivalent GitHub package entry is `npx github:Jieyi-Deng/Pallas-ads install`. Registry publication and GitHub availability are tracked separately; do not assume the short registry command works before publication.
+The equivalent GitHub package entry is `npx github:Jieyi-Deng/Pallas-ads install`. Both routes are now published. For a fixed version use `npx pallas-ads@0.2.0-alpha.1 install`.
 
 A supported local Python 3.12/3.13 is reused. Otherwise the installer downloads a pinned, SHA-256-verified uv binary from Astral's official GitHub release and uses it to provision Python 3.13 alongside the project's runtime. It does not change system Python, shell profiles or global agent configuration. Use `--managed-python` to explicitly choose this isolated Python, or `--python /absolute/python3.13` to select an existing one.
 

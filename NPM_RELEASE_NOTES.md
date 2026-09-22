@@ -12,4 +12,4 @@ Seven launcher unit tests and 22 Python setup regressions passed. Existing-Pytho
 
 This npm installer version wraps the unchanged reviewed Python wheel 0.2.0a1. Original ZIP assets are retained unchanged. The `.tgz` is an npm package, not a source repository export. Full source remains private; distributed runtime code remains readable and Apache-2.0 licensed.
 
-At preparation time npm registry publication required publisher 2FA; the GitHub package command is independent of npm registry publishing. Consult the main README for the current short-command availability.
+Published on npm as `pallas-ads@0.2.0-alpha.1` with the `latest` tag after publisher security verification. Run `npx pallas-ads install`; no npm account is needed for installation. The GitHub package entry remains available.
