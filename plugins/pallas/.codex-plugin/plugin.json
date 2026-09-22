@@ -1,0 +1,38 @@
+{
+  "name": "pallas",
+  "version": "0.1.0",
+  "description": "Analyze advertising accounts and exports with evidence-based reports in your agent.",
+  "author": {
+    "name": "Pallas",
+    "email": "support@pallas-ads.com",
+    "url": "https://pallas-ads.com/"
+  },
+  "homepage": "https://pallas-ads.com/",
+  "repository": "https://github.com/Jieyi-Deng/Pallas-ads",
+  "license": "Apache-2.0",
+  "keywords": [
+    "advertising",
+    "analytics",
+    "meta",
+    "google-ads",
+    "tiktok"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Pallas",
+    "shortDescription": "Advertising analysis inside your agent.",
+    "longDescription": "Connect available advertising accounts or analyze CSV/XLSX exports. Prepare Pallas once per project, then use its workflow and analysis Skills to generate local reports.",
+    "developerName": "Pallas",
+    "category": "Productivity",
+    "capabilities": [],
+    "websiteURL": "https://pallas-ads.com/",
+    "defaultPrompt": [
+      "Set up Pallas in this project.",
+      "Analyze my advertising export with Pallas.",
+      "Help me connect my advertising account."
+    ],
+    "composerIcon": "./assets/pallas-logo.png",
+    "logo": "./assets/pallas-logo.png"
+  }
+}

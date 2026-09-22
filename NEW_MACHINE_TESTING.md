@@ -1,5 +1,7 @@
 # Verify your setup and share feedback
 
+For native plugins, follow [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md) and verify three Skills and ten Pallas tools after setup. Record host version, installation source, project activation, authorization, and report results separately. Do not run the npm updater on a migrated plugin project.
+
 Use this guide after [installing and activating Pallas](INSTALL.md). It helps you check the experience with your own advertising data and provide useful feedback.
 
 ## Check activation

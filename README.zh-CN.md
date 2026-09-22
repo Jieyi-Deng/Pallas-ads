@@ -21,27 +21,37 @@ Pallas 将广告数据分析带入 Codex 和 Claude Code。连接可用的 Meta�
 
 ## 1. 安装
 
-准备好 **macOS、Node.js 22 或更高版本，以及 Codex 或 Claude Code**，运行：
+准备好 **macOS、Node.js 22 或更高版本，以及支持插件的 Codex 或 Claude Code**。
+
+直接告诉 Agent：
+
+> 请按照 https://github.com/Jieyi-Deng/Pallas-ads 中的 PLUGIN_INSTALL.md 安装 Pallas 插件，然后用它的 setup Skill 为当前项目完成初始化。
+
+也可以直接添加插件源并安装：
+
+**Codex 终端**
 
 ```sh
-npx pallas-ads install
+codex plugin marketplace add Jieyi-Deng/Pallas-ads
+codex plugin add pallas@pallas-ads
 ```
 
-选择使用的 Agent 和一个新的项目文件夹。安装器会配置运行环境、MCP 连接与分析 Skills；需要时自动准备 Python。
+**Claude Code**
 
-也可以直接告诉 Agent：
+```text
+/plugin marketplace add Jieyi-Deng/Pallas-ads
+/plugin install pallas@pallas-ads
+```
 
-> 请按照 https://github.com/Jieyi-Deng/Pallas-ads/blob/main/INSTALL.md 为我当前的 Agent 安装 Pallas。创建新的 Pallas 项目，检查安装结果，并告诉我打开哪个文件夹来激活它。
-
-指定客户端的命令见[安装指南](INSTALL.md)。
+安装与旧项目迁移见[插件指南](PLUGIN_INSTALL.md)。使用项目安装方式的用户仍可通过 [npm 安装器](INSTALL.md)运行 `npx pallas-ads install`。
 
 ## 2. 在 Agent 中激活
 
-在 Codex 或 Claude Code 中打开安装器提示的文件夹，确认项目信任及所需 MCP 权限，然后开始新任务，让 Pallas 工具与 Skills 加载。
+打开你希望保存广告数据的项目，让 `pallas-setup` Skill 完成初始化。确认项目信任及所需权限，然后重新加载或开始新任务。
 
-> 请检查当前项目中的 Pallas、工作流 Skill 和分析 Skill 是否可用，然后帮我准备需要连接的媒体账户。
+> 请为当前项目初始化 Pallas，检查它的工具、安装 Skill、工作流 Skill 和分析 Skill 是否可用，然后帮我准备需要连接的媒体账户。
 
-这里的激活指在 Agent 中加载 Pallas。媒体账户授权是后面的独立步骤。
+初始化会准备运行环境并将 Pallas 绑定到当前项目。媒体账户授权是后面的独立步骤。
 
 ## 3. 授权媒体账户
 
@@ -81,11 +91,9 @@ Pallas 会先预览数据的解释方式，由你确认分析口径后再保存�
 
 ## 更新 Pallas
 
-```sh
-npx pallas-ads@latest update --directory /path/to/your-pallas-project
-```
+通过 Agent 的插件管理器更新，再为每个 Pallas 项目运行 setup Skill，随后开始新任务。详见[插件更新与恢复](PLUGIN_INSTALL.md#update)。
 
-更新后重新开始 Agent 任务。[安装器说明](NPM_INSTALLER.md)提供检查与维护命令，版本变更记录见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
+仍使用 npm 安装方式的项目，请使用 [npm 更新命令](NPM_INSTALLER.md)。版本变更记录见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
 
 ## 数据处理
 

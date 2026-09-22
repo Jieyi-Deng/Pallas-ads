@@ -1,0 +1,20 @@
+{
+  "name": "pallas-ads",
+  "interface": {
+    "displayName": "Pallas"
+  },
+  "plugins": [
+    {
+      "name": "pallas",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pallas"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

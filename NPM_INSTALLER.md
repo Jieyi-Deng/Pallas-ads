@@ -1,5 +1,7 @@
 # Pallas installer reference
 
+For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This page covers the npm project installation; use one entry per project.
+
 The npm launcher prepares the Pallas runtime, local MCP configuration, and the `pallas-workflow` and `pallas-analysis` Skills. Start with [INSTALL.md](INSTALL.md) for the complete install, activation, and first-use flow.
 
 ## Install

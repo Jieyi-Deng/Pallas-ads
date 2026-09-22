@@ -1,0 +1,14 @@
+{
+  "name": "pallas-ads",
+  "owner": {
+    "name": "Pallas",
+    "email": "support@pallas-ads.com"
+  },
+  "plugins": [
+    {
+      "name": "pallas",
+      "source": "./plugins/pallas",
+      "description": "Advertising analysis inside your agent."
+    }
+  ]
+}
