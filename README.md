@@ -6,13 +6,25 @@ Analyze advertising data in your own Codex or Claude Code. Pallas checks data, c
 
 This is the **public distribution repository**. The full development repository remains private. The downloadable Python wheel includes readable runtime code, the two Pallas Skills and report templates; it is not a binary-only or source-hidden package. Distributed Pallas material retains its Apache-2.0 license.
 
+## Install with one npm command
+
+The npm-format installer can currently run directly from GitHub:
+
+```sh
+npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+```
+
+Choose Codex or Claude Code and a new project directory. The launcher provisions Python if needed and installs the runtime, MCP and both Skills. Requires macOS (Apple Silicon / Intel) and Node.js 22+; Python does not need to be installed beforehand. Open and trust the generated project afterward.
+
+The registry shorthand `npx pallas-ads install` awaits the publisher's npm security verification. Use the GitHub command above meanwhile. See [installer details](NPM_INSTALLER.md) for `doctor` and `update`. The existing ZIP route remains available.
+
 ## Install through your agent
 
 A local installation is necessary, but your agent can perform it. Give Codex or Claude Code this request:
 
 > Install Pallas for my current agent by following https://github.com/Jieyi-Deng/Pallas-ads/blob/v0.2.0a1/INSTALL.md . Use the default local analysis mode in a new project. Download and verify the release, install it, then tell me which project to open and start a new task in. Do not enable live media connections yet.
 
-Requirements: **macOS, Python 3.12 or 3.13, Codex or Claude Code**, and internet access to download dependencies. The installer creates a separate runtime and project; it does not replace global agent settings or existing projects. The agent may need your approval for installation and project trust. No extra OpenAI runtime API key, Meta certificate or Google developer file is required for default local analysis.
+ZIP route requirements: **macOS, Python 3.12 or 3.13, Codex or Claude Code**, and internet access to download dependencies. The installer creates a separate runtime and project; it does not replace global agent settings or existing projects. The agent may need your approval for installation and project trust. No extra OpenAI runtime API key, Meta certificate or Google developer file is required for default local analysis.
 
 [Installation instructions](INSTALL.md) · [Download v0.2.0a1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) · [Test guide](NEW_MACHINE_TESTING.md)
 

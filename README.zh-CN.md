@@ -6,13 +6,25 @@
 
 这里是**公开分发仓库**，完整开发仓库仍为私有。可下载的 Python wheel 包含可读运行时代码、两套 Skills 和报告模板，不是隐藏源码的二进制产品；分发内容保留 Apache-2.0 许可证。
 
+## 一条 npm 命令安装
+
+已提供 npm 格式安装器，当前可以直接从 GitHub 运行：
+
+```sh
+npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+```
+
+选择 Codex / Claude Code 和新的项目目录后，安装器自动处理 Python、MCP 与两套 Skills。需要 macOS（Apple Silicon / Intel）和 Node.js 22+，无需提前安装 Python。安装后在 Agent 打开生成项目并确认信任。
+
+npm registry 的短命令 `npx pallas-ads install` 正等待发布者完成 npm 的安全验证；目前请使用上面的 GitHub 命令。支持 `doctor` 和 `update`，详见 [npm 安装器说明](NPM_INSTALLER.md)。现有 ZIP 入口仍保留。
+
 ## 让 Agent 安装
 
 本地版需要安装，但下载、安装与配置可以交给 Agent。将下面这句话发给自己的 Codex 或 Claude Code：
 
 > 请按照 https://github.com/Jieyi-Deng/Pallas-ads/blob/v0.2.0a1/INSTALL.md 为我当前的 Agent 安装 Pallas。使用新的项目目录和默认本地分析模式，下载并校验版本后完成安装，告诉我打开哪个项目并开始新任务。暂不连接真实媒体账户。
 
-需要 **macOS、Python 3.12 或 3.13、Codex / Claude Code**，安装依赖需要联网。安装器创建独立环境和项目，不覆盖已有项目或修改全局 Agent 配置。宿主要求的安装许可、项目信任和媒体同意仍由用户确认。默认本地分析无需额外 OpenAI 运行密钥、Meta 证书或 Google 开发者文件。
+ZIP 路线需要 **macOS、Python 3.12 或 3.13、Codex / Claude Code**，安装依赖需要联网。安装器创建独立环境和项目，不覆盖已有项目或修改全局 Agent 配置。宿主要求的安装许可、项目信任和媒体同意仍由用户确认。默认本地分析无需额外 OpenAI 运行密钥、Meta 证书或 Google 开发者文件。
 
 [安装说明](INSTALL.md) · [下载 v0.2.0a1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) · [测试与反馈流程](NEW_MACHINE_TESTING.md)
 

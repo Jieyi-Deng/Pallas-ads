@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0a1",
+  "wheel": "pallas_ads-0.2.0a1-py3-none-any.whl",
+  "sha256": "1eaf69945a04199061825c2475d4ca367c04604b1bb71fc10a4c49cb25ed3380",
+  "target": "macOS + Codex / Claude Code",
+  "default_mode": "core",
+  "google_application_embedded": false,
+  "requires_google_configuration_file": false,
+  "contains_user_oauth_tokens": false,
+  "contains_localhost_private_key": false
+}

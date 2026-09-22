@@ -1,3 +1,23 @@
+# Install Pallas / 安装 Pallas
+
+## Recommended npm-format launcher
+
+Requires macOS and Node.js 22+. Python is provisioned automatically when needed. No npm login is needed to install public packages.
+
+```sh
+npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install
+```
+
+For non-interactive agent use:
+
+```sh
+npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install --client codex --directory "$HOME/pallas-codex"
+```
+
+Use `--client claude` for Claude Code. Choose a new/empty project. Follow the completion message: open that folder in the agent, confirm trust and start a new task. See [NPM_INSTALLER.md](NPM_INSTALLER.md) for runtime handling, diagnostics and updates. npm registry publication is pending publisher security verification; use this GitHub command until the README confirms the short registry command is available.
+
+## Alternative original ZIP route
+
 # Install Pallas 0.2.0a1 / 安装 Pallas
 
 This is the version-pinned installation entry for Codex and Claude Code. The agent performs the technical steps; the user confirms permissions requested by their host. 本页可直接交给 Agent 执行，不要求广告用户手工编写命令或配置。

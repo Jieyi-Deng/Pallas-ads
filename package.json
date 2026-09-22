@@ -1,0 +1,16 @@
+{
+  "name": "pallas-ads",
+  "version": "0.2.0-alpha.1",
+  "description": "Install Pallas local advertising analysis for Codex and Claude Code",
+  "type": "module",
+  "bin": {"pallas-ads": "bin/pallas-ads.mjs"},
+  "engines": {"node": ">=22"},
+  "os": ["darwin"],
+  "cpu": ["arm64", "x64"],
+  "files": ["bin/", "lib/", "resources/", "LICENSE", "NOTICE", "README.md"],
+  "scripts": {"test": "node --test test/*.test.mjs"},
+  "license": "Apache-2.0",
+  "repository": {"type": "git", "url": "git+https://github.com/Jieyi-Deng/Pallas-ads.git"},
+  "bugs": {"url": "https://github.com/Jieyi-Deng/Pallas-ads/issues"},
+  "publishConfig": {"access": "public", "registry": "https://registry.npmjs.org/"}
+}
