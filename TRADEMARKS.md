@@ -10,5 +10,5 @@ unapproved distribution, service, adapter, or organization is official,
 endorsed, or maintained by the Pallas project.
 
 This policy is an initial project guideline, not a claim that every referenced
-name is registered. Questions about nominative use or project endorsement should
-be raised with the maintainers before release.
+name is registered. For questions about nominative use or project endorsement, contact
+[support@pallas-ads.com](mailto:support@pallas-ads.com).

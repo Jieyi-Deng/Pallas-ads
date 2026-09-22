@@ -1,50 +1,77 @@
-# Install Pallas / 安装 Pallas
+# Install and activate Pallas
 
-## Recommended npm-format launcher
+Pallas runs inside a dedicated project in Codex or Claude Code. You can follow these steps yourself or give this page to your agent.
 
-Requires macOS and Node.js 22+. Python is provisioned automatically when needed. No npm login is needed to install public packages.
+## Requirements
+
+- macOS on Apple Silicon or Intel.
+- Node.js 22 or later, including npm/npx.
+- Codex or Claude Code, and internet access for installation.
+- A new or empty project folder.
+
+The installer reuses supported Python or prepares it automatically. You do not need an npm account or a separate OpenAI runtime API key for local analysis.
+
+## Install
+
+Run the interactive installer:
 
 ```sh
 npx pallas-ads install
 ```
 
-For non-interactive agent use:
+Choose your agent and project folder. For an agent running without an interactive terminal, specify both explicitly.
+
+Codex:
 
 ```sh
 npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
-Use `--client claude` for Claude Code. Choose a new/empty project. Follow the completion message: open that folder in the agent, confirm trust and start a new task. See [NPM_INSTALLER.md](NPM_INSTALLER.md) for runtime handling, diagnostics and updates. The npm package is published as `pallas-ads@0.2.0-alpha.1`. Use that explicit version to pin installation; the GitHub alternative is `npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install`.
-
-## Alternative original ZIP route
-
-# Install Pallas 0.2.0a1 / 安装 Pallas
-
-This is the version-pinned installation entry for Codex and Claude Code. The agent performs the technical steps; the user confirms permissions requested by their host. 本页可直接交给 Agent 执行，不要求广告用户手工编写命令或配置。
-
-## Agent procedure / Agent 执行步骤
-
-1. Confirm the current client (Codex or Claude Code) and check macOS plus Python 3.12/3.13. If Python is missing, explain that prerequisite and follow the user's normal software installation policy. Do not silently select an unsupported version. The package does not include an agent subscription or Python itself.
-2. Use a new temporary download directory. Download both fixed release assets:
-   - [pallas-0.2.0a1-local-alpha.zip](https://github.com/Jieyi-Deng/Pallas-ads/releases/download/v0.2.0a1/pallas-0.2.0a1-local-alpha.zip)
-   - [SHA-256 checksum](https://github.com/Jieyi-Deng/Pallas-ads/releases/download/v0.2.0a1/pallas-0.2.0a1-local-alpha.zip.sha256)
-3. Verify the ZIP's SHA-256 before extracting. Stop on mismatch. The checksum establishes release consistency, not an independent cryptographic publisher identity. The installer also checks the embedded wheel hash.
-4. Extract the bundle, read its NEW_MACHINE_TESTING.md, and select a new/empty project directory (for example ~/pallas-test). Do not overwrite any existing runtime or project. Run from the extracted bundle, using an available supported interpreter:
+Claude Code:
 
 ```sh
-python3.13 install_macos.py --directory "$HOME/pallas-test" --client codex
+npx pallas-ads install --client claude --directory "$HOME/pallas-claude"
 ```
 
-For Claude Code replace `codex` with `claude`. The default is core/local mode: do not add live Meta flags, certificate trust or Google requirements unless the user separately requests that route. Do not request OpenAI runtime keys, tokens or developer secrets for file analysis.
+Use separate projects for the two clients. The installer creates a project, an adjacent runtime, MCP settings, and the `pallas-workflow` and `pallas-analysis` Skills. Keep the project and its adjacent runtime directories in place.
 
-5. The installer creates the adjacent `pallas-test-runtime` environment, installs dependencies, initializes `.pallas`, and copies client MCP settings, both Skills and synthetic samples. Review its `agent doctor` output; optional media gaps are not local-analysis blockers. The MCP config uses an absolute executable path, so retain the runtime folder.
-6. Tell the user to open the generated project in their selected agent, trust the project and start a new task. Respect host approval prompts; never bypass them. In the new task confirm the Pallas tools and Skills are available. Installation checks alone do not prove host loading.
-7. Follow START_HERE.md and preview `samples/meta_campaign_daily.csv`. Show the interpretation in ordinary language, import after confirmation, generate the report and link its local HTML. The sample is synthetic, not live media evidence.
+## Activate
 
-安装结束并不等于媒体授权。文件分析可以立即试用；媒体连接按 [测试指南](NEW_MACHINE_TESTING.md) 的可选矩阵另行操作。账户登录、同意、MFA 和系统信任确认由用户完成。
+1. Open the generated project folder in the selected agent.
+2. Confirm project trust and the requested local MCP permissions.
+3. Start a new task to load the project configuration and Skills.
+4. Ask: “Check that Pallas tools and both Pallas Skills are available, then help me analyze my advertising data.”
 
-## Existing installation / 已有安装
+The agent should verify actual tool availability. An installation diagnostic alone does not establish that the client has loaded the MCP server. No separate MCP terminal needs to remain open.
 
-Do not rerun the fresh installer over existing projects. Back up the project, upgrade the wheel using the runtime's Python, run `pallas agent refresh-skills --directory PROJECT`, retain its backup and restart the agent task. Keep `.pallas` and the user's own credentials; never copy somebody else's workspace or tokens.
+If tools are missing, confirm that the correct project is open, reload the task, and run:
 
-This release is a local Alpha, not a cloud service or a marketplace one-click installation. There is no verified PyPI publication. No build from the private source repository is required.
+```sh
+npx pallas-ads doctor --directory "$HOME/pallas-codex"
+```
+
+Substitute your actual project path. For help, contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
+
+## Use Pallas
+
+Provide the path to your advertising CSV or XLSX export and ask:
+
+> Analyze this file with Pallas. Preview its account, date range, fields, currency, timezone, and missing values. After I confirm the interpretation, import it and create a report with performance, changes, and recommended next steps.
+
+See [FILE_IMPORT.md](FILE_IMPORT.md) for export preparation. To connect a live account, follow [AUTHORIZATION.md](AUTHORIZATION.md); installing or activating Pallas does not grant media access.
+
+## Maintain an installation
+
+See [NPM_INSTALLER.md](NPM_INSTALLER.md) for updates and recovery. Do not overwrite a populated project to reinstall. Back up the project before upgrading, and retain its `.pallas` data and any Skills backups.
+
+## Install from a release archive
+
+For an archive-based installation, choose the Pallas installation ZIP and its SHA-256 checksum from [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases). Use the attached installation bundle, not GitHub's automatically generated source archive. Verify the checksum before extracting, and follow that bundle's installer instructions using Python 3.12 or 3.13 on macOS. Exact artifact names and versions are recorded in the release notes.
+
+For a standard local setup, run from the extracted bundle:
+
+```sh
+python3.13 install_macos.py --directory "$HOME/pallas-codex" --client codex
+```
+
+Then follow the activation steps above. The npm `doctor` and `update` commands manage npm-created installations; for an archive installation use the installed runtime's CLI and its release instructions.

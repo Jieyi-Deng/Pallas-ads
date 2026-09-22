@@ -1,57 +1,78 @@
-# Pallas Ads
+<p align="center">
+  <a href="https://pallas-ads.com/"><img src="https://raw.githubusercontent.com/Jieyi-Deng/Pallas-ads/main/assets/pallas-logo.png" width="96" height="96" alt="Pallas 品牌标志"></a>
+</p>
 
-[English](README.md) · **本地分析 Alpha 0.2.0a1**
+# Pallas
 
-在自己的 Codex 或 Claude Code 中分析广告数据。Pallas 负责数据检查、计算和本地报告，Agent 负责对话与推理。
+**在你自己的 Agent 中，完成广告数据分析。**
 
-这里是**公开分发仓库**，完整开发仓库仍为私有。可下载的 Python wheel 包含可读运行时代码、两套 Skills 和报告模板，不是隐藏源码的二进制产品；分发内容保留 Apache-2.0 许可证。
+[English](README.md) | **简体中文** · [产品官网](https://pallas-ads.com/) · [npm](https://www.npmjs.com/package/pallas-ads)
 
-## 一条 npm 命令安装
+Pallas 将广告数据分析带入 Codex 和 Claude Code。使用 Meta、Google Ads、TikTok Ads 的广告导出文件，或连接可用的媒体账户，通过自然语言提出分析需求。Pallas 检查数据、计算效果指标，并生成可以追溯到来源的分析报告。
 
-npm 安装器已发布，直接运行：
+访问 **[pallas-ads.com](https://pallas-ads.com/)**，了解产品与广告分析方法。
+
+## 从广告数据到行动建议
+
+- **了解投放表现。** 在明确的账户和日期范围内，查看花费、展示、点击及效率指标。
+- **解释指标变化。** 分析广告系列构成与指标变化的算术原因；证据不足的业务解释会标明为待验证假设。
+- **交付可回看的报告。** 报告包含账户与期间总结、变化拆解，以及主要发现和后续建议。
+- **在 Agent 中持续沟通。** `pallas-workflow` 与 `pallas-analysis` 两套 Skills 为支持的数据来源提供一致的分析流程。
+
+## 1. 安装
+
+准备好 **macOS、Node.js 22 或更高版本，以及 Codex 或 Claude Code**，运行：
 
 ```sh
 npx pallas-ads install
 ```
 
-选择 Codex / Claude Code 和新的项目目录后，安装器自动处理 Python、MCP 与两套 Skills。需要 macOS（Apple Silicon / Intel）和 Node.js 22+，无需提前安装 Python。安装后在 Agent 打开生成项目并确认信任。
+选择使用的 Agent 和一个新的项目文件夹。安装器会配置运行环境、MCP 连接与分析 Skills；需要时自动准备 Python。
 
-已发布到 [npm](https://www.npmjs.com/package/pallas-ads)：安装器版本 `0.2.0-alpha.1`，内含运行时 `0.2.0a1`。普通用户无需 npm 账号。支持 `doctor` 和 `update`，详见 [安装器说明](NPM_INSTALLER.md)。GitHub 命令 `npx github:Jieyi-Deng/Pallas-ads#npm-v0.2.0-alpha.1 install` 和原 ZIP 继续可用。
+也可以直接告诉 Agent：
 
-## 让 Agent 安装
+> 请按照 https://github.com/Jieyi-Deng/Pallas-ads/blob/main/INSTALL.md 为我当前的 Agent 安装 Pallas。创建新的 Pallas 项目，检查安装结果，并告诉我打开哪个文件夹来激活它。
 
-本地版需要安装，但下载、安装与配置可以交给 Agent。将下面这句话发给自己的 Codex 或 Claude Code：
+指定客户端的命令见[安装指南](INSTALL.md)。
 
-> 请按照 https://github.com/Jieyi-Deng/Pallas-ads/blob/v0.2.0a1/INSTALL.md 为我当前的 Agent 安装 Pallas。使用新的项目目录和默认本地分析模式，下载并校验版本后完成安装，告诉我打开哪个项目并开始新任务。暂不连接真实媒体账户。
+## 2. 在 Agent 中激活
 
-ZIP 路线需要 **macOS、Python 3.12 或 3.13、Codex / Claude Code**，安装依赖需要联网。安装器创建独立环境和项目，不覆盖已有项目或修改全局 Agent 配置。宿主要求的安装许可、项目信任和媒体同意仍由用户确认。默认本地分析无需额外 OpenAI 运行密钥、Meta 证书或 Google 开发者文件。
+在 Codex 或 Claude Code 中打开安装器提示的文件夹，确认项目信任及所需 MCP 权限，然后开始新任务，让 Pallas 工具与 Skills 加载。
 
-[安装说明](INSTALL.md) · [下载 v0.2.0a1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) · [测试与反馈流程](NEW_MACHINE_TESTING.md)
+> 请检查当前项目中的 Pallas、工作流 Skill 和分析 Skill 是否可用，告诉我是否可以开始分析广告数据。
 
-下载 Release 附件 `pallas-0.2.0a1-local-alpha.zip`。GitHub 自动生成的 Source code 压缩包只包含本分发仓库的文档，不是安装包。
+这里的激活指在 Agent 中加载 Pallas。媒体账户授权是后面的独立步骤。
 
-## 首次分析
+## 3. 分析你的数据
 
-安装完成后，在 Agent 打开生成的项目、信任项目并开始新任务，说：
+将广告平台导出的 CSV 或 XLSX 文件路径提供给 Agent：
 
-> 使用 Pallas 分析 samples/meta_campaign_daily.csv，先展示账户、期间、字段映射、币种、时区和缺失预览。我确认口径后再导入，生成三段式 HTML。区分实际观测、算术贡献和未验证业务原因。这是合成样例，不连接真实账户。
+> 请用 Pallas 分析 /path/to/my-ad-export.csv。先展示账户、日期范围、字段映射、币种、时区和缺失数据；我确认后再导入，生成包含投放表现、变化拆解和后续建议的报告。完成后给我 HTML 报告链接。
 
-包内还提供 Google、TikTok 合成样例。真实 CSV/XLSX 需符合[支持格式](FILE_IMPORT.md)：单媒体、单账户、单币种、广告系列日粒度，不能有重复行或公式。不同文件独立保存，不自动跨文件相加。
+Pallas 会先预览数据的解释方式，由你确认分析口径后再保存导入。Agent 随后交付报告并解释主要发现。导出准备方式见[广告文件指南](FILE_IMPORT.md)。
 
-## 本版能力与边界
+## 4. 授权媒体账户
 
-已实现预览、确认、导入、共用报告，分析花费/展示/点击、CTR/CPC/CPM、变化的算术贡献和系列构成。空值不补零，缺乏转化或业务证据时不推断购买、盈利或素材疲劳。重复导入幂等，重启后可以继续使用留存数据。
+需要读取在线账户数据时，可以说：
 
-801 项自动回归通过，并从独立安装环境验证了两种客户端配置的 MCP 合成流程。这不等于真人 Agent 完整遵循流程，也不等于真实账户数值对账通过。
+> 请帮我将 Meta / Google Ads / TikTok Ads 账户连接到 Pallas。先检查当前 Agent 的连接配置，引导我完成浏览器授权，再列出可访问的广告账户。让我选择账户和报告期间后，再读取效果数据。
 
-实时媒体是可选实验能力，详见[媒体矩阵](NEW_MACHINE_TESTING.md#可选实时连接)。Google 实时连接需要维护者配置和平台准入；Meta/Claude 使用宿主官方 MCP，Meta/Codex 的显式预注册路线仍用于内测；不承诺所有陌生用户免邀请接入。TikTok 新账户资格也需实测。
+连接配置就绪后，在媒体平台页面完成登录与同意授权，回到 Agent 选择账户并开始分析。如果需要补充连接配置或账户访问权限，请按[媒体授权指南](AUTHORIZATION.md)操作，或联系 [support@pallas-ads.com](mailto:support@pallas-ads.com)。文件分析可以独立于账户授权使用。
 
-本阶段不包含 ChatGPT 托管服务、多文件/多媒体自动整合或无人值守账户托管，不修改投放。
+## 更新 Pallas
 
-## 数据与反馈
+```sh
+npx pallas-ads@latest update --directory /path/to/your-pallas-project
+```
 
-Pallas 无遥测，证据本地保存；工具结果仍会提供给所选 Agent，并适用其数据政策。可选媒体请求会发送到对应平台。公开 Issue 不要上传凭据、原始账户导出或未审阅的私人报告。按测试说明准备并审阅脱敏反馈，打包不会自动上传。
+更新后重新开始 Agent 任务。[安装器说明](NPM_INSTALLER.md)提供检查与维护命令，版本变更记录见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
 
-这是个人 portfolio 项目，本版没有付费服务；不代表媒体或 Agent 提供商背书。
+## 数据处理
+
+Pallas 在本地工作区保存导入证据和报告，不采集遥测。工具结果由你选择的 Agent 按其数据政策处理；连接媒体时，请求发送至对应平台。Pallas 分析广告表现，不修改广告投放。
+
+## 联系支持
+
+如有使用问题、连接配置或其他需要，请联系 **[support@pallas-ads.com](mailto:support@pallas-ads.com)**。反馈可复现的问题时，可参考[反馈指南](NEW_MACHINE_TESTING.md)。
 
 [许可证](LICENSE) · [NOTICE](NOTICE) · [商标说明](TRADEMARKS.md)
