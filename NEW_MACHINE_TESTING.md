@@ -1,17 +1,17 @@
 # Verify your setup and share feedback
 
-For native plugins, follow [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md) and verify three Skills and ten Pallas tools after setup. Record host version, installation source, project activation, authorization, and report results separately. Do not run the npm updater on a migrated plugin project.
+For native plugins, follow [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md) and verify six Skills and eleven Pallas tools after setup. Record host version, installation source, project activation, authorization, and report results separately. Do not run the npm updater on a migrated plugin project.
 
 Use this guide after [installing and activating Pallas](INSTALL.md). It helps you check the experience with your own advertising data and provide useful feedback.
 
 ## Check activation
 
-Open the generated project in Codex or Claude Code, confirm project trust, and start a new task. Ask the agent to verify that Pallas tools, `pallas-workflow`, and `pallas-analysis` are available.
+Open the generated project in Codex or Claude Code, confirm project trust, and start a new task. Ask the agent to verify that eleven Pallas tools and the appropriate command, analysis, dashboard, and workflow Skills are available. Native plugins also include setup. See the [command guide](PALLAS_COMMAND.md) for invocation in each host.
 
 Run installation diagnostics if needed:
 
 ```sh
-npx pallas-ads doctor --directory /path/to/your-pallas-project
+npx github:Jieyi-Deng/Pallas-ads doctor --directory /path/to/your-pallas-project
 ```
 
 Optional media setup messages do not prevent file analysis. The diagnostic does not replace checking actual tool loading in the agent.
@@ -33,6 +33,8 @@ Review the following with your agent:
 | Reasoning | Metric changes and campaign mix are explained with evidence. Unverified business causes are identified as hypotheses. |
 | Report | The HTML opens, units are clear, and the conversation matches the report. |
 | Repeat use | Re-importing the same data does not double-count it, and retained datasets remain available after restarting. |
+| Command routing | `analysis` generates a verified report; `dashboard` creates or updates only the selected dashboard. The chat includes a clickable HTML link. |
+| Dashboard history | Repeating the same import does not duplicate rows; later updates retain earlier history. Missing fresh exports are reported explicitly. |
 | Live data, if connected | The authorized account, period, currency, and totals are checked against the media platform. |
 
 For live account setup, use [AUTHORIZATION.md](AUTHORIZATION.md). Record authorization, account discovery, data retrieval, and report reconciliation separately. Mark any step you did not perform as `not_run`.

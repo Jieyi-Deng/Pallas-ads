@@ -17,7 +17,7 @@ Pallas 将广告数据分析带入 Codex 和 Claude Code。连接可用的 Meta�
 - **了解投放表现。** 在明确的账户和日期范围内，查看花费、展示、点击及效率指标。
 - **解释指标变化。** 分析广告系列构成与指标变化的算术原因；证据不足的业务解释会标明为待验证假设。
 - **交付可回看的报告。** 报告包含账户与期间总结、变化拆解，以及主要发现和后续建议。
-- **在 Agent 中持续沟通。** `pallas-workflow` 与 `pallas-analysis` 两套 Skills 为支持的数据来源提供一致的分析流程。
+- **在 Agent 中持续沟通。** `pallas` 统一入口将分析与持久看板请求交给对应 Skill，并使用经过校验的报告模板。
 
 ## 1. 安装
 
@@ -43,13 +43,13 @@ codex plugin add pallas@pallas-ads
 /plugin install pallas@pallas-ads
 ```
 
-安装与旧项目迁移见[插件指南](PLUGIN_INSTALL.md)。使用项目安装方式的用户仍可通过 [npm 安装器](INSTALL.md)运行 `npx pallas-ads install`。
+安装与旧项目迁移见[插件指南](PLUGIN_INSTALL.md)。使用项目安装方式的用户仍可通过 [npm 安装器](INSTALL.md)运行 `npx github:Jieyi-Deng/Pallas-ads install`。
 
 ## 2. 在 Agent 中激活
 
 打开你希望保存广告数据的项目，让 `pallas-setup` Skill 完成初始化。确认项目信任及所需权限，然后重新加载或开始新任务。
 
-> 请为当前项目初始化 Pallas，检查它的工具、安装 Skill、工作流 Skill 和分析 Skill 是否可用，然后帮我准备需要连接的媒体账户。
+> 请为当前项目初始化 Pallas，检查它的 11 个工具与 6 个 Skills 是否可用，包括 Pallas 命令和看板 Skill，然后帮我准备需要连接的媒体账户。
 
 初始化会准备运行环境并将 Pallas 绑定到当前项目。媒体账户授权是后面的独立步骤。
 
@@ -67,6 +67,8 @@ codex plugin add pallas@pallas-ads
 
 选择读取已连接的广告账户，或上传广告导出文件。
 
+在 Claude Code 中使用 `/pallas:pallas analysis` 或 `/pallas:pallas dashboard`。如果希望使用 `/pallas analysis` 和 `/pallas dashboard`，让 setup 为当前项目添加命令别名。Codex 中选择已安装的 `pallas` Skill，或在宿主支持时使用 `$pallas analysis` / `$pallas dashboard`。设置与示例见[命令指南](PALLAS_COMMAND.md)。
+
 ### 直接读取广告账户
 
 > 请用 Pallas 读取刚才授权的广告账户最近七个完整自然日的效果数据。先确认账户、报告日期、币种、时区和可用数据，再分析投放表现及变化，说明判断依据，并生成包含后续建议的 HTML 报告。
@@ -81,6 +83,12 @@ Agent 通过已配置的媒体连接获取数据，说明数据覆盖情况后�
 
 Pallas 会先预览数据的解释方式，由你确认分析口径后再保存导入。Agent 随后交付报告并解释主要发现。导出准备方式见[广告文件指南](FILE_IMPORT.md)。
 
+### 保留并更新广告看板
+
+> 请用 Pallas 为我选定的账户或已确认文件创建看板，将历史保存在当前项目，展示可用的投放与素材明细，并给我 HTML 链接。后续更新沿用同一个看板，说明缺失或过期的数据来源。
+
+看板保留已有日期并更新选定来源。文件来源需要提供新导出才能更新；缺失的转化和素材明细保持不可用。更新看板不会自动创建定时任务。
+
 ## 5. 设置定时巡检
 
 完成一次分析后，如果你的 Agent 提供定时任务功能，可以在同一个 Pallas 项目中安排重复巡检：
@@ -93,7 +101,7 @@ Pallas 会先预览数据的解释方式，由你确认分析口径后再保存�
 
 通过 Agent 的插件管理器更新，再为每个 Pallas 项目运行 setup Skill，随后开始新任务。详见[插件更新与恢复](PLUGIN_INSTALL.md#update)。
 
-仍使用 npm 安装方式的项目，请使用 [npm 更新命令](NPM_INSTALLER.md)。版本变更记录见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
+仍使用 npm 安装方式的项目，请使用 [npm 更新命令](NPM_INSTALLER.md)。当前 GitHub 分发版本见 [plugin 0.2.0 发行说明](RELEASE_NOTES_PLUGIN_0.2.0.md)，npm registry 发布单独进行。历史版本见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
 
 ## 数据处理
 

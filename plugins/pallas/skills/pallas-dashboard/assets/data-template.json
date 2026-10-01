@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "platform": "google",
+    "account_id": "9000000999",
+    "account_name": "EXAMPLE — replace with evidence",
+    "currency": "USD",
+    "timezone": "America/Los_Angeles"
+  },
+  "evidence": {
+    "kind": "uploaded_file",
+    "reference": "EXAMPLE ONLY — not an actual export",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "field_mapping": {
+      "date": "Date",
+      "campaign_id": "Campaign ID",
+      "spend": "Cost (USD)",
+      "impressions": "Impressions",
+      "clicks": "Clicks",
+      "conversions": "Purchases",
+      "conversion_value": "Purchase value (USD)"
+    }
+  },
+  "period": {
+    "start": "2026-09-29",
+    "end": "2026-09-29"
+  },
+  "complete": true,
+  "conversion_definition": {
+    "event": "purchase",
+    "attribution_window": "7-day click",
+    "counting_method": "one per order",
+    "value_currency": "USD",
+    "evidence_reference": "EXAMPLE ONLY — replace with documented source definition"
+  },
+  "campaigns": [
+    {
+      "id": "example_campaign",
+      "name": "Example campaign",
+      "status": "ACTIVE",
+      "ad_type": "Purchase",
+      "target_cpa": 20
+    }
+  ],
+  "rows": [
+    {
+      "campaign_id": "example_campaign",
+      "date": "2026-09-29",
+      "spend": "100.00",
+      "impressions": 10000,
+      "clicks": 200,
+      "conversions": 5,
+      "conversion_value": "250.00"
+    }
+  ],
+  "details": {
+    "ad_groups": [
+      {
+        "id": "example_group",
+        "campaign_id": "example_campaign",
+        "name": "Example group",
+        "os": null
+      }
+    ],
+    "creatives": [
+      {
+        "id": "example_creative",
+        "ad_group_id": "example_group",
+        "name": "Example creative",
+        "format": "Video",
+        "preview_data": null,
+        "original_url": null
+      }
+    ],
+    "rows": [
+      {
+        "creative_id": "example_creative",
+        "date": "2026-09-29",
+        "os": "iOS",
+        "spend": "100.00",
+        "impressions": 10000,
+        "clicks": 200,
+        "conversions": 5,
+        "conversion_value": "250.00",
+        "video_views": 3000,
+        "video_completions": 600
+      }
+    ]
+  }
+}

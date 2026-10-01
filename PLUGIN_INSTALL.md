@@ -49,7 +49,18 @@ The agent resolves the installed plugin path and runs its setup helper for your 
 
 Codex setup creates one project MCP entry with an explicit launcher and workspace path; the native plugin provides its Skills and setup helper. Claude Code uses the plugin's bundled MCP entry and the current project binding. Use separate project folders for separate clients or customers. Open the prepared project root when starting your agent.
 
-The expected inventory is **three Skills** (`pallas-setup`, `pallas-workflow`, `pallas-analysis`) and **ten Pallas tools**. The helper's `doctor` command checks the binding and runtime; your agent must also verify that the tools load. A connected local Pallas server does not imply that a media account is authorized.
+Plugin 0.2.0 contains **six Skills** (`pallas`, `pallas-setup`, `pallas-workflow`, `pallas-analysis`, `pallas-competitors`, `pallas-dashboard`) and **eleven Pallas tools**, including `pallas_command`. Older installations can have a smaller inventory and must update before using the unified commands. The helper's `doctor` command checks the binding and runtime; your agent must also verify that the tools load. A connected local Pallas server does not imply that a media account is authorized.
+
+### Unified commands (command-capable builds)
+
+Use `/pallas:pallas analysis` or `/pallas:pallas dashboard` in Claude Code. To enable bare
+`/pallas analysis` and `/pallas dashboard`, ask setup to add the project command with
+`--install-command`. It refuses to overwrite existing user commands and can be rolled back.
+In Codex, select the installed Pallas Skill (`$pallas analysis` / `$pallas dashboard` where
+supported); menu spelling depends on the host version. Project-local installs already include
+the full `pallas` Skill. Use `help` or `status` to inspect capabilities without account reads.
+If `pallas_command` is absent, this installation needs a command-capable plugin/runtime build;
+reloading an older release alone cannot add the feature.
 
 ## 3. Authorize
 

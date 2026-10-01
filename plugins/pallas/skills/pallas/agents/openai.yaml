@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pallas"
+  short_description: "Run advertising analysis and persistent dashboards"
+  default_prompt: "Use $pallas to analyze my advertising data or update my dashboard."

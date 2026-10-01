@@ -33,8 +33,8 @@ test('both native catalogs resolve one self-contained plugin and the same Skills
   assert.equal(codex.name,'pallas');assert.equal(claude.version,codex.version);
   assert.deepEqual(json(join(plugin,codex.mcpServers)).mcpServers,{});
   assert.equal(json(join(plugin,claude.mcpServers)).mcpServers.pallas.args[0],'${CLAUDE_PLUGIN_ROOT}/scripts/pallas.mjs');
-  for(const name of ['pallas-setup','pallas-workflow','pallas-analysis']) assert.match(readFileSync(join(plugin,'skills',name,'SKILL.md'),'utf8'),/^---/);
-  for(const name of ['scripts/pallas.mjs','scripts/project.py','scripts/serve.py','assets/pallas-logo.png','skills/pallas-analysis/assets/report.html']) assert.ok(readFileSync(join(plugin,name)).length>0);
+  for(const name of ['pallas','pallas-setup','pallas-workflow','pallas-analysis','pallas-competitors','pallas-dashboard']) assert.match(readFileSync(join(plugin,'skills',name,'SKILL.md'),'utf8'),/^---/);
+  for(const name of ['scripts/pallas.mjs','scripts/project.py','scripts/serve.py','assets/pallas-logo.png','skills/pallas-analysis/assets/report.html','skills/pallas-competitors/assets/report.html','skills/pallas-dashboard/assets/dashboard.html']) assert.ok(readFileSync(join(plugin,name)).length>0);
 });
 test('bundled runtime checksums match and no operator Google configuration is embedded',()=>{
   const resources=join(plugin,'resources'),manifest=json(join(resources,'npm-runtime.json'));

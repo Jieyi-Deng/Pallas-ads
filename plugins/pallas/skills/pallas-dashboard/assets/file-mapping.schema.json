@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "ConversionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "event": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Event",
+          "type": "string"
+        },
+        "attribution_window": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Attribution Window",
+          "type": "string"
+        },
+        "counting_method": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Counting Method",
+          "type": "string"
+        },
+        "value_currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Value Currency",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event",
+        "attribution_window",
+        "counting_method",
+        "value_currency",
+        "evidence_reference"
+      ],
+      "title": "ConversionDefinition",
+      "type": "object"
+    },
+    "DataSource": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "enum": [
+            "google",
+            "meta",
+            "tiktok"
+          ],
+          "title": "Platform",
+          "type": "string"
+        },
+        "account_id": {
+          "pattern": "^[0-9]{1,32}$",
+          "title": "Account Id",
+          "type": "string"
+        },
+        "account_name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Account Name",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "timezone": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "platform",
+        "account_id",
+        "account_name",
+        "currency",
+        "timezone"
+      ],
+      "title": "DataSource",
+      "type": "object"
+    },
+    "DateRange": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "format": "date",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "format": "date",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "DateRange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/DataSource"
+    },
+    "kind": {
+      "default": "uploaded_file",
+      "enum": [
+        "uploaded_file",
+        "authorized_account"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "period": {
+      "$ref": "#/$defs/DateRange"
+    },
+    "complete": {
+      "const": true,
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "grain": {
+      "enum": [
+        "campaign_day",
+        "creative_day"
+      ],
+      "title": "Grain",
+      "type": "string"
+    },
+    "columns": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Columns",
+      "type": "object"
+    },
+    "spend_unit": {
+      "enum": [
+        "currency",
+        "micros"
+      ],
+      "title": "Spend Unit",
+      "type": "string"
+    },
+    "value_unit": {
+      "default": "currency",
+      "enum": [
+        "currency",
+        "micros"
+      ],
+      "title": "Value Unit",
+      "type": "string"
+    },
+    "conversion_definition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ConversionDefinition"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "sheet": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sheet"
+    }
+  },
+  "required": [
+    "schema_version",
+    "source",
+    "period",
+    "complete",
+    "grain",
+    "columns",
+    "spend_unit"
+  ],
+  "title": "FileMapping",
+  "type": "object"
+}

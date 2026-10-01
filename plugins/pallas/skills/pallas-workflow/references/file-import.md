@@ -18,7 +18,9 @@ breakdowns. Do not rewrite raw files to make invalid input pass.
    interpretation (reuse an already explicit matching confirmation). Never ask for hashes.
 4. Call `file_import` with the unchanged file/options, returned `review_hash` and
    `user_confirmed=true`. Changed inputs require a fresh preview. Copy no credentials.
-5. Call `build_report(action=file_review,dataset_id=...)`, then follow pallas-analysis.
+5. Call `build_report(action=file_review,dataset_id=...)`, then follow pallas-analysis. When the
+   user also supplied internal conversion data, import it through
+   [internal-conversions.md](internal-conversions.md) and add `internal_dataset_id`.
    Report partial_result is expected: file coverage and business semantics remain unverified.
    Link the HTML and chat/JSON artifacts, explain results and next checks, not only paths.
 

@@ -11,6 +11,11 @@ request schemas with `pallas operations` or MCP `tools/list`. CLI fallback is
 JSON requests are agent-produced machine inputs, not configuration homework for advertisers.
 Never supply raw Graph, GAQL, TikTok endpoints or credentials in a request.
 
+Route persistent dashboards, multi-platform overviews and incremental dashboard updates to
+`pallas-dashboard` and `build_report(action=dashboard)`. Reuse the selected workspace and existing
+dashboard ID. Route one-off diagnosis/reports to `pallas-analysis`; a report request ends with
+a generated HTML artifact link, not only a conversational summary or prepare contract.
+
 For native plugin installations, use the installed pallas-setup Skill for initialization,
 project binding, migration, diagnostics and updates. Follow install → activate → authorize →
 analyze; file analysis can skip authorization. Do not register another Pallas MCP server or
@@ -30,6 +35,9 @@ only change them when asked. Never copy user OAuth credentials from another mach
 For CSV/XLSX requests, use [the file preview/import workflow](references/file-import.md) first.
 No OAuth or product profile is required. Do not divert file analysis into live account setup.
 First-release files are single-account campaign/day snapshots, not automatic cross-media merges.
+When the user also provides first-party internal conversion data (new users, conversions,
+revenue or retention by channel), follow [internal conversion data](references/internal-conversions.md)
+after the advertising file is confirmed. Internal channel and platform meanings are user-confirmed.
 
 ## First-use ordering and data access
 

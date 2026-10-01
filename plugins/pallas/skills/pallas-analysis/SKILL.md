@@ -1,6 +1,6 @@
 ---
 name: pallas-analysis
-description: Explain retained Pallas acquisition evidence and build local Markdown/HTML briefings with the user's Codex or Claude agent. Use for Pallas comparisons, monitor-run interpretation and evidence-backed reports; not for native advertising queries or account changes.
+description: Generate local HTML advertising analysis reports from authorized Pallas connections, retained host captures, imported files or comparisons. Use for account diagnosis and evidence-backed reports; use pallas-dashboard for persistent dashboards.
 ---
 
 # Pallas analysis delivery
@@ -12,6 +12,19 @@ use a retained Evidence Packet ID and optional explicit monitor run IDs.
 Do not infer them from campaign names or select a different product to make a request succeed.
 
 ## Default human-facing HTML format
+
+For a persistent dashboard, multi-platform overview or incremental refresh, load
+`pallas-dashboard` and use `build_report(action=dashboard)`. Do not route those requests to
+this one-off analysis renderer.
+
+For an analysis/report request, call the matching build_report action (analyze, file_review,
+host_review, or prepare followed by build). Read the returned HTML artifact from
+`artifacts.html`, `html_path`, or legacy `directory/report.html`, confirm it exists, and link it
+in the final answer. A prepare response or an in-chat table alone is not report delivery.
+The runtime rejects a report operation whose promised HTML is missing, but cannot force a
+host agent to call the operation or include its link. If generation fails, report that failure;
+do not claim an HTML report was created. A user asking only a conversational question about
+an existing report does not require generating another report.
 
 Read [the report contract](references/report-template.md) and use
 [the shared HTML template](assets/report.html) for new account analysis reports. Unless the user
@@ -31,6 +44,17 @@ No live authorization is implied. Missing dates/values are not zero, overlapping
 not combined, and unknown conversion events cannot become purchases or financial ROI.
 The report and chat.md are the factual starting point; ask only unresolved business questions
 needed for the user's decision. Do not replace runtime evidence with an unrelated custom report.
+
+With `internal_dataset_id`, section 二 adds an integrated advertising + internal conversion
+assessment and section 三 adds its findings. Read `internal_integration` and
+`evidence/internal_matching.json` first: alignment (overlap, timezone, currency), channel groups,
+efficiency, `quality_comparison`, `organic_trend`, campaign matches and `unavailable`. Explain paid
+acquisition quality against organic growth only for rows marked `eligible`; for others state why
+the comparison is withheld. These are descriptive differences, not lift, cannibalization or
+causal effects. Platform and internal conversions follow different attribution; explain the ratio,
+never add them or declare one wrong. `not_integrable` means no integrated metric exists; explain the
+blocking reason and the export needed. Matching rules are in the workflow Skill's
+`references/internal-conversions.md`.
 
 ## Account history and diagnostic requests
 

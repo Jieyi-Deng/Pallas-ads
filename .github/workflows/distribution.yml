@@ -1,0 +1,61 @@
+name: Distribution checks
+on:
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - 'docs/**/*.md'
+  workflow_dispatch:
+    inputs:
+      include_macos:
+        description: 'Also run the native macOS bootstrap (normally verified locally)'
+        type: boolean
+        default: false
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  distribution:
+    name: Distribution (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        include: ${{ fromJSON(inputs.include_macos && '[{"os":"ubuntu-latest","python":"3.12"},{"os":"macos-latest","python":"3.13"}]' || '[{"os":"ubuntu-latest","python":"3.12"}]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: resources/npm-runtime.json
+      - name: Verify distribution files and launcher behavior
+        run: |
+          node --test test/*.test.mjs
+          node bin/pallas-ads.mjs --help
+          node plugins/pallas/scripts/pallas.mjs --help
+          python test/wheel-check.py
+      - name: Install the shipped wheel and verify synthetic commands
+        run: |
+          python -m venv "$RUNNER_TEMP/pallas-installed"
+          "$RUNNER_TEMP/pallas-installed/bin/python" -m pip install resources/*.whl
+          "$RUNNER_TEMP/pallas-installed/bin/python" test/command-smoke.py --python "$RUNNER_TEMP/pallas-installed/bin/python" --plugin "$PWD/plugins/pallas" --output "$RUNNER_TEMP/command-acceptance"
+      - name: Verify native macOS bootstrap
+        if: runner.os == 'macOS'
+        env:
+          PALLAS_DATA_HOME: ${{ runner.temp }}/pallas-plugin-runtime
+        run: |
+          node plugins/pallas/scripts/pallas.mjs setup --client codex --project "$RUNNER_TEMP/pallas-test" --python "$(command -v python)" --install-command
+          node plugins/pallas/scripts/pallas.mjs doctor --project "$RUNNER_TEMP/pallas-test"
+          node test/plugin-smoke.mjs "$RUNNER_TEMP/pallas-test"
+          node plugins/pallas/scripts/pallas.mjs deactivate --project "$RUNNER_TEMP/pallas-test"
+      - name: Record coverage
+        run: |
+          echo 'Verified shipped artifacts and synthetic command behavior; no media account access.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'One Linux job per product PR. Native macOS setup is local-first; include_macos enables a deliberate release check. Documentation-only PRs do not run Actions.' >> "$GITHUB_STEP_SUMMARY"
