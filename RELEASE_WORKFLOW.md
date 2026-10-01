@@ -19,7 +19,9 @@ source project. Do not independently patch a shipped Skill or wheel here.
 5. Publish the same tgz to npm. Verify an anonymous registry download, integrity and
    the `latest` tag, then update the release notes with the actual channel status.
 
-`release.json` describes the artifacts in this checkout. It is not proof of npm
+`release.json` describes the product artifacts in this checkout. Publisher tooling
+is tracked separately in the upstream frozen candidate and verified against public
+main before publication; tooling-only edits do not change product metadata. It is not proof of npm
 publication. Consult the [npm package](https://www.npmjs.com/package/pallas-ads)
 and [GitHub releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for channel
 availability. Ordinary documentation and publisher-tool changes do not by themselves
