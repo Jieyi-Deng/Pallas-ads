@@ -2,6 +2,8 @@
 
 For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This page covers the npm project installation; use one entry per project.
 
+Use the GitHub package commands below for installer 0.2.0-alpha.2 and runtime 0.2.0a2. The npm registry is a separate release channel; its existing 0.2.0-alpha.1 package does not include the new unified command or dashboard.
+
 Pallas runs inside a dedicated project in Codex or Claude Code. You can follow these steps yourself or give this page to your agent.
 
 ## Requirements
@@ -18,7 +20,7 @@ The installer reuses supported Python or prepares it automatically. You do not n
 Run the interactive installer:
 
 ```sh
-npx pallas-ads install
+npx github:Jieyi-Deng/Pallas-ads install
 ```
 
 Choose your agent and project folder. For an agent running without an interactive terminal, specify both explicitly.
@@ -26,30 +28,30 @@ Choose your agent and project folder. For an agent running without an interactiv
 Codex:
 
 ```sh
-npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
+npx github:Jieyi-Deng/Pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
 Claude Code:
 
 ```sh
-npx pallas-ads install --client claude --directory "$HOME/pallas-claude"
+npx github:Jieyi-Deng/Pallas-ads install --client claude --directory "$HOME/pallas-claude"
 ```
 
-Use separate projects for the two clients. The installer creates a project, an adjacent runtime, MCP settings, and the `pallas-workflow` and `pallas-analysis` Skills. Keep the project and its adjacent runtime directories in place.
+Use separate projects for the two clients. The installer creates a project, an adjacent runtime, MCP settings, and five Skills: `pallas`, `pallas-workflow`, `pallas-analysis`, `pallas-dashboard`, and `pallas-competitors`. Keep the project and its adjacent runtime directories in place.
 
 ## Activate
 
 1. Open the generated project folder in the selected agent.
 2. Confirm project trust and the requested local MCP permissions.
 3. Start a new task to load the project configuration and Skills.
-4. Ask: “Check that Pallas tools and both Pallas Skills are available, then help me prepare my media account connection.”
+4. Ask: “Check that Pallas tools and the five Pallas Skills are available, then help me prepare my media account connection.”
 
 The agent should verify actual tool availability. An installation diagnostic alone does not establish that the client has loaded the MCP server. No separate MCP terminal needs to remain open.
 
 If tools are missing, confirm that the correct project is open, reload the task, and run:
 
 ```sh
-npx pallas-ads doctor --directory "$HOME/pallas-codex"
+npx github:Jieyi-Deng/Pallas-ads doctor --directory "$HOME/pallas-codex"
 ```
 
 Substitute your actual project path. For help, contact [support@pallas-ads.com](mailto:support@pallas-ads.com).

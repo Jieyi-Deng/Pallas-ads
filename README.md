@@ -17,7 +17,7 @@ Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and i
 - **Understand performance.** Review spend, impressions, clicks, and efficiency metrics with clear account and date context.
 - **Explain changes.** Explore campaign mix and the arithmetic drivers of metric changes, with business explanations identified as hypotheses when evidence is missing.
 - **Get a report you can revisit.** Each report brings together an account and period summary, a breakdown of changes, and findings with recommended next steps.
-- **Keep the conversation in your agent.** The `pallas-workflow` and `pallas-analysis` Skills guide the same analysis process across supported data sources.
+- **Keep the conversation in your agent.** The `pallas` entrypoint routes analysis and persistent dashboards to the matching Skills and verified report templates.
 
 ## 1. Install
 
@@ -43,13 +43,13 @@ codex plugin add pallas@pallas-ads
 /plugin install pallas@pallas-ads
 ```
 
-See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx pallas-ads install`, remains available for projects using the project-based installation.
+See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx github:Jieyi-Deng/Pallas-ads install`, remains available for projects using the project-based installation.
 
 ## 2. Activate in your agent
 
 Open your intended project and ask the `pallas-setup` Skill to prepare it. Confirm project trust and any requested permissions, then reload or start a new task.
 
-> Prepare Pallas in this project and verify that its tools and setup, workflow, and analysis Skills are available. Then help me prepare the media account connection I want to use.
+> Prepare Pallas in this project and verify that its eleven tools and six Skills, including the Pallas command and dashboard Skills, are available. Then help me prepare the media account connection I want to use.
 
 Setup prepares the runtime and binds Pallas to your project. Media account authorization is a separate step below.
 
@@ -67,6 +67,8 @@ If you only want to analyze an uploaded export, skip account authorization and u
 
 Choose a connected advertising account or upload an advertising export.
 
+In Claude Code, use `/pallas:pallas analysis` or `/pallas:pallas dashboard`. Ask setup to add the project command alias if you prefer `/pallas analysis` and `/pallas dashboard`. In Codex, select the installed `pallas` Skill or use `$pallas analysis` / `$pallas dashboard` where supported. See the [command guide](PALLAS_COMMAND.md) for setup and examples.
+
 ### Read a connected account
 
 > Use Pallas to read performance data from my authorized advertising account for the last seven complete days. Confirm the account, reporting dates, currency, timezone, and available data. Analyze performance and changes, explain the evidence behind your findings, and generate an HTML report with recommended next steps.
@@ -81,6 +83,12 @@ Attach your CSV or XLSX export if your agent supports local file attachments, or
 
 Pallas previews the interpretation before saving the import. You confirm what the data represents, and your agent returns the report and explains the findings. See [preparing an advertising export](FILE_IMPORT.md).
 
+### Keep a persistent dashboard
+
+> Use Pallas to create a dashboard from the accounts or confirmed files I selected. Keep its history in this project, show available performance and creative detail, and give me the HTML link. For later updates, reuse the same dashboard and explain missing or stale sources.
+
+Dashboards retain previous dates and update the selected sources. They need fresh exports for file-based updates; missing conversions or creative detail remain unavailable. Updating a dashboard does not create a schedule.
+
 ## 5. Set up recurring checks
 
 After a successful analysis, use your agent's scheduling feature, where available, to repeat the workflow in the same Pallas project:
@@ -93,7 +101,7 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
-For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). The current GitHub distribution is described in the [plugin 0.2.0 release notes](RELEASE_NOTES_PLUGIN_0.2.0.md). npm registry publication is separate. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
 
 ## Your data
 

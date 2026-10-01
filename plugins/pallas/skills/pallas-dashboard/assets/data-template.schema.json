@@ -1,0 +1,675 @@
+{
+  "$defs": {
+    "AdGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "campaign_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Campaign Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "os": {
+          "anyOf": [
+            {
+              "enum": [
+                "iOS",
+                "Android",
+                "Others"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os"
+        }
+      },
+      "required": [
+        "id",
+        "campaign_id",
+        "name"
+      ],
+      "title": "AdGroup",
+      "type": "object"
+    },
+    "Campaign": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "ad_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ad Type"
+        },
+        "target_cpa": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Cpa"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Campaign",
+      "type": "object"
+    },
+    "CampaignRow": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "spend": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Spend"
+        },
+        "impressions": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Impressions"
+        },
+        "clicks": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Clicks"
+        },
+        "conversions": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conversions"
+        },
+        "conversion_value": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conversion Value"
+        },
+        "campaign_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Campaign Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "date",
+        "spend",
+        "impressions",
+        "clicks",
+        "campaign_id"
+      ],
+      "title": "CampaignRow",
+      "type": "object"
+    },
+    "ConversionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "event": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Event",
+          "type": "string"
+        },
+        "attribution_window": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Attribution Window",
+          "type": "string"
+        },
+        "counting_method": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Counting Method",
+          "type": "string"
+        },
+        "value_currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Value Currency",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event",
+        "attribution_window",
+        "counting_method",
+        "value_currency",
+        "evidence_reference"
+      ],
+      "title": "ConversionDefinition",
+      "type": "object"
+    },
+    "Creative": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "ad_group_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Ad Group Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "Image",
+            "Video",
+            "Carousel",
+            "Other"
+          ],
+          "title": "Format",
+          "type": "string"
+        },
+        "preview_data": {
+          "anyOf": [
+            {
+              "maxLength": 2000000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preview Data"
+        },
+        "original_url": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Original Url"
+        }
+      },
+      "required": [
+        "id",
+        "ad_group_id",
+        "name",
+        "format"
+      ],
+      "title": "Creative",
+      "type": "object"
+    },
+    "CreativeRow": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "spend": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Spend"
+        },
+        "impressions": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Impressions"
+        },
+        "clicks": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Clicks"
+        },
+        "conversions": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conversions"
+        },
+        "conversion_value": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Conversion Value"
+        },
+        "creative_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Creative Id",
+          "type": "string"
+        },
+        "os": {
+          "anyOf": [
+            {
+              "enum": [
+                "iOS",
+                "Android",
+                "Others"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os"
+        },
+        "video_views": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Views"
+        },
+        "video_completions": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Completions"
+        }
+      },
+      "required": [
+        "date",
+        "spend",
+        "impressions",
+        "clicks",
+        "creative_id"
+      ],
+      "title": "CreativeRow",
+      "type": "object"
+    },
+    "DataSource": {
+      "additionalProperties": false,
+      "properties": {
+        "platform": {
+          "enum": [
+            "google",
+            "meta",
+            "tiktok"
+          ],
+          "title": "Platform",
+          "type": "string"
+        },
+        "account_id": {
+          "pattern": "^[0-9]{1,32}$",
+          "title": "Account Id",
+          "type": "string"
+        },
+        "account_name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Account Name",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "timezone": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "platform",
+        "account_id",
+        "account_name",
+        "currency",
+        "timezone"
+      ],
+      "title": "DataSource",
+      "type": "object"
+    },
+    "DateRange": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "format": "date",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "format": "date",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "DateRange",
+      "type": "object"
+    },
+    "Details": {
+      "additionalProperties": false,
+      "properties": {
+        "ad_groups": {
+          "items": {
+            "$ref": "#/$defs/AdGroup"
+          },
+          "title": "Ad Groups",
+          "type": "array"
+        },
+        "creatives": {
+          "items": {
+            "$ref": "#/$defs/Creative"
+          },
+          "title": "Creatives",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "$ref": "#/$defs/CreativeRow"
+          },
+          "title": "Rows",
+          "type": "array"
+        }
+      },
+      "required": [
+        "ad_groups",
+        "creatives",
+        "rows"
+      ],
+      "title": "Details",
+      "type": "object"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "uploaded_file",
+            "authorized_account"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "reference": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "field_mapping": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "minProperties": 1,
+          "title": "Field Mapping",
+          "type": "object"
+        }
+      },
+      "required": [
+        "kind",
+        "reference",
+        "sha256",
+        "field_mapping"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One complete source window; additive counts only, never precomputed ratios.",
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/DataSource"
+    },
+    "evidence": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "period": {
+      "$ref": "#/$defs/DateRange"
+    },
+    "complete": {
+      "const": true,
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "conversion_definition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ConversionDefinition"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "campaigns": {
+      "items": {
+        "$ref": "#/$defs/Campaign"
+      },
+      "title": "Campaigns",
+      "type": "array"
+    },
+    "rows": {
+      "items": {
+        "$ref": "#/$defs/CampaignRow"
+      },
+      "title": "Rows",
+      "type": "array"
+    },
+    "details": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Details"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "schema_version",
+    "source",
+    "evidence",
+    "period",
+    "complete",
+    "campaigns",
+    "rows"
+  ],
+  "title": "DashboardData",
+  "type": "object"
+}

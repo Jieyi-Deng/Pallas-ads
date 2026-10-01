@@ -130,7 +130,39 @@ def remove_codex_server(text):
     return changed
 
 
-def setup(project, client, runtime, version, wheel_hash, migrate, node="node"):
+def command_alias(project, client, binding, enabled):
+    """Opt-in project skill forwarding to the bundled entrypoint; never replace user files."""
+    previous = binding.get("command_alias")
+    if not enabled and not previous:
+        return {}, None
+    relative = (".claude/skills" if client == "claude" else ".agents/skills") + "/pallas/SKILL.md"
+    target = safe(project, relative)
+    if client == "claude" and safe(project, ".claude/commands/pallas.md").exists():
+        raise ValueError("A user /pallas command already exists; keep it or rename it manually.")
+    if target.parent.exists() and any(target.parent.iterdir()):
+        if not previous or previous.get("path") != relative or not target.is_file():
+            raise ValueError("A user pallas skill already exists; it will not be overwritten.")
+        if digest(target.read_bytes()) != previous.get("sha256"):
+            raise ValueError(
+                "The pallas command alias was edited; preserve and review it manually."
+            )
+    elif previous:
+        raise ValueError("The managed pallas command alias is missing; review the binding first.")
+    entrypoint = Path(__file__).resolve().parents[1] / "skills/pallas/SKILL.md"
+    content = (
+        "---\nname: pallas\ndescription: Run /pallas analysis, dashboard, help or status "
+        "in this prepared Pallas project.\n---\n\n"
+        "Read the installed Pallas entrypoint at " + json.dumps(str(entrypoint)) + ".\n"
+        "Apply it to the user's command and arguments in this project's bound workspace.\n"
+        "If the entrypoint or pallas_command tool is missing, run the installed pallas-setup "
+        "workflow and reload. Never select another project's data.\n"
+    ).encode()
+    return {relative: content}, {"path": relative, "sha256": digest(content)}
+
+
+def setup(
+    project, client, runtime, version, wheel_hash, migrate, node="node", install_command=False
+):
     from pallas_ads.local_state import WorkspaceRepository
 
     updates, moves = {}, []
@@ -145,7 +177,12 @@ def setup(project, client, runtime, version, wheel_hash, migrate, node="node"):
         )
     server = config.get("mcpServers" if client == "claude" else "mcp_servers", {}).get("pallas")
     skill_root = ".claude/skills" if client == "claude" else ".agents/skills"
-    for name in ["pallas-workflow", "pallas-analysis"]:
+    for name in [
+        "pallas-workflow",
+        "pallas-analysis",
+        "pallas-competitors",
+        "pallas-dashboard",
+    ]:
         relative = skill_root + "/" + name
         path = safe(project, relative)
         if path.exists():
@@ -154,6 +191,8 @@ def setup(project, client, runtime, version, wheel_hash, migrate, node="node"):
     binding = json.loads(binding_path.read_text()) if binding_path.exists() else {}
     if binding and (binding.get("client") != client or binding.get("project") != str(project)):
         raise ValueError("This binding belongs to another client/path; keep separate projects.")
+    alias_updates, alias = command_alias(project, client, binding, install_command)
+    updates.update(alias_updates)
     managed_server = client == "codex" and server and server == binding.get("mcp")
     if binding.get("mcp") and server and not managed_server:
         raise ValueError("Pallas MCP config was customized after setup. Review it manually.")
@@ -211,8 +250,11 @@ def setup(project, client, runtime, version, wheel_hash, migrate, node="node"):
     instructions = safe(project, instruction_name)
     if not instructions.exists():
         updates[instruction_name] = (
-            b"# Pallas project\n\nUse the installed Pallas plugin and its pallas-workflow and "
-            b"pallas-analysis Skills. Keep data in this project's .pallas workspace. "
+            b"# Pallas project\n\nUse the installed Pallas plugin's pallas command Skill for "
+            b"analysis/dashboard/help/status, and its pallas-workflow and "
+            b"pallas-analysis Skills; use pallas-dashboard for persistent dashboards and updates. "
+            b"Report requests must deliver the generated HTML link. "
+            b"Keep data in this project's .pallas workspace. "
             b"Authorize media through the configured host connection. Never copy tokens or "
             b"modify campaigns. File analysis can skip authorization.\n"
         )
@@ -237,6 +279,7 @@ def setup(project, client, runtime, version, wheel_hash, migrate, node="node"):
             "wheelSha256": wheel_hash,
             "schemaVersion": 1,
             "mcp": mcp,
+            **({"command_alias": alias} if alias else {}),
         }
     )
     # No secrets are copied. Existing .pallas data is opened in place, not reset.
@@ -357,7 +400,18 @@ if __name__ == "__main__":
         project = Path(raw_project).resolve()
         if command == "setup":
             client, runtime, version, wheel_hash, node, *flags = args
-            setup(project, client, runtime, version, wheel_hash, flags == ["--migrate"], node)
+            if set(flags) - {"--migrate", "--install-command"}:
+                raise ValueError("Unknown setup flag")
+            setup(
+                project,
+                client,
+                runtime,
+                version,
+                wheel_hash,
+                "--migrate" in flags,
+                node,
+                install_command="--install-command" in flags,
+            )
         elif command == "rollback":
             rollback(project)
         elif command == "deactivate":

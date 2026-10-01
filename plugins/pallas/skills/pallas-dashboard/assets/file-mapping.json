@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "platform": "google",
+    "account_id": "9000000999",
+    "account_name": "EXAMPLE — replace with evidence",
+    "currency": "USD",
+    "timezone": "America/Los_Angeles"
+  },
+  "kind": "uploaded_file",
+  "period": {
+    "start": "2026-09-29",
+    "end": "2026-09-29"
+  },
+  "complete": true,
+  "grain": "creative_day",
+  "spend_unit": "currency",
+  "value_unit": "currency",
+  "conversion_definition": {
+    "event": "purchase",
+    "attribution_window": "7-day click",
+    "counting_method": "one per order",
+    "value_currency": "USD",
+    "evidence_reference": "EXAMPLE ONLY — replace with documented source definition"
+  },
+  "columns": {
+    "account_id": "Account ID",
+    "currency": "Currency",
+    "date": "Date",
+    "campaign_id": "Campaign ID",
+    "campaign_name": "Campaign name",
+    "ad_group_id": "Ad group ID",
+    "ad_group_name": "Ad group name",
+    "creative_id": "Creative ID",
+    "creative_name": "Creative name",
+    "format": "Format",
+    "os": "OS",
+    "spend": "Cost (USD)",
+    "impressions": "Impressions",
+    "clicks": "Clicks",
+    "conversions": "Purchases",
+    "conversion_value": "Purchase value (USD)",
+    "video_views": "Video views",
+    "video_completions": "Video completions"
+  }
+}

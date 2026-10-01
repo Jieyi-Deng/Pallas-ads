@@ -15,13 +15,17 @@ export function options(args) {
   if (!['setup','serve','doctor','rollback','deactivate','connect-meta','help'].includes(result.command)) throw Error('Use setup, serve, doctor, rollback, deactivate or connect-meta.');
   while (args.length) {
     const key = args.shift();
-    if (key === '--migrate') { result.migrate = true; continue; }
+    if (['--migrate','--install-command'].includes(key)) {
+      const flag = key === '--migrate' ? 'migrate' : 'installCommand';
+      if (result[flag]) throw Error('Repeated setup flag.');
+      result[flag] = true; continue;
+    }
     if (!['--project','--client','--python'].includes(key) || !args.length || args[0].startsWith('--') || result[key.slice(2)]) throw Error('Unknown, repeated or incomplete argument.');
     result[key.slice(2)] = args.shift();
   }
   if (result.client && !['codex','claude'].includes(result.client)) throw Error('Client must be codex or claude.');
   if (result.command === 'setup' && (!result.project || !result.client)) throw Error('Setup requires --project /absolute/path and --client codex|claude.');
-  if (result.command !== 'setup' && (result.client || result.python || result.migrate)) throw Error('Client, Python and migrate options apply only to setup.');
+  if (result.command !== 'setup' && (result.client || result.python || result.migrate || result.installCommand)) throw Error('Client, Python and setup flags apply only to setup.');
   return result;
 }
 function regular(path) {
@@ -96,7 +100,7 @@ function receipt(project) {
 export async function main(args=process.argv.slice(2)) {
   const opts=options([...args]);
   if(opts.command==='help') {
-    console.log('Pallas native plugin\nsetup --client codex|claude --project PATH [--python EXECUTABLE] [--migrate]\nserve [--project PATH]\ndoctor --project PATH\nrollback --project PATH\ndeactivate --project PATH\nconnect-meta --project PATH (Claude Code only)\nSetup prepares a runtime and binds this project. It does not authorize media.'); return;
+    console.log('Pallas native plugin\nsetup --client codex|claude --project PATH [--python EXECUTABLE] [--migrate] [--install-command]\nserve [--project PATH]\ndoctor --project PATH\nrollback --project PATH\ndeactivate --project PATH\nconnect-meta --project PATH (Claude Code only)\nSetup prepares a runtime and binds this project. --install-command adds a project pallas skill without overwriting user commands. It does not authorize media.'); return;
   }
   if(Number(process.versions.node.split('.')[0])<22) throw Error('Pallas requires Node.js 22 or newer.');
   if(process.platform!=='darwin') throw Error('Pallas setup and runtime support macOS.');
@@ -107,7 +111,7 @@ export async function main(args=process.argv.slice(2)) {
     try {
       const {directory,manifest}=verifiedResources(ROOT);
       const runtime=await prepareRuntime(directory,manifest,opts.python);
-      await run(join(runtime,'bin/python'),[join(ROOT,'scripts/project.py'),'setup',project,opts.client,runtime,VERSION,manifest.files[manifest.wheel],process.execPath,...(opts.migrate?['--migrate']:[])]);
+      await run(join(runtime,'bin/python'),[join(ROOT,'scripts/project.py'),'setup',project,opts.client,runtime,VERSION,manifest.files[manifest.wheel],process.execPath,...(opts.migrate?['--migrate']:[]),...(opts.installCommand?['--install-command']:[])]);
       console.log('Pallas is prepared. Reload plugins or start a new agent session in this project. Then authorize a media account or provide an advertising export.');
     } finally {release();}
     return;

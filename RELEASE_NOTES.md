@@ -1,3 +1,5 @@
+For the current GitHub distribution, see [Pallas native plugin 0.2.0](RELEASE_NOTES_PLUGIN_0.2.0.md), which bundles runtime 0.2.0a2. The following notes describe the earlier archive release.
+
 # v0.2.0a1 — Local analysis Alpha
 
 The first public distribution of Pallas's local analysis workflow for macOS + Python 3.12–3.13 + Codex / Claude Code.
