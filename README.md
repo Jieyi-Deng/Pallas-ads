@@ -43,7 +43,7 @@ codex plugin add pallas@pallas-ads
 /plugin install pallas@pallas-ads
 ```
 
-See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx github:Jieyi-Deng/Pallas-ads install`, remains available for projects using the project-based installation.
+See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx pallas-ads install`, remains available for projects using the project-based installation.
 
 ## 2. Activate in your agent
 
@@ -101,7 +101,7 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
-For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). The current GitHub distribution is described in the [plugin 0.2.0 release notes](RELEASE_NOTES_PLUGIN_0.2.0.md). npm registry publication is separate. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). The [plugin release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [npm release notes](NPM_RELEASE_NOTES.md) describe the current distributions. npm and GitHub ship the same runtime. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
 
 ## Your data
 

@@ -2,7 +2,7 @@
 
 For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This page covers the npm project installation; use one entry per project.
 
-Use the GitHub package commands below for installer 0.2.0-alpha.2 and runtime 0.2.0a2. The npm registry is a separate release channel; its existing 0.2.0-alpha.1 package does not include the new unified command or dashboard.
+npm and GitHub now both distribute installer 0.2.0-alpha.2 with runtime 0.2.0a2, including the unified Pallas command and dashboard Skills. The npm `latest` tag points to this Alpha release; use `pallas-ads@0.2.0-alpha.2` to pin it explicitly.
 
 The npm launcher prepares the Pallas runtime, local MCP configuration, and five Skills: `pallas`, `pallas-workflow`, `pallas-analysis`, `pallas-dashboard`, and `pallas-competitors`. Start with [INSTALL.md](INSTALL.md) for the complete install, activation, and first-use flow.
 
@@ -11,16 +11,16 @@ The npm launcher prepares the Pallas runtime, local MCP configuration, and five 
 Requires macOS on Apple Silicon or Intel, Node.js 22+, and internet access.
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads install
+npx pallas-ads install
 ```
 
 The installer asks for Codex or Claude Code and a new project directory. For non-interactive use:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads install --client codex --directory "$HOME/pallas-codex"
+npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
-Use `--client claude` for Claude Code. The GitHub source supplies the runtime bundled in this repository.
+Use `--client claude` for Claude Code. The alternative GitHub source is `npx github:Jieyi-Deng/Pallas-ads install`; it supplies the same bundled runtime.
 
 A supported Python 3.12 or 3.13 is reused. If none is available, the installer downloads a pinned, SHA-256-verified uv binary and prepares Python 3.13 alongside the runtime. Choose `--managed-python` to explicitly use a dedicated Python, or `--python /absolute/path/to/python3.13` to select an existing interpreter. These options are mutually exclusive.
 
@@ -35,7 +35,7 @@ Open the generated folder in your agent, confirm trust, and start a new task. Fo
 ## Diagnose
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads doctor --directory "$HOME/pallas-codex"
+npx pallas-ads doctor --directory "$HOME/pallas-codex"
 ```
 
 The check covers local installation and reports media setup separately. Confirm tool loading in an actual agent task and verify media access by listing authorized accounts.
@@ -45,7 +45,7 @@ The check covers local installation and reports media setup separately. Confirm 
 Back up your project, then run:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads update --directory "$HOME/pallas-codex"
+npx pallas-ads@latest update --directory "$HOME/pallas-codex"
 ```
 
 The update uses the runtime bundled with the selected installer. It retains project data and MCP configuration and backs up Skills before refreshing them. Review any custom Skills changes against that backup, then restart your agent task. Consult [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for version details.

@@ -1,8 +1,8 @@
-# GitHub installer 0.2.0-alpha.2
+# npm installer 0.2.0-alpha.2
 
-The GitHub package now bundles runtime 0.2.0a2, the unified Pallas command, and five portable Skills. Native plugin 0.2.0 is a separate entrypoint. See [the release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [installer reference](NPM_INSTALLER.md) for update commands and validation.
+The npm and GitHub packages now bundle runtime 0.2.0a2, the unified Pallas command, and five portable Skills. Native plugin 0.2.0 is a separate entrypoint. See [the release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [installer reference](NPM_INSTALLER.md) for update commands and validation.
 
-This version has not been published to the npm registry; `npx pallas-ads` still selects the earlier registry package below. Use `npx github:Jieyi-Deng/Pallas-ads` for this release.
+Published to npm on October 1, 2026, as `pallas-ads@0.2.0-alpha.2` with `latest` pointing to this version. Install with `npx pallas-ads install`; update an npm-managed project with `npx pallas-ads@latest update --directory /absolute/path/to/project`. The bundled runtime and launcher are unchanged from the verified GitHub release.
 
 # npm installer 0.2.0-alpha.1
 

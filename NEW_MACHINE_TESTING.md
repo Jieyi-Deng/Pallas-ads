@@ -11,7 +11,7 @@ Open the generated project in Codex or Claude Code, confirm project trust, and s
 Run installation diagnostics if needed:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads doctor --directory /path/to/your-pallas-project
+npx pallas-ads doctor --directory /path/to/your-pallas-project
 ```
 
 Optional media setup messages do not prevent file analysis. The diagnostic does not replace checking actual tool loading in the agent.

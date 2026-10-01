@@ -8,12 +8,12 @@ This update delivers the unified Pallas command, persistent advertising dashboar
 | --- | --- |
 | Native plugin | 0.2.0 |
 | Bundled Python runtime | 0.2.0a2 |
-| GitHub npm installer | 0.2.0-alpha.2 |
+| npm / GitHub installer | 0.2.0-alpha.2 |
 | Analysis renderer | 2.3.0 |
 | Dashboard renderer | 2.0.0 |
 | Competitor renderer | 1.0.0 |
 
-The npm registry remains at `pallas-ads@0.2.0-alpha.1`; this release updates the GitHub distribution. Use the GitHub installer commands below for the new runtime. These component versions are independent.
+npm follow-up, October 1, 2026: `pallas-ads@0.2.0-alpha.2` is also published to the npm registry and selected by `latest`. Both channels ship the same reviewed runtime. These component versions are independent.
 
 ## Commands and reports
 
@@ -33,13 +33,13 @@ Close active Pallas tasks, update the plugin through your host, rerun its setup 
 For an existing npm project:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads update --directory /absolute/path/to/project
+npx pallas-ads@latest update --directory /absolute/path/to/project
 ```
 
 For a new project:
 
 ```sh
-npx github:Jieyi-Deng/Pallas-ads install --client codex --directory /absolute/path/to/new-project
+npx pallas-ads install --client codex --directory /absolute/path/to/new-project
 ```
 
 Use `--client claude` for Claude Code. Preserve the project, runtime, and backups. Do not use the npm updater on a project already migrated to a native plugin.
