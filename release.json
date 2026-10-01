@@ -7,8 +7,6 @@
   "files": {
     ".agents/plugins/marketplace.json": "7cf861f6cd8e0dff1b4334cc08bf0d41b9ac0a97bb478b28c94c0927c8bb5f5c",
     ".claude-plugin/marketplace.json": "b8af2e721614c74d37fa67831818796e364819cdcb431a8b6c43b9cd818d89cd",
-    ".github/workflows/npm-publish.yml": "b6d20fd4bb07df49515e34cfa40f9a6606783beb2c1e2665d58c5400a9a1bc4e",
-    ".github/workflows/publish-checks.yml": "db80baf7b608fe425a0e0cf2081ce79943024792c64fcfa2f405b1d4d2b467a8",
     "LICENSE": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b",
     "NOTICE": "e8fe35ea6ebaac031f3051f4aac22efec72e09bd9c003ad76afd15e428f1da15",
     "PLUGIN_INSTALL.md": "e3412f8fcad31adf9b415c30e588bbd3296573333885c06564f9322f253cfc71",
@@ -60,9 +58,7 @@
     "resources/install_macos.py": "729e077f3abb2983c5ad6551a4c03e60a23cfa020199d462e92ede545d3581b8",
     "resources/npm-runtime.json": "bd02ac2adbafe4852760b0959ed73c54e9e54264aaaf39955bf5735776a366cd",
     "resources/pallas_ads-0.2.0a2-py3-none-any.whl": "42553a0f6c37be742195de7ab0790945e32c21fea8a47c9d9d371f7ce8a918e8",
-    "resources/release-manifest.json": "88ad86b993d6dab5bebb54e2adc68cfef57f91f3a8f6ba9ac968f7fb39e78f42",
-    "test/test_npm_publish.py": "c22e7c164971b411a07edf2e318a711d621b336aeb382072ff01485cb271879d",
-    "tools/npm_publish.py": "f2ae3c98efd997ea66cf1ac0d211e8e20a8af741f0d52dd02dfd4c318b73b43e"
+    "resources/release-manifest.json": "88ad86b993d6dab5bebb54e2adc68cfef57f91f3a8f6ba9ac968f7fb39e78f42"
   },
   "npm_files": {
     "LICENSE": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b",
