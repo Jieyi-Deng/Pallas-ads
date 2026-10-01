@@ -2,7 +2,7 @@
 
 For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This page covers the npm project installation; use one entry per project.
 
-npm and GitHub now both distribute installer 0.2.0-alpha.2 with runtime 0.2.0a2, including the unified Pallas command and dashboard Skills. The npm `latest` tag points to this Alpha release; use `pallas-ads@0.2.0-alpha.2` to pin it explicitly.
+This installer includes the unified Pallas command and dashboard Skills. Check the [npm package](https://www.npmjs.com/package/pallas-ads) for registry availability and `latest`; [release.json](release.json) records the component versions in this GitHub checkout. Channels may update at different times. To pin an installer, use `pallas-ads@<version>` with a published npm version.
 
 The npm launcher prepares the Pallas runtime, local MCP configuration, and five Skills: `pallas`, `pallas-workflow`, `pallas-analysis`, `pallas-dashboard`, and `pallas-competitors`. Start with [INSTALL.md](INSTALL.md) for the complete install, activation, and first-use flow.
 
@@ -20,7 +20,7 @@ The installer asks for Codex or Claude Code and a new project directory. For non
 npx pallas-ads install --client codex --directory "$HOME/pallas-codex"
 ```
 
-Use `--client claude` for Claude Code. The alternative GitHub source is `npx github:Jieyi-Deng/Pallas-ads install`; it supplies the same bundled runtime.
+Use `--client claude` for Claude Code. The alternative GitHub source is `npx github:Jieyi-Deng/Pallas-ads install`; consult its release manifest before choosing a channel.
 
 A supported Python 3.12 or 3.13 is reused. If none is available, the installer downloads a pinned, SHA-256-verified uv binary and prepares Python 3.13 alongside the runtime. Choose `--managed-python` to explicitly use a dedicated Python, or `--python /absolute/path/to/python3.13` to select an existing interpreter. These options are mutually exclusive.
 

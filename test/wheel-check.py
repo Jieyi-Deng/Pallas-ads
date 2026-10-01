@@ -30,7 +30,21 @@ with zipfile.ZipFile(root / "resources" / manifest["wheel"]) as wheel:
                 assert wheel.read(member) == file.read_bytes(), f"Skill/wheel mismatch: {member}"
     status = json.loads(wheel.read("pallas_ads/resources/release-status.json"))
     package = json.loads((root / "package.json").read_text())
-    assert package["version"].replace("-alpha.", "a") == status["package_version"]
+    assert manifest["runtimeVersion"] == status["package_version"]
     assert not status["advertising_writes"] and not status["default_telemetry"]
 
-print("Installer/plugin checksums, runtime modules, Skill identity and private-file exclusions passed.")
+release = json.loads((root / "release.json").read_text())
+assert release["schema_version"] == 1
+assert release["components"]["runtime"] == status["package_version"]
+assert release["components"]["npm"] == package["version"]
+for host in (".codex-plugin", ".claude-plugin"):
+    metadata = json.loads((plugin / host / "plugin.json").read_text())
+    assert release["components"]["plugin"] == metadata["version"]
+for name, expected in release["files"].items():
+    path = Path(name)
+    assert not path.is_absolute() and ".." not in path.parts and "\\" not in name
+    target = root / path
+    assert not any(p.is_symlink() for p in [target, *target.parents])
+    assert hashlib.sha256(target.read_bytes()).hexdigest() == expected, f"Release inventory mismatch: {name}"
+
+print("Release versions/inventory, installer/plugin checksums, runtime modules, Skill identity and private-file exclusions passed.")

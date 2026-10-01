@@ -101,7 +101,7 @@ Pallas 会先预览数据的解释方式，由你确认分析口径后再保存�
 
 通过 Agent 的插件管理器更新，再为每个 Pallas 项目运行 setup Skill，随后开始新任务。详见[插件更新与恢复](PLUGIN_INSTALL.md#update)。
 
-仍使用 npm 安装方式的项目，请使用 [npm 更新命令](NPM_INSTALLER.md)。当前分发版本见[插件发行说明](RELEASE_NOTES_PLUGIN_0.2.0.md)和 [npm 发行说明](NPM_RELEASE_NOTES.md)，npm 与 GitHub 包含相同 runtime。历史版本见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
+仍使用 npm 安装方式的项目，请使用 [npm 更新命令](NPM_INSTALLER.md)。当前 GitHub 文件的组件版本见 [release.json](release.json)，registry 可用版本见 [npm 包页面](https://www.npmjs.com/package/pallas-ads)；两个渠道可能在不同时间更新。历史版本见 [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases)。
 
 ## 数据处理
 
