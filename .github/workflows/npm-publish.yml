@@ -1,0 +1,78 @@
+name: Publish reviewed npm artifact
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Published GitHub release tag containing release.json and the reviewed npm tgz'
+        required: true
+        type: string
+      confirm_publish:
+        description: 'Publish this reviewed release to npm latest'
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main' && inputs.confirm_publish && vars.NPM_TRUSTED_PUBLISHING_ENABLED == 'true'
+    environment: npm-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Use an npm CLI supporting trusted publishing
+        run: npm install --global npm@11.21.0 --ignore-scripts
+      - name: Resolve the reviewed release
+        id: release
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, re, subprocess
+          tag = os.environ['RELEASE_TAG']
+          if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', tag):
+              raise SystemExit('Invalid release tag')
+          subprocess.run(['git', 'fetch', '--no-tags', 'origin', f'refs/tags/{tag}:refs/tags/{tag}'], check=True)
+          subprocess.run(['git', 'merge-base', '--is-ancestor', tag, 'origin/main'], check=True)
+          release = json.loads(subprocess.check_output(['gh', 'release', 'view', tag, '--json', 'isDraft']))
+          if release['isDraft']:
+              raise SystemExit('Publish the reviewed GitHub release first')
+          data = subprocess.check_output(['git', 'show', f'{tag}:release.json'])
+          manifest = json.loads(data)
+          name = manifest['npm_tarball']['filename']
+          if not re.fullmatch(r'pallas-ads-[0-9][0-9A-Za-z.-]*\.tgz', name):
+              raise SystemExit('Invalid npm artifact name')
+          destination = pathlib.Path(os.environ['RUNNER_TEMP']) / 'pallas-npm'
+          destination.mkdir()
+          (destination / 'release.json').write_bytes(data)
+          subprocess.run(['gh', 'release', 'download', tag, '--pattern', name, '--dir', str(destination)], check=True)
+          # The published manifest asset must also match the reviewed tag, not only its filename.
+          asset = destination / 'manifest-asset'
+          asset.mkdir()
+          subprocess.run(['gh', 'release', 'download', tag, '--pattern', 'release.json', '--dir', str(asset)], check=True)
+          if (asset / 'release.json').read_bytes() != data:
+              raise SystemExit('Release manifest asset differs from the reviewed tag')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'archive={name}\n')
+          PY
+      - name: Verify, publish and check anonymous registry download
+        env:
+          ARCHIVE_NAME: ${{ steps.release.outputs.archive }}
+        run: |
+          python tools/npm_publish.py --manifest "$RUNNER_TEMP/pallas-npm/release.json" --archive "$RUNNER_TEMP/pallas-npm/$ARCHIVE_NAME" --publish
+      - name: Record publication scope
+        run: echo 'Uploaded the reviewed tarball without rebuilding or rerunning product tests. npm integrity and latest verified; no live-account acceptance implied.' >> "$GITHUB_STEP_SUMMARY"

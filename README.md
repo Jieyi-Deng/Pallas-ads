@@ -101,7 +101,7 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
-For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). The [plugin release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [npm release notes](NPM_RELEASE_NOTES.md) describe the current distributions. npm and GitHub ship the same runtime. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). See [release.json](release.json) for this checkout’s component versions and the [npm package](https://www.npmjs.com/package/pallas-ads) for registry availability. Channels may update at different times. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
 
 ## Your data
 

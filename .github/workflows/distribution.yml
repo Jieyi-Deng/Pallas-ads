@@ -4,6 +4,10 @@ on:
     paths-ignore:
       - '*.md'
       - 'docs/**/*.md'
+      - '.github/workflows/npm-publish.yml'
+      - '.github/workflows/publish-checks.yml'
+      - 'tools/npm_publish.py'
+      - 'test/test_npm_publish.py'
   workflow_dispatch:
     inputs:
       include_macos:
