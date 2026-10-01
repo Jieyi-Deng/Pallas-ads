@@ -1,8 +1,16 @@
-# GitHub installer 0.2.0-alpha.2
+# npm installer 0.2.0-alpha.2
 
-The GitHub package now bundles runtime 0.2.0a2, the unified Pallas command, and five portable Skills. Native plugin 0.2.0 is a separate entrypoint. See [the release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [installer reference](NPM_INSTALLER.md) for update commands and validation.
+The npm and GitHub packages now bundle runtime 0.2.0a2, the unified Pallas command, and five portable Skills. Native plugin 0.2.0 is a separate entrypoint. See [the release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [installer reference](NPM_INSTALLER.md) for update commands and validation.
 
-This version has not been published to the npm registry; `npx pallas-ads` still selects the earlier registry package below. Use `npx github:Jieyi-Deng/Pallas-ads` for this release.
+Published to npm on October 1, 2026, at 13:45 PDT (20:45 UTC), as [`pallas-ads@0.2.0-alpha.2`](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.2) with `latest` pointing to this version. Install with `npx pallas-ads install`; update an npm-managed project with `npx pallas-ads@latest update --directory /absolute/path/to/project`. The bundled runtime and launcher are unchanged from the verified GitHub release.
+
+Post-publication verification downloaded the registry tarball anonymously and confirmed byte identity with the reviewed package, the 10-file allowlist, and the wheel SHA-256 recorded in the plugin release notes. A fresh npm cache resolved `latest` to `0.2.0-alpha.2`; the published launcher's `--version` and `--help` commands passed. These are maintainer-run distribution checks, not returned external-user or real-account acceptance. Product regressions and Actions were not repeated for this publication and documentation update.
+
+Registry tarball integrity:
+
+```text
+sha512-uSjsv/VxtK1DvNQyDg6MQkFuO0FGioF7fkE1BaCCcl06AyP3B8WbDqvEivYa/F1WecQv16MWuPKQxYCB/ZXm/A==
+```
 
 # npm installer 0.2.0-alpha.1
 
