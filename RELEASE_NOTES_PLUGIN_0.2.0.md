@@ -13,7 +13,7 @@ This update delivers the unified Pallas command, persistent advertising dashboar
 | Dashboard renderer | 2.0.0 |
 | Competitor renderer | 1.0.0 |
 
-npm follow-up, October 1, 2026: `pallas-ads@0.2.0-alpha.2` is also published to the npm registry and selected by `latest`. Both channels ship the same reviewed runtime. These component versions are independent.
+npm follow-up, October 1, 2026, 13:45 PDT (20:45 UTC): `pallas-ads@0.2.0-alpha.2` is also published to the npm registry and selected by `latest`. Both channels ship the same reviewed runtime. Anonymous registry download, package integrity, and fresh-cache launcher verification passed; see the [npm release notes](NPM_RELEASE_NOTES.md). These component versions are independent.
 
 ## Commands and reports
 
