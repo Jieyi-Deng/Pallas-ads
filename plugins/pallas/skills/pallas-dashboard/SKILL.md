@@ -103,8 +103,24 @@ validated window (automatic fetching is not enabled for this route):
 ```
 
 Existing confirmed CSV/XLSX `dataset_id` imports and Meta `capture_id` imports remain supported.
+A `dataset_id` import adds observed rows only: its first/last dates do not establish complete
+coverage, dates without rows stay unknown (not zero), and the result is `partial_result` with
+`coverage_not_established`; comparisons and Key Insights are withheld for those dates. Only a
+`data_path` window with `complete: true` (or a complete API/capture read) establishes coverage.
+`status.json` `sources.<key>.coverage` separates `complete_windows`, `observed_only` and
+`unknown_within_observed_span`; report these instead of a data-through date for observed-only
+sources. A `coverage_repaired` issue means older state claimed file coverage that no retained
+complete window supports; rows were kept and those dates are now observed-only.
 For Meta `host_capture`, run exactly the runtime's `requested_reads` plus account/field context,
 stage via `source_connect_or_import(action=host_capture)`, then update with the capture ID.
+Day boundaries use the account `timezone_name` from that retained evidence. A read with
+`purpose: account_timezone` is a prerequisite until it is captured; never supply the computer's
+timezone, infer one from currency, or assume UTC. Until then (`source_timezone_required` or
+`source_timezone_invalid`), reads end at the last date that has ended in every timezone. Days
+not yet ended in the account timezone at `observed_at` are reported as `excluded_unfinished`
+and never become rows or coverage; re-read them after they end. Older capture state is checked
+once against retained captures; a `coverage_repaired` issue there means days read before they
+ended, or with no retained capture, are now observed-only until a complete capture re-reads them.
 
 `dashboards/<id>/data.json` is the saved view data and the **exact data embedded in the HTML**.
 All routes converge on this file through the same code. `state.json` is the deduplicated update

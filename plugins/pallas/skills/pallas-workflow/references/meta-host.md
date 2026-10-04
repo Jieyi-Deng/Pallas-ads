@@ -24,9 +24,12 @@ It installs both Skills and the report template; no source checkout is required 
 4. Retrieve accounts with real pagination cursors; preserve incomplete discovery. Present API
    account names for selection when ambiguous. Never ask the user to type advertiser IDs.
    Match returned IDs internally; account names are not product identity evidence.
-5. For authorized data work, query field metadata first. Resolve currency/timezone, campaign
-   objective, ad-set `optimization_goal`, promoted object/event, attribution and targeting from
-   supported fields. These are current settings unless historical validity is independently known.
+5. For authorized data work, query field metadata first. Resolve currency and the account
+   `timezone_name` from returned account evidence (keep `timezone_name` in the account row, or
+   request it on an `account`-level entity read); never substitute the computer's timezone,
+   infer it from currency, or assume UTC. A day is complete only after it ends in that timezone.
+   Then resolve campaign objective, ad-set `optimization_goal`, promoted object/event,
+   attribution and targeting from supported fields. These are current settings unless historical validity is independently known.
    Only ask the user after available media evidence cannot resolve a business fact.
 6. Historical queries use explicit `level`, `fields`, `time_increment` and either exact `time_range`
    or `maximum`/`data_maximum`. A maximum preset does not prove complete account Lifetime.

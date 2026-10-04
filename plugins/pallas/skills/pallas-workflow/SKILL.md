@@ -5,7 +5,7 @@ description: Create confirmed Pallas product profiles and operate local imports,
 
 # Pallas workflow
 
-Use the user's selected local workspace. Pallas provides ten typed high-level tools; discover
+Use the user's selected local workspace. Pallas provides eleven typed high-level tools; discover
 request schemas with `pallas operations` or MCP `tools/list`. CLI fallback is
 `pallas call OPERATION --workspace /absolute/workspace --input /absolute/request.json`.
 JSON requests are agent-produced machine inputs, not configuration homework for advertisers.
@@ -72,10 +72,15 @@ permission problem, not permission to browse Ads Manager, scrape dashboards, exp
 another advertising connector. Browser interaction is for OAuth. Manual backend reconciliation
 is a separate user-requested test step and must never replace a failed Pallas source read.
 Developer App/OAuth-client settings are operator prerequisites, not product facts. Google Ads
-uses Cloud project access; never ask for a Developer Token. Google application parameters come
-from the official wheel. `providers google-desktop` is only an explicit operator/custom-app option,
-not a normal installation step. Packaging, Cloud access and app publication issues belong to the
-publisher; users only consent and choose accounts. Never ask for secrets in chat.
+uses Cloud project access; never ask for a Developer Token. Public packages (npm, plugin, public
+wheel) contain no Google application identity, so a fresh install reports Google
+`operator_setup_required`; that never blocks file analysis, Meta or TikTok. Google live access
+needs the operator's Desktop application (`pallas providers google-desktop`, run by the operator)
+or an operator-built wheel; hand missing setup to the operator. Keep the stages separate:
+operator setup required, application configured, OAuth consent completed, production data
+returned, and reconciled data. Configured is not authorization, a successful consent is not data
+access, and returned data is not reconciliation. Users only consent and choose accounts. Never
+ask for secrets, JSON files or tokens in chat.
 
 Meta defaults to the host client's official MCP (`https://mcp.facebook.com/ads`).
 `connect(platform=meta)` returns host instructions, not a Pallas OAuth session. Never poll

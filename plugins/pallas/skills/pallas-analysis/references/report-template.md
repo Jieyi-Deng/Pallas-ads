@@ -8,6 +8,14 @@ reason to deliver a new account report outside this template.
 
 ## Required HTML structure
 
+The primary reader is a business owner who needs the main judgment and next action
+quickly. Use a continuous reading layout, a short takeaway after the scope, at most
+four headline metrics selected for the available evidence, and conclusion-led
+findings. Keep material limitations beside the affected judgment. Detailed numeric
+evidence belongs in linked CSV files, not repeated tables or collapsed raw blocks.
+Recommendations use ordered, full-width rows with rationale and prerequisites;
+do not repeat the full findings or turn actions into parallel dashboard cards.
+
 ```html
 <header><!-- Report title, one-sentence purpose, section navigation --></header>
 <section id="overview">
@@ -38,6 +46,14 @@ from the corresponding finding and footer. Default files: `report.json`, `eviden
 `evidence/diagnostics.json`, `evidence/notes.md`, and `manifest.json`. Do not link fake paths or
 provider record URIs that the user cannot open. Preserve failures and scope limits in the sidecars;
 put their material implications in the body, in human language.
+
+Observation reports also export `evidence/comparison.csv`,
+`evidence/campaign_contributions.csv`, `evidence/anomalies.csv`, and `evidence/goals.csv`.
+File reports retain every imported row in `evidence/source_records.csv`, including native
+conversion fields. Internal integrations provide separate daily, quality, groups, efficiency,
+campaign and organic-trend CSVs. Meta host reviews export query-scoped metrics, query scopes,
+goals and eligible daily evidence as `evidence/host_*.csv`; overlapping queries remain separate.
+Every selected subset is disclosed, and CSV files are included in the report manifest.
 
 ## Numeric presentation
 
