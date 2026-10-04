@@ -150,7 +150,20 @@ def check(python: Path, plugin: Path, output: Path):
                 },
             }
         )
-        assert created["status"] == "complete", created
+        # File rows are observations: they never establish complete coverage, so comparisons
+        # are withheld and the dashboard is a partial result rather than complete.
+        assert created["status"] == "partial_result", created
+        assert {i["code"] for i in created["issues"]} == {
+            "coverage_not_established",
+            "dashboard_data_incomplete",
+        }, created
+        status = created["result"]["validation"]["data_status"]["sources"]
+        assert all(
+            not s["coverage"]["established"]
+            and s["coverage"]["observed_only"] == [["2026-09-28", "2026-09-29"]]
+            and s["covered"] == []
+            for s in status.values()
+        ), status
         assert created["result"]["validation"]["verified"]
         assert created["result"]["details"]["row_count"] == 6
         repeated = invoke(
@@ -182,6 +195,7 @@ def check(python: Path, plugin: Path, output: Path):
             "repeated_rows": 6,
             "new_process_updated_rows": 7,
             "stale_other_sources": "partial_result",
+            "file_coverage": "observed_only",
             "artifact_integrity": True,
             "project_alias": True,
             "host_model_tested": False,
