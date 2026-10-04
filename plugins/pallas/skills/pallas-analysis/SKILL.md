@@ -31,6 +31,13 @@ Read [the report contract](references/report-template.md) and use
 explicitly requests another format, present exactly three sections: account/period summary;
 observed changes with quantified explanations and visualizations; main findings and recommendations.
 Put detailed raw evidence in linked local files, not JSON blocks or technical inventories in HTML.
+Write for a business owner reading quickly: a short main judgment and next step after the
+scope, at most four relevant headline metrics, then conclusion-led findings with nearby
+charts and material limits. Use a single reading flow and ordered action rows. Do not
+repeat full finding titles in the overview and closing section, or reproduce detailed
+tables as dashboard panels. Keep detailed daily, campaign, conversion, comparison and
+contribution values in linked CSV files with exact retained precision. JSON sidecars still
+preserve source context, scope and verification; CSV exports do not replace them.
 Display all quantitative values to two decimal places (omit the decimal part when the rounded value is an integer), including chart labels and percentages;
 retain exact raw values and preserve dates/IDs. The runtime renderer loads this same template.
 
@@ -50,7 +57,10 @@ assessment and section 三 adds its findings. Read `internal_integration` and
 `evidence/internal_matching.json` first: alignment (overlap, timezone, currency), channel groups,
 efficiency, `quality_comparison`, `organic_trend`, campaign matches and `unavailable`. Explain paid
 acquisition quality against organic growth only for rows marked `eligible`; for others state why
-the comparison is withheld. These are descriptive differences, not lift, cannibalization or
+the comparison is withheld. A metric with `basis: provided_data` was calculated from the rows the
+user supplied: keep its warning beside it, name the unmatched dates, campaigns or blank fields,
+and ask whether the absence means zero or an incomplete export; never say data was lost or present
+it as complete. These are descriptive differences, not lift, cannibalization or
 causal effects. Platform and internal conversions follow different attribution; explain the ratio,
 never add them or declare one wrong. `not_integrable` means no integrated metric exists; explain the
 blocking reason and the export needed. Matching rules are in the workflow Skill's

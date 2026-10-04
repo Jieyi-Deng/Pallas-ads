@@ -44,6 +44,14 @@ const scoped = (data=rows,start=S.start,end=S.end) => data.filter(r=>inScope(r)&
 const oldest = rows.reduce((a,r)=>r.date<a?r.date:a,dayAdd(D.end,-27));
 const covered = (source,start,end) => (D.sources[source].covered||[]).some(([a,b])=>a<=start&&b>=end);
 const comparable = prev => Object.keys(D.sources).filter(source=>inScope({source})).every(source=>covered(source,S.start,S.end)&&covered(source,prev.start,prev.end));
+// Complete windows count missing rows as zero; file observations only know the dates they contain.
+const observedOnly = (source,d) => (D.sources[source].observed_only||[]).some(([a,b])=>a<=d&&b>=d);
+const known = (source,d) => covered(source,d,d)||observedOnly(source,d);
+const inScopeSources = () => Object.keys(D.sources).filter(source=>inScope({source}));
+const knownDays = (start,end) => Array.from({length:Math.max(0,daysBetween(start,end))},(_,i)=>dayAdd(start,i)).filter(d=>inScopeSources().every(source=>known(source,d)));
+const currentComplete = () => inScopeSources().every(source=>covered(source,S.start,S.end));
+const insightsWithheld = () => currentComplete()?null:'Insights withheld: the selected dates lack verified complete coverage for at least one source. Dates without rows are unknown, not zero.';
+const coverageNote = () => currentComplete()?(S.compare&&!comparable(previous())?' · comparison withheld: the comparison period lacks verified complete coverage':''):` · observed rows only (${knownDays(S.start,S.end).length} of ${daysBetween(S.start,S.end)} days); dates without rows are unknown, not zero${S.compare?' · comparison withheld':''}`;
 const previous = () => {if($('compare').value==='year'){const shift=d=>{const x=new Date(d+'T00:00:00Z'),m=x.getUTCMonth();x.setUTCFullYear(x.getUTCFullYear()-1);if(x.getUTCMonth()!==m)x.setUTCDate(0);return x.toISOString().slice(0,10);};return {start:shift(S.start),end:shift(S.end)};}const n=daysBetween(S.start,S.end);return {start:dayAdd(S.start,-n),end:dayAdd(S.start,-1)};};
 const percentChange = (a,b) => a==null||b==null||b===0?null:(a/b-1)*100;
 function grouped(data,key) {const groups=new Map();for(const r of data){const k=key(r);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);}return [...groups].map(([key,rs])=>({key,rows:rs,...sum(rs)}));}
@@ -62,7 +70,7 @@ function platformButtons(){ $('platforms').innerHTML=['all',...platforms].map(p=
 function priorData(data=rows){const p=previous();if(!S.compare||!comparable(p))return [];if(data===detailRows){const parents=scoped(rows,p.start,p.end);if(!parents.every(r=>data.some(d=>d.source===r.source&&d.campaign_id===r.campaign_id&&d.date===r.date)))return [];}return scoped(data,p.start,p.end);}
 function renderOverview(){
  const current=scoped(),past=priorData(),total=sum(current),prior=sum(past),basis=$('compare').value==='year'?'previous year':'previous period';
- $('overview-period').textContent=`${S.start} – ${S.end}${S.compare?' · vs. '+basis:''}`;
+ $('overview-period').textContent=`${S.start} – ${S.end}${S.compare&&comparable(previous())?' · vs. '+basis:''}${coverageNote()}`;
  $('kpis').innerHTML=metricKeys.slice(0,8).map(k=>`<dl class="kpi"><dt>${labels[k]}</dt><dd>${format(total,k)}</dd>${S.compare?`<small><span class="${tone(k,delta(total,prior,k))}">${deltaText(delta(total,prior,k))}</span> &nbsp;vs. ${format(prior,k)}</small>`:''}</dl>`).join('');
  $('secondary-kpis').innerHTML=['cpm','conversion_value','roas'].map(k=>`<span>${labels[k]} <b>${format(total,k)}</b> ${S.compare?`<small class="${tone(k,delta(total,prior,k))}">${deltaText(delta(total,prior,k))}</small>`:''}</span>`).join('');
  const chunks=grouped(current,r=>D.sources[r.source].platform),mode=$('breakdown').value;
@@ -77,11 +85,12 @@ function renderOverview(){
  }return html;
  }).join('')+(current.length?`<tr class="total"><td>Total</td><td>${new Set(current.map(r=>r.source)).size} accounts</td>${cells(total,false,prior)}</tr>`:'<tr><td colspan="12" class="empty">No data for these filters.</td></tr>');
  $('spend-mix').innerHTML=['spend','conversions'].map(k=>{if(!(total[k]>0))return '';return `<span class="mix-group">${k==='spend'?'Spend':'Conv.'} share <span class="mix-bar">${chunks.map(g=>`<span class="${g.key}" style="width:${g[k]/total[k]*100}%"></span>`).join('')}</span><span>${chunks.map(g=>names[g.key][0]+' '+number(g[k]/total[k]*100)+'%').join(' · ')}</span></span>`;}).join('');
- $('change-note').textContent=S.compare?'vs. '+basis+' · green = improving, red = deteriorating':'Comparison off';
+ $('change-note').textContent=!S.compare?'Comparison off':comparable(previous())?'vs. '+basis+' · green = improving, red = deteriorating':'Comparison withheld: the selected or comparison dates lack verified complete coverage';
  const keys=['spend','ctr','cvr','cpa','cpm'];
  $('change-matrix').innerHTML='<div class="matrix"><span></span>'+keys.map(k=>`<span class="matrix-heading">${labels[k]}</span>`).join('')+[...chunks,{key:'Total',...total}].map(g=>{const old=g.key==='Total'?prior:sum(past.filter(r=>D.sources[r.source].platform===g.key));return `<strong class="${g.key==='Total'?'matrix-total':''}">${g.key==='Total'?'Total':platformBadge(g.key)}</strong>`+keys.map(k=>{const d=S.compare?delta(g,old,k):null;return `<span class="heat ${tone(k,d)} ${g.key==='Total'?'matrix-total':''}" style="--intensity:${Math.min(1,Math.abs(d||0)/30)}" title="${labels[k]}: ${format(g,k)} vs. ${format(old,k)}">${deltaText(d)}</span>`;}).join('');}).join('')+'</div>';
 }
 function renderInsights(){
+ const withheld=insightsWithheld();if(withheld){$('insight-list').innerHTML=`<p class="empty">${esc(withheld)}</p>`;return;}
  const cs=campaignData().filter(c=>c.spend!=null),past=priorData(),observations=[];
  const previousCampaign=c=>sum(past.filter(r=>r.source===c.source&&r.campaign_id===c.id));
  const add=(c,title,body,stat,statLabel,toneClass='neutral',creative=null)=>observations.push({c,title,body,stat,statLabel,toneClass,creative});
@@ -103,7 +112,7 @@ function renderInsights(){
 function renderChart(){
  const end=D.end,start=dayAdd(end,-89),dates=Array.from({length:90},(_,i)=>dayAdd(start,i));
  const active=platforms.filter(p=>Object.entries(D.sources).some(([source,s])=>s.platform===p&&inScope({source}))),visible=active.filter(p=>!S.hidden.has(p));
- const series={};for(const p of active){const sourceIds=Object.keys(D.sources).filter(source=>D.sources[source].platform===p&&inScope({source}));series[p]=dates.map(d=>sourceIds.every(source=>covered(source,d,d))?sum(scoped(rows,d,d).filter(r=>D.sources[r.source].platform===p)):sum([]));}
+ const series={};for(const p of active){const sourceIds=Object.keys(D.sources).filter(source=>D.sources[source].platform===p&&inScope({source}));series[p]=dates.map(d=>sourceIds.every(source=>known(source,d))?sum(scoped(rows,d,d).filter(r=>D.sources[r.source].platform===p)):sum([]));}
  $('trend-note').textContent=`Last 90 days · ${start} – ${end} · click a platform to highlight it`;
  $('trend-legend').innerHTML=`<button data-highlight="all" aria-pressed="${S.trend==='all'&&!S.hidden.size}">All platforms</button>`+active.map(p=>{const total=sum(scoped(rows,start,end).filter(r=>D.sources[r.source].platform===p));return `<span class="legend-pair ${p} ${S.trend===p?'focused':''}" style="opacity:${S.hidden.has(p)?.45:S.trend!=='all'&&S.trend!==p?.65:1}"><button data-highlight="${p}" aria-pressed="${S.trend===p}"><i class="dot ${p}"></i><b>${names[p]}</b> <small>${money(total.spend)} · ${number(total.conversions)} conv.</small></button><button data-hide="${p}">${S.hidden.has(p)?'Show':'Hide'}</button></span>`;}).join('');
  const W=1000,H=170,x=i=>i/89*W,shadeStart=Math.max(0,daysBetween(start,S.start)-1),shadeEnd=Math.min(89,daysBetween(start,S.end)-1);
