@@ -68,7 +68,13 @@ reloading an older release alone cannot add the feature.
 
 Complete the platform's login and consent screens. Your agent uses the [authorization guide](AUTHORIZATION.md) and preserves existing connections.
 
-For Meta in Claude Code, the setup Skill can add the project `meta_official` server and its read-tool guard. Reload and trust the project MCP and hook, then authenticate through `/mcp`. Meta remains a host-managed connection; the plugin does not copy tokens or change client identities. Existing Codex Meta connections are retained. New Codex Meta access needs the supported preregistered configuration; Google live access needs operator application setup. Contact [support@pallas-ads.com](mailto:support@pallas-ads.com) when that setup is missing. TikTok follows the Pallas connection flow.
+Publisher-configured releases provide Google Desktop and Meta public application identities.
+On both hosts, request a connection and complete browser login; no application file, certificate,
+host Meta registration or `/mcp` command is needed. Existing host-owned Meta connections remain
+separate and are retained. Meta's Pallas-owned data adapter is still pending, so its new login
+does not yet enable account discovery or reports. Platform eligibility and real-account access
+must be verified independently. If an older core build reports missing setup, contact
+[support@pallas-ads.com](mailto:support@pallas-ads.com) for the publisher-configured release.
 
 For uploaded CSV/XLSX analysis, skip media authorization.
 

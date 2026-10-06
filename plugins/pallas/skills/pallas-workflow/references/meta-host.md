@@ -5,6 +5,11 @@ This route has two separate servers: `pallas` (local runtime) and `meta_official
 The installer is `pallas agent setup --client claude|codex --directory /new/project`.
 It installs both Skills and the report template; no source checkout is required after wheel install.
 
+This reference applies only when `options.meta_authorization.authorization_owner` is
+`host_client`. Publisher-configured releases use Pallas-owned browser login in both hosts,
+without project Meta registration, `/mcp`, a restart or local certificates. Use the main workflow
+for that route. Never copy a host grant into Pallas or claim a different connector proves it.
+
 ## Authorization and account-first onboarding
 
 1. Inspect Pallas `source_connect_or_import(action=options)` and the host's callable tools.
@@ -22,7 +27,8 @@ It installs both Skills and the report template; no source checkout is required 
      authentication and account access remain unverified. With the read guard loaded, call it
      and follow any host authentication prompt; a permission error is an access result, not a reason to reauthorize
      blindly or switch connectors.
-   - `ads_get_ad_accounts` returned accounts: existing usable connection. Do not reauthorize.
+   - `ads_get_ad_accounts` returned accounts: existing usable host connection. Reuse it unless the user explicitly requests reauthorization;
+     then honor that request using the connection owner's authentication entrypoint.
    Pallas checks only this project's `.mcp.json`/`.claude/settings.json`; a user-scope
    registration is invisible to it, so working host tools take precedence over that report.
 2. If Meta tools are available, read accounts directly; do not demand a new authorization.

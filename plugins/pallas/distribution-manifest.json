@@ -1,7 +1,7 @@
 {
   "files": {
-    ".claude-plugin/plugin.json": "2ea5fb07276b3d79538d20ee62b481a0dc48fdd7bbcd755948f56a6c30e6d14a",
-    ".codex-plugin/plugin.json": "eccbd26af59360652999b684769218c95b767ed7fac62bd3993f68b0b223d903",
+    ".claude-plugin/plugin.json": "41da4a55748f0165f6f44597970161a4f74a602491a7a0064887bc4c10b3c1bc",
+    ".codex-plugin/plugin.json": "c3f428f55442f01dc6e8537c81f8bb8f0dd7cace0f850927b51d405c83acc1ae",
     ".mcp.json": "372a7f8c1e988f58480012e741582e13bb1c9c2b2611432f365ae132f519cfe5",
     "LICENSE": "6727ef7a9b1844ba225c76436938c66a049ae5ddb4cb2936455f471be657493b",
     "NOTICE": "e8fe35ea6ebaac031f3051f4aac22efec72e09bd9c003ad76afd15e428f1da15",
@@ -9,12 +9,12 @@
     "assets/pallas-logo.png": "97a1dafc51ddae22a2da80cd4d35fd63219a138eac982b9f0ed5abf170b6ff11",
     "mcp.claude.json": "62c22fd9ec8fb34ab3b4042a0699fdae9861b5ac6c81f53e25d102e5fe9b2c2a",
     "resources/install_macos.py": "729e077f3abb2983c5ad6551a4c03e60a23cfa020199d462e92ede545d3581b8",
-    "resources/npm-runtime.json": "4946d25fb83b38b04c09c99935205cab93057dca413967b053c74d071695e1ef",
-    "resources/pallas_ads-0.2.0a4-py3-none-any.whl": "9c5070e6474fa290e2fd5b5c6dbeffbbc4db10c7b0e84c577dd90cc77bb3e609",
-    "resources/release-manifest.json": "f84baf502162dd5a33d71e864cf96407651978b664ec24b132a7facfce938784",
+    "resources/npm-runtime.json": "53194cab2f2f6f9bffc2ea18e9f9f1a1152915af1d85bb180c55266b99aa302a",
+    "resources/pallas_ads-0.2.0a5-py3-none-any.whl": "a931780dc52168f973b9a663a5bab59be61981ec6b6922c07f69823ea055dd94",
+    "resources/release-manifest.json": "906eb0572f032e5072689bd87383790efa38a1d9c888518b997508fb81df14d5",
     "scripts/installer.mjs": "aae77c761a096596baf3ac4c235485a978c8280ff82d7b4b08a5fda8c5690dd5",
     "scripts/pallas.mjs": "d185c019aa5cab486e3b18767f652c96852e25141b59fb274dfceaf02da6977e",
-    "scripts/project.py": "3b2c9a42dc92b6d6511a7bcc005bb7b538e1ab4f8f114abe97543dce23d5e218",
+    "scripts/project.py": "52e7ec185840155f0a45fcb017f1ab34a3ccd17632c4439a5f9839fbf7276312",
     "scripts/serve.py": "19dbc6599defa301526c950840e29a06cf4bfb1fc8a9dfb2585bd4960e8cc552",
     "skills/pallas/SKILL.md": "a1785ea0ce1bbe83760f6f716978c344d5f7d4c72af3b4c0fbf86e4ffa8419cf",
     "skills/pallas/agents/openai.yaml": "72610cd008240f1483555a3d1ab93751595cdbfc449291e1b848e96e4e70a659",
@@ -38,10 +38,10 @@
     "skills/pallas-dashboard/references/persistence.md": "16e25f67ed23afbb074a129e1b817733b5a7e4817ecc937459a24f8bfd8163d2",
     "skills/pallas-dashboard/references/scheduling.md": "659e6f823c7f53f2fca0b87296f8862952379ff217b65b98cd3b0213ea78b3cc",
     "skills/pallas-dashboard/scripts/dashboard.py": "d1edda89c93f920e9ed50ebc2beefdb7385abf53c6314ec0644e38149aee731f",
-    "skills/pallas-setup/SKILL.md": "de1176e1a747b9e06e3d3349ba51090a00586cc04e3ad1ae92abc75361b652d8",
-    "skills/pallas-workflow/SKILL.md": "085568b6f600948e3238c6c418b8c3a799fb4679955c22f8a3dae22ee1d0a0f0",
+    "skills/pallas-setup/SKILL.md": "ec77a3d6abf384c2f1e6f762d6952901bbe6770a2fedbb328bae1929e874ef6a",
+    "skills/pallas-workflow/SKILL.md": "2f31fbbe2c37ea38e9a7a112fc7daef32ebf939357a9937fe7893c30f2453065",
     "skills/pallas-workflow/references/file-import.md": "b5f35e5989e35d60aee07adbc84d8c41bb97d773d40e95d0e5c613a54810169a",
     "skills/pallas-workflow/references/internal-conversions.md": "5cce8e397b71b46689616517ac4dc108a2201cdd90d7a587ddd627e3f3165250",
-    "skills/pallas-workflow/references/meta-host.md": "dc6f318c09655acfcde1a4b5385945e2fee22a639cf8d4bfac39a69546bbf931"
+    "skills/pallas-workflow/references/meta-host.md": "42558a49ba4083a176738c4e1806c7e3f9992477ac4ac7a2e5d2161929154e5d"
   }
 }

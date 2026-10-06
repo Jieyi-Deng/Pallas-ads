@@ -21,12 +21,21 @@ publisher = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(publisher)
 
 
-def fixture(root, *, extra=None, private_wheel=False):
+def fixture(root, *, extra=None, private_wheel=False, applications=None, inventory=None):
     buffer = io.BytesIO()
+    applications = applications or {}
     with zipfile.ZipFile(buffer, "w") as wheel:
         wheel.writestr("pallas_ads/__init__.py", '__version__ = "0.2.0a3"')
         if private_wheel:
             wheel.writestr("pallas_ads/resources/google-desktop.json", "synthetic private marker")
+        for platform, content in applications.items():
+            filename = {"google": "google-desktop.json", "meta": "meta-mcp.json"}[platform]
+            wheel.writestr("pallas_ads/resources/" + filename, json.dumps(content))
+    if inventory is None:
+        inventory = {
+            p: hashlib.sha256(json.dumps(content).encode()).hexdigest()
+            for p, content in applications.items()
+        }
     files = {
         "package.json": json.dumps({"name": "pallas-ads", "version": "0.2.0-alpha.4"}).encode(),
         "README.md": b"npm guide",
@@ -36,7 +45,12 @@ def fixture(root, *, extra=None, private_wheel=False):
         "lib/installer.mjs": b"// installer",
         "resources/pallas_ads-0.2.0a3-py3-none-any.whl": buffer.getvalue(),
         "resources/install_macos.py": b"# installer",
-        "resources/release-manifest.json": b'{"google_application_embedded":false}',
+        "resources/release-manifest.json": json.dumps(
+            {
+                "google_application_embedded": "google" in applications,
+                "oauth_applications": inventory,
+            }
+        ).encode(),
     }
     resources = {
         Path(k).name: hashlib.sha256(v).hexdigest()
@@ -89,6 +103,55 @@ class PublicationTests(unittest.TestCase):
     def test_private_wheel_is_rejected(self):
         archive, manifest = fixture(self.root, private_wheel=True)
         with self.assertRaisesRegex(ValueError, "Private"):
+            publisher.verify_archive(archive, manifest)
+
+    def test_reviewed_publisher_applications_are_accepted(self):
+        applications = {
+            "google": {
+                "installed": {
+                    "client_id": "synthetic.apps.googleusercontent.com",
+                    "client_secret": "synthetic-installed-client",
+                }
+            },
+            "meta": {
+                "client_id": "123456",
+                "redirect_uri": "https://pallas-ads.com/oauth/meta/callback",
+            },
+        }
+        archive, manifest = fixture(self.root, applications=applications)
+        self.assertEqual(publisher.verify_archive(archive, manifest), archive.read_bytes())
+
+    def test_application_tokens_and_other_redirects_are_rejected(self):
+        for change in (
+            {"access_token": "synthetic-never-publish"},
+            {"redirect_uri": "https://example.com/callback"},
+        ):
+            with self.subTest(change=change):
+                archive, manifest = fixture(
+                    self.root,
+                    applications={
+                        "meta": {
+                            "client_id": "123456",
+                            "redirect_uri": "https://pallas-ads.com/oauth/meta/callback",
+                            **change,
+                        }
+                    },
+                )
+                with self.assertRaisesRegex(ValueError, "Private"):
+                    publisher.verify_archive(archive, manifest)
+
+    def test_unlisted_application_is_rejected(self):
+        archive, manifest = fixture(
+            self.root,
+            applications={
+                "meta": {
+                    "client_id": "123456",
+                    "redirect_uri": "https://pallas-ads.com/oauth/meta/callback",
+                }
+            },
+            inventory={},
+        )
+        with self.assertRaisesRegex(ValueError, "inventory"):
             publisher.verify_archive(archive, manifest)
 
     def test_changed_public_payload_is_rejected(self):

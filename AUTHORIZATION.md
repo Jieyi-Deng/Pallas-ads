@@ -1,52 +1,64 @@
 # Connect an advertising account
 
-Native plugin users: complete [installation and activation](PLUGIN_INSTALL.md) first. Plugin installation does not grant media access. The setup Skill configures Claude Code Meta when requested and preserves existing Codex connections.
-
-Account authorization allows an available media connection to read data you can access. It is separate from installing and activating Pallas. You can analyze a local advertising export without connecting a media account.
+Complete [plugin installation and activation](PLUGIN_INSTALL.md) or the [npm installation](INSTALL.md)
+first. Installation alone does not grant media access. File analysis needs no media authorization.
 
 ## Start in your agent
 
-> Help me connect my Meta / Google Ads / TikTok Ads account to Pallas. Check the connection setup, guide me through browser authorization, and list the accounts I can access. Let me choose the account and reporting period before reading performance data.
+> Connect my Google Ads / Meta Ads / TikTok Ads account to Pallas. Open browser login, wait for the
+> authorization result, and explain whether account discovery is available for this connection.
 
-1. The agent checks the selected platform's connection setup.
-2. For a configured route, open the platform's authorization page.
-3. Sign in yourself and review the requested access. Complete any account selection, consent, and MFA shown by the platform.
-4. Return to the agent and list accessible advertising accounts. Choose the account and reporting period there; consent screens do not always include account selection.
-5. Ask Pallas to retrieve the selected data and explain its coverage before analysis.
+Pallas checks the selected platform, opens your system browser and waits for the result. Sign in
+and review consent yourself, including any MFA. Return to the same chat afterward. You do not
+need to create a developer app, import JSON, configure a certificate or paste tokens into chat.
 
-Successful sign-in does not by itself establish access to an advertising account. Confirm that the expected account is listed and that the requested reporting period can be read.
+If the browser cannot open automatically, the agent supplies a clickable login link for the
+pending session. If you cancel, wait too long or close the agent session, ask to start login again.
+An explicit request to sign in again creates a new session even when an earlier connection exists.
+The old Pallas grant is retained until its replacement succeeds.
 
 ## Choose a connection route
 
-| Platform and agent | Connection setup | Next step |
+| Platform, both Codex and Claude Code | Publisher-configured release | After consent |
 |---|---|---|
-| TikTok Ads, Codex or Claude Code | Pallas uses the official TikTok MCP connection. | Ask Pallas to connect TikTok, complete browser consent, and discover available accounts. |
-| Meta, Claude Code | Claude Code manages the official Meta MCP connection. The default npm project does not enable it. | Prepare a Meta-enabled project as described below, authenticate `meta_official` through `/mcp`, and list accounts. |
-| Meta, Codex | The provided route needs a registered application identity and local HTTPS callback setup. It is not enabled by the npm installer. | Contact [support@pallas-ads.com](mailto:support@pallas-ads.com) for compatible setup and account eligibility before starting authorization. |
-| Google Ads, Codex or Claude Code | Pallas uses the Google Ads API. Live access requires configured application identity and platform access; the public core package does not supply them. | Contact [support@pallas-ads.com](mailto:support@pallas-ads.com) for connection setup, then complete Google browser consent and account discovery. |
+| Google Ads | Bundled Google Desktop application, browser consent and local callback | Discover accounts, select one, then choose a reporting period. Cloud project access and your account permissions still apply. |
+| Meta Ads | Pallas's public application, browser consent and Pallas HTTPS callback returning to the local app | Pallas-owned authorization is implemented; its Meta data adapter remains pending. Login alone does not enable account discovery or reports. |
+| TikTok Ads | Pallas uses the official TikTok MCP browser flow | Discover accounts, select one and inspect available data. Live metric reconciliation remains separate. |
 
-Access depends on your platform permissions and the configured application's eligibility. If an application requires a test-user invitation, support will confirm the required setup. Do not create your own developer application just to analyze an exported file.
+The new Google/Meta flow requires a publisher-configured release and completed platform setup.
+Older core releases, including npm alpha.4 / plugin 0.2.2, do not include those applications.
+If setup is missing, the publisher supplies the corrected release; advertisers do not configure
+client IDs or files. Platform verification, application eligibility and fresh external-user
+acceptance are separate from local software tests. Access is not guaranteed for every account.
+
+Google's callback stays on your computer. Meta sends a short-lived authorization code and random
+state through `https://pallas-ads.com/oauth/meta/callback`, hosted on Cloudflare Pages, before the
+browser forwards them to a temporary local receiver. The page has no analytics or token storage.
+Token exchange happens locally with PKCE; Pallas tokens use the operating system credential store.
+See the [privacy policy](https://pallas-ads.com/privacy) for data flow and hosting information.
 
 ## Enable Meta in Claude Code
 
-An agent can use the runtime from an existing npm installation to create a **separate, new** project with the official Meta connection and Pallas's read-tool guard. For the default Claude installation paths:
+This section applies only to an existing **host-managed** `meta_official` connection. Its login
+belongs to Claude Code and is independent of Pallas-owned authorization. The setup Skill can
+retain/register this legacy route and its read-tool guard. Interactive Claude Code terminals
+can use `/mcp`; the desktop Code tab does not provide that command. Prefer the publisher-configured
+Pallas flow for new browser-login installations. No tokens are copied between the two routes.
 
-```sh
-"$HOME/pallas-claude-runtime/bin/pallas" agent setup --client claude --mode live --directory "$HOME/pallas-meta-claude"
-```
+Existing Codex host-managed Meta connections also remain separate. A successful read through
+another installed Meta connector is not evidence that Pallas's new connection is authorized.
 
-Adjust the runtime path if the original installation used a different name. Do not run setup over a populated project. The new project shares the original runtime, so keep that runtime in place. It is created by the runtime CLI and has no separate npm installer receipt; use the original npm project when updating the shared runtime, then refresh this project's Skills using that runtime's `agent refresh-skills` command.
-
-Open the new project in Claude Code, confirm trust and the MCP/hook configuration, and start a new task. Open `/mcp`, select `meta_official`, and choose Authenticate. Complete the Meta page and return to Claude Code to discover accounts.
-
-The consent page may request advertising management permissions even though Pallas's project guard restricts analysis to its allowed read tools. Review the actual consent shown. Do not disable that guard to get around a failed request. If authorization or account access fails, retain the error and contact support.
+Review the actual consent screen. The official Meta MCP requires `ads_read` and
+`ads_mcp_management`; a successful consent does not permit Pallas to modify campaigns or budgets.
+Do not disable read-tool guards to work around failures.
 
 ## Credentials and disconnection
 
-Complete passwords, consent, and MFA in the platform's own interface. Do not paste tokens, API keys, passwords, or browser cookies into chat or public issues. Do not transfer authorization tokens between ChatGPT, Codex, and Claude Code.
+Complete passwords, consent and MFA on the platform. Never paste passwords, tokens, browser
+cookies or client configuration into chat or public issues. Ask Pallas to disconnect its own
+connection; use host controls for host-managed connections. Revoke remote access separately in
+the media platform. Removing a workspace alone does not revoke consent.
 
-Disconnect a host-managed connection in the agent that authorized it. Revoke remote consent in the media platform when you want to remove that access. Removing a Pallas workspace alone does not revoke a platform authorization.
-
-## When a connection needs help
-
-Tell [support@pallas-ads.com](mailto:support@pallas-ads.com) which agent and platform you use, which step failed, and the sanitized error. Share an email address for a test invitation only if support confirms it is needed; never share credentials. You can continue using [advertising exports](FILE_IMPORT.md) while connection setup is resolved.
+For help, contact [support@pallas-ads.com](mailto:support@pallas-ads.com) with your agent/version,
+platform, failed step and sanitized error. You can use [advertising exports](FILE_IMPORT.md)
+while platform access is being resolved.

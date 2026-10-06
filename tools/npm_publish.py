@@ -49,6 +49,87 @@ def read_url(url):
     return data
 
 
+def verify_wheel(wheel_bytes, release):
+    """Validate reviewed publisher resources and reject private runtime payloads."""
+    with zipfile.ZipFile(io.BytesIO(wheel_bytes)) as packaged_wheel:
+        if len(packaged_wheel.namelist()) != len(set(packaged_wheel.namelist())):
+            raise ValueError("Duplicate runtime wheel entries.")
+        # Exact publisher resources are the only exception to the private-file ban.
+        # This verifier is also shipped without the private source repository.
+        applications = release.get("oauth_applications", {})
+        if not isinstance(applications, dict) or set(applications) - {"google", "meta"}:
+            raise ValueError("Invalid publisher OAuth inventory.")
+        seen = {}
+        for platform, filename in (("google", "google-desktop.json"), ("meta", "meta-mcp.json")):
+            member = "pallas_ads/resources/" + filename
+            if member not in packaged_wheel.namelist():
+                continue
+            if packaged_wheel.getinfo(member).file_size > 65536:
+                raise ValueError("Invalid publisher OAuth resource.")
+            raw = packaged_wheel.read(member)
+            try:
+                app = json.loads(raw)
+                if platform == "google":
+                    valid = (
+                        isinstance(app, dict)
+                        and set(app) == {"installed"}
+                        and isinstance(app["installed"], dict)
+                        and set(app["installed"]) == {"client_id", "client_secret"}
+                        and isinstance(app["installed"]["client_id"], str)
+                        and re.fullmatch(
+                            r"[A-Za-z0-9_-]{1,240}\.apps\.googleusercontent\.com",
+                            app["installed"]["client_id"],
+                        )
+                        and isinstance(app["installed"]["client_secret"], str)
+                        and 0 < len(app["installed"]["client_secret"]) <= 4096
+                        and not any(ord(c) < 32 for c in app["installed"]["client_secret"])
+                    )
+                else:
+                    valid = (
+                        isinstance(app, dict)
+                        and set(app) == {"client_id", "redirect_uri"}
+                        and isinstance(app["client_id"], str)
+                        and re.fullmatch(r"[0-9]{5,32}", app["client_id"])
+                        and app["redirect_uri"] == "https://pallas-ads.com/oauth/meta/callback"
+                    )
+                if not valid:
+                    raise ValueError
+            except (ValueError, TypeError, KeyError):
+                raise ValueError("Private or unsafe file in runtime wheel.") from None
+            seen[platform] = hashlib.sha256(raw).hexdigest()
+        if seen != applications or bool(release.get("google_application_embedded")) != (
+            "google" in seen
+        ):
+            raise ValueError("Publisher OAuth inventory mismatch.")
+        forbidden = {
+            "PALLAS_HANDOFF.md",
+            "PALLAS_PRODUCT.md",
+            "PALLAS_PROJECT.md",
+            "AGENTS.md",
+            "google-desktop.json",
+            "meta-mcp.json",
+            ".env",
+            ".pallas",
+            "local_docs",
+            "private_data",
+            "__pycache__",
+        }
+        for name in packaged_wheel.namelist():
+            if name in {
+                "pallas_ads/resources/" + n for n in ("google-desktop.json", "meta-mcp.json")
+            }:
+                continue
+            parts = Path(name).parts
+            if (
+                name.startswith("/")
+                or ".." in parts
+                or forbidden.intersection(parts)
+                or any(p.startswith(".env.") for p in parts)
+                or name.endswith((".pem", ".key"))
+            ):
+                raise ValueError("Private or unsafe file in runtime wheel.")
+
+
 def verify_archive(archive, manifest):
     archive = Path(archive)
     if archive.is_symlink():
@@ -106,29 +187,7 @@ def verify_archive(archive, manifest):
     for name, expected in runtime_manifest["files"].items():
         if hashlib.sha256(contents["resources/" + name]).hexdigest() != expected:
             raise ValueError("Runtime resource mismatch.")
-    with zipfile.ZipFile(io.BytesIO(contents[wheel])) as packaged_wheel:
-        forbidden = {
-            "PALLAS_HANDOFF.md",
-            "PALLAS_PRODUCT.md",
-            "PALLAS_PROJECT.md",
-            "AGENTS.md",
-            "google-desktop.json",
-            ".env",
-            ".pallas",
-            "local_docs",
-            "private_data",
-            "__pycache__",
-        }
-        for name in packaged_wheel.namelist():
-            parts = Path(name).parts
-            if (
-                name.startswith("/")
-                or ".." in parts
-                or forbidden.intersection(parts)
-                or any(p.startswith(".env.") for p in parts)
-                or name.endswith((".pem", ".key"))
-            ):
-                raise ValueError("Private or unsafe file in runtime wheel.")
+    verify_wheel(contents[wheel], json.loads(contents["resources/release-manifest.json"]))
     return data
 
 

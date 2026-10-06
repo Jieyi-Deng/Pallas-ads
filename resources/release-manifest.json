@@ -1,10 +1,14 @@
 {
-  "version": "0.2.0a4",
-  "wheel": "pallas_ads-0.2.0a4-py3-none-any.whl",
-  "sha256": "9c5070e6474fa290e2fd5b5c6dbeffbbc4db10c7b0e84c577dd90cc77bb3e609",
+  "version": "0.2.0a5",
+  "wheel": "pallas_ads-0.2.0a5-py3-none-any.whl",
+  "sha256": "a931780dc52168f973b9a663a5bab59be61981ec6b6922c07f69823ea055dd94",
   "target": "macOS + Codex / Claude Code",
   "default_mode": "core",
-  "google_application_embedded": false,
+  "google_application_embedded": true,
+  "oauth_applications": {
+    "google": "f22240700247c0f98d3218b37890a6afab793ebca254c59d6a4b52801f30925b",
+    "meta": "33cc3c65a2c140ccbdfcac00b467414712f2957eae9d908e13a6923cb7ae2dda"
+  },
   "requires_google_configuration_file": false,
   "contains_user_oauth_tokens": false,
   "contains_localhost_private_key": false
