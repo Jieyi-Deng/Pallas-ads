@@ -34,7 +34,9 @@ do not repeat the full findings or turn actions into parallel dashboard cards.
 </section>
 ```
 
-The runtime fills `$title`, `$subtitle`, `$overview`, `$changes`, `$recommendations`, and
+The runtime selects `zh-CN` for Chinese input and `en` for other languages. The Chinese
+headings below illustrate structure, not a fixed output language. Navigation, headings,
+footer and body all use the selected language. The runtime fills `$title`, `$subtitle`, `$overview`, `$changes`, `$recommendations`, and
 `$evidence_links` in the asset. Source strings must be escaped. Place no JSON, Python dictionary
 representation, raw API field inventory, `<pre>`, or large raw-data block in the HTML body,
 including collapsed details. Small curated tables have reader-facing labels, explicit units and
@@ -61,9 +63,9 @@ All displayed quantitative measurements use two digits after the decimal (omit t
 clicks, conversion counts, percentages, relative changes, percentage-point changes, contributions,
 thresholds and chart annotations. Convert ratio to percent before rounding; distinguish percent
 change from percentage-point change. Formatting is a presentation operation, not a transformation
-of retained data or intermediate arithmetic. Null/zero-denominator values read “未提供”. Do not
+of retained data or intermediate arithmetic. Null/zero-denominator values read “未提供” / “Not provided” in the selected language. Do not
 round dates, identifiers, version strings, or categorical age labels as though they were measures.
-Use section names or Chinese ordinals rather than decimalized section numbering.
+Use localized section names and ordinals rather than decimalized section numbering.
 
 ## Interpretation and visualization
 

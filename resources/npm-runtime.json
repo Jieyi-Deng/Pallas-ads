@@ -1,9 +1,9 @@
 {
-  "runtimeVersion": "0.2.0a5",
-  "wheel": "pallas_ads-0.2.0a5-py3-none-any.whl",
+  "runtimeVersion": "0.2.0a6",
+  "wheel": "pallas_ads-0.2.0a6-py3-none-any.whl",
   "files": {
-    "pallas_ads-0.2.0a5-py3-none-any.whl": "a931780dc52168f973b9a663a5bab59be61981ec6b6922c07f69823ea055dd94",
+    "pallas_ads-0.2.0a6-py3-none-any.whl": "ad4e85fb98c64888aec989f259f8863bcb84bd6d7ffb894a7c1fc01d741184c1",
     "install_macos.py": "729e077f3abb2983c5ad6551a4c03e60a23cfa020199d462e92ede545d3581b8",
-    "release-manifest.json": "906eb0572f032e5072689bd87383790efa38a1d9c888518b997508fb81df14d5"
+    "release-manifest.json": "9319f58e36e8d3f06792c3f8dc2c5f4cd6444e3b26676f567121b83523f8978e"
   }
 }

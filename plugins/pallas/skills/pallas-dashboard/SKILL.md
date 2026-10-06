@@ -13,6 +13,16 @@ validates, deduplicates, calculates metrics, applies insight rules and renders t
 
 ## 1. Before first generation
 
+Set `report_language` from the user's request: Chinese -> `zh-CN`; all other languages ->
+`en`. An explicit requested output language takes precedence with the same mapping. Pass it
+at the top level of `build_report`/`pallas_command`, or in `dashboard.report_language` when
+using the direct dashboard helper. Never infer it from account names, input files or the OS.
+The saved language covers headings, filters, charts, insights, dialogs and accessibility text.
+Explicit user-requested updates pass the current request's language. Unattended/scheduled
+updates omit the field and retain the saved language; new dashboards default to English.
+Keep user-supplied names/titles and evidence values unchanged. Generate new descriptive titles
+in the selected report language. Do not translate or replace the finished HTML manually.
+
 Choose the route from the user's request and existing authorization; ask only for missing
 account/file selection or ambiguous metric definitions. Do not ask again for an already
 confirmed title or source. A file-only request needs no advertising-account authorization.
