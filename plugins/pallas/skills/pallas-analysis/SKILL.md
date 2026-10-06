@@ -13,6 +13,14 @@ Do not infer them from campaign names or select a different product to make a re
 
 ## Default human-facing HTML format
 
+Always supply `report_language` to `build_report` (or top-level `pallas_command`): use
+`zh-CN` for a Chinese conversation and `en` for every other conversation language.
+An explicit output-language request takes precedence under the same two-language mapping.
+Use the user's request, not account/file names, source text or the previous report, to select
+the language. Carry it through prepare/build and retries. The runtime localizes the shared
+HTML, Markdown, labels, charts and generated explanations; do not translate by rewriting a
+finished HTML artifact. Source names, IDs, numeric values and raw evidence remain unchanged.
+
 For a persistent dashboard, multi-platform overview or incremental refresh, load
 `pallas-dashboard` and use `build_report(action=dashboard)`. Do not route those requests to
 this one-off analysis renderer.

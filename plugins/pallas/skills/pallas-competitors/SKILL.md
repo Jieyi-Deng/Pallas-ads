@@ -47,7 +47,15 @@ gets one answer. Optional researcher planning questions have `origin=research`; 
 working notes, not a questionnaire for the reader. Do not invent eight questions to fill the
 schema. `answers` is the executive summary: retain the few findings that change a decision;
 `question_id` is optional. Do not repeat planning questions or display Q/O/P/M identifiers in prose.
-Pick `report_language` (`en` or `zh-CN`) from the user's language.
+Set `competitor_brief.report_language` to `zh-CN` for Chinese input (including Traditional
+Chinese), and `en` for every other input language. An explicit output-language request takes
+precedence under this same mapping. Determine it from the user's request, not the researched
+market, source pages, brand names or previous reports. Write all analyst-authored brief prose
+(title, summaries, profile attributes, observations, hypotheses and gaps) in that selected
+language before rendering; the runtime localizes fixed labels, not arbitrary supplied prose.
+Keep original brand names, source titles, quotations, URLs, IDs and values intact. If also
+passing top-level `build_report.report_language`, it must match the brief. Other locale codes
+normalize to English; the renderer does not translate a third-language brief automatically.
 
 ## Stage 2 — Understand product, audience and market
 

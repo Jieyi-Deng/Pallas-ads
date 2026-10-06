@@ -19,6 +19,8 @@ Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and i
 - **Get a report you can revisit.** Each report brings together an account and period summary, a breakdown of changes, and findings with recommended next steps.
 - **Keep the conversation in your agent.** The `pallas` entrypoint routes analysis and persistent dashboards to the matching Skills and verified report templates.
 
+Reports follow the language of your request: Chinese requests produce Chinese reports; other languages currently produce English reports. This applies to analysis, dashboards and competitor research. An explicit report-language request takes precedence. Background dashboard refreshes retain the saved language.
+
 ## 1. Install
 
 You need **macOS, Node.js 22 or later, and Codex or Claude Code** with plugin support.
@@ -98,6 +100,8 @@ After a successful analysis, use your agent's scheduling feature, where availabl
 The agent manages the schedule; Pallas performs the analysis. Confirm that scheduled runs can access the project, runtime, and authorized connection, and keep the required machine or execution environment available. For file-based checks, supply an updated export before each run: rereading a saved file does not fetch new account data.
 
 ## Keep Pallas up to date
+
+The GitHub distribution now includes native plugin **0.2.4** and runtime **0.2.0a6**. npm **0.2.0-alpha.6** publication is deferred; `npm latest` remains **0.2.0-alpha.5**. Use the native plugin channel for this report-language update.
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 

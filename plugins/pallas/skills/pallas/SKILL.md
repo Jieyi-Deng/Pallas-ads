@@ -11,6 +11,17 @@ Turn the user's command into a `pallas_command` request in the selected project'
 workspace. Reuse the runtime's analysis, mapping and rendering code. Do not write a new
 report renderer or calculate replacement metrics in chat.
 
+## Report language
+
+For each user-requested report or update, set top-level `report_language` from the language
+of the user's request: Chinese (including Traditional Chinese) -> `zh-CN`; every other
+language -> `en`. A requested output language takes precedence, using the same fallback.
+Do not infer language from account names, files, source pages, existing reports or OS settings.
+Pass this field through preview/confirmation retries and report generation. A new report
+without the field defaults to English. An unattended dashboard refresh omits it to preserve
+the saved language. User-facing titles you generate should use the selected report language;
+preserve names and titles explicitly supplied by the user.
+
 ## Resolve the command
 
 - No arguments or `help`: invoke `{"intent":"help"}` and briefly show `analysis`,
