@@ -118,8 +118,12 @@ export async function main(args=process.argv.slice(2)) {
   }
   const binding=receipt(project);
   if(opts.command==='doctor') {
-    console.log(JSON.stringify({project,client:binding.client,pluginVersion:binding.pluginVersion,runtime:binding.runtime,workspace:join(project,'.pallas'),mediaAuthorization:'Verify in the host; setup does not grant access.'}));
-    await run(join(binding.runtime,'bin/python'),['-I','-c',"from importlib.metadata import version; print('Pallas ' + version('pallas-ads'))"]); return;
+    const {manifest}=verifiedResources(ROOT);
+    const runtimeCurrent=binding.wheelSha256===manifest.files[manifest.wheel];
+    console.log(JSON.stringify({project,client:binding.client,pluginVersion:binding.pluginVersion,installedPluginVersion:VERSION,runtime:binding.runtime,runtimeCurrent,workspace:join(project,'.pallas'),mediaAuthorization:'Verify in the host; setup does not grant access.',...(runtimeCurrent?{}:{next:'Plugin runtime changed. Run setup once for this project, then reload.'})}));
+    await run(join(binding.runtime,'bin/python'),['-I','-c',"from importlib.metadata import version; print('Pallas ' + version('pallas-ads'))"]);
+    // Readiness comes from the bound runtime's own checks, never from a pallas found on PATH.
+    await run(join(binding.runtime,'bin/python'),[join(ROOT,'scripts/project.py'),'doctor',project]); return;
   }
   if(opts.command==='serve') {
     const {manifest}=verifiedResources(ROOT);

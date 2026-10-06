@@ -21,7 +21,9 @@ project binding, migration, diagnostics and updates. Follow install → activate
 analyze; file analysis can skip authorization. Do not register another Pallas MCP server or
 copy Skills into a prepared plugin project. The setup Skill configures the host-specific entry.
 
-For legacy npm/bundle installation, run `pallas agent doctor --directory PROJECT` after the installer.
+For legacy npm/bundle installation, run that project's runtime `agent doctor --directory PROJECT`
+after the installer (a native plugin project uses the pallas-setup Skill's `doctor`; a different
+`pallas` on PATH is not evidence for this project and its `runtime` row reports the mismatch).
 The default core package needs no media application configuration or certificates. Missing optional
 Google/Meta setup does not block file analysis. For an explicitly requested Google live
 connection, obtain an operator-configured build if needed; do not ask users for JSON or secrets.
@@ -62,6 +64,17 @@ For Google and TikTok, use `source_connect_or_import` in this order:
    or ambiguous identity/scope. Multiple campaign/app candidates are not automatically one product.
    Do not re-ask currency/timezone already returned by the API. Review and confirm the full draft.
 
+Recovery: before discover/inspect/analyze/sync and dashboard reads, the runtime refreshes a
+Pallas-owned Google connection whose locally stored expiry has passed, at most once per request.
+`source_status` stays observational. `source_credential_expired` there is local metadata, and
+`usability_not_live_checked` means no provider request was sent. Failures return a sanitized
+`failure` {code, stage, category, retriable, recovery_action}; follow `recovery_action`, not a
+generic retry. `retry_after_current_operation`/`retry_later` are retriable. `authorize_again` uses
+`action=connect`; the old credential is kept until the new connection succeeds.
+`operator_configure_google_application`, `operator_verify_google_application` and
+`refresh_client_mismatch` go to the operator. `check_account_access` is a provider permission
+result. Never ask the advertiser for JSON, secrets or tokens.
+
 Inspection can produce traffic arithmetic before profile confirmation, retaining all coverage and
 outcome restrictions. Persistent canonical sync/comparison still needs a confirmed binding.
 Never fabricate a profile to unlock reads. Missing provider setup must be handed to the operator.
@@ -85,8 +98,10 @@ ask for secrets, JSON files or tokens in chat.
 Meta defaults to the host client's official MCP (`https://mcp.facebook.com/ads`).
 `connect(platform=meta)` returns host instructions, not a Pallas OAuth session. Never poll
 `source_auth_status` for this route or ask for App ID, Configuration ID, secret or certificate.
-The host owns credentials, reauthorization and disconnect. Pallas cannot inspect host login state;
-use the host's MCP settings and actual tool results. Claude Code authorization has been verified;
+The host owns credentials, reauthorization and disconnect. Pallas reports only the project
+registration `state` (`not_registered`, `registered_guard_missing`, `configuration_conflict`,
+`registered_authentication_unknown`); authentication and account access come from the host's
+tools. Follow the four-state decision in the Meta host workflow. Claude Code authorization has been verified;
 Codex DCR was rejected by Meta on 2026-09-14, but Pallas's pre-registered client login was verified.
 For Codex projects installed with `--meta-client-id`, run `pallas agent login-meta --directory PROJECT`
 to start the packaged HTTPS forwarder and host login. If the localhost certificate is missing,
