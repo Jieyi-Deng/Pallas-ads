@@ -26,7 +26,8 @@ after the installer (a native plugin project uses the pallas-setup Skill's `doct
 `pallas` on PATH is not evidence for this project and its `runtime` row reports the mismatch).
 The default core package needs no media application configuration or certificates. Missing optional
 Google/Meta setup does not block file analysis. For an explicitly requested Google live
-connection, obtain an operator-configured build if needed; do not ask users for JSON or secrets.
+connection, use the publisher-configured release; a core-only build reports operator_setup_required.
+Obtain the correct release if needed; do not ask users for JSON or secrets.
 Use `agent doctor --media google/meta/tiktok/all` only for the requested live route.
 The macOS test bundle's install_macos.py installs the wheel and project settings. System prompts
 and official consent stay with the user. Existing explicit operator configurations take precedence;
@@ -47,12 +48,22 @@ Authorization does not require a confirmed product profile. When the user wants 
 connect accounts first, honor that order. Gather available source facts before asking for product
 information; ask only for missing or ambiguous business facts. One account may advertise multiple
 products; account and campaign names are clues, never proof of product identity or goal semantics.
-For Meta, use the host-owned route in [Meta host workflow](references/meta-host.md).
-For Google and TikTok, use `source_connect_or_import` in this order:
+For all media, inspect the connection owner returned by Pallas. A configured publisher Meta
+application uses Pallas browser OAuth in either host. Only a `host_client_managed` installation
+uses [Meta host workflow](references/meta-host.md). An unrelated host plugin's saved login does
+not establish a Pallas connection and cannot satisfy an explicit request to log in again.
+For Pallas-owned authorization, use `source_connect_or_import` in this order:
 1. `action=options`: inspect configured providers and existing workspace connections.
 2. `action=connect, platform=...`: browser authorization, with no user-supplied developer config
    or advertising account ID. Reuse an existing connection only in the selected workspace and scope.
-3. Poll `source_auth_status`; then `action=discover, connection_id=...` to read accessible accounts.
+   When asked to log in again, call connect even if an existing connection works. To replace
+   a Pallas connection, include its connection_id and reauthorize=true; cancellation or failure
+   keeps the old grant. Never disconnect first. browser_opened=true confirms only that the
+   browser launcher accepted the request; browser_open_failed requires showing the returned
+   authorization_url to the user. Do not claim consent succeeded until status is connected.
+3. Poll `source_auth_status`. Pallas-owned Meta currently supports authorization only: account
+   discovery/report adaptation remains pending. State that limitation; do not silently switch
+   to another host login. For Google/TikTok, use `action=discover, connection_id=...` to read accessible accounts.
    Google discovery traverses manager/client hierarchies. Explain incomplete discovery limits.
 4. Present returned account names and ask the user to choose. Submit `action=select` with the
    returned `choice_id` internally; never ask the user to type account IDs or select manager accounts.

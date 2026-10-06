@@ -36,8 +36,12 @@ test('both native catalogs resolve one self-contained plugin and the same Skills
   for(const name of ['pallas','pallas-setup','pallas-workflow','pallas-analysis','pallas-competitors','pallas-dashboard']) assert.match(readFileSync(join(plugin,'skills',name,'SKILL.md'),'utf8'),/^---/);
   for(const name of ['scripts/pallas.mjs','scripts/project.py','scripts/serve.py','assets/pallas-logo.png','skills/pallas-analysis/assets/report.html','skills/pallas-competitors/assets/report.html','skills/pallas-dashboard/assets/dashboard.html']) assert.ok(readFileSync(join(plugin,name)).length>0);
 });
-test('bundled runtime checksums match and no operator Google configuration is embedded',()=>{
+test('bundled runtime checksums match the selected publisher application inventory',()=>{
   const resources=join(plugin,'resources'),manifest=json(join(resources,'npm-runtime.json'));
   for(const [name,digest] of Object.entries(manifest.files)) assert.equal(hash(readFileSync(join(resources,name))),digest,name);
-  assert.equal(json(join(resources,'release-manifest.json')).google_application_embedded,false);
+  const release=json(join(resources,'release-manifest.json'));
+  const apps=release.oauth_applications || {};
+  assert.ok(Object.keys(apps).every(x=>['google','meta'].includes(x)));
+  for (const value of Object.values(apps)) assert.match(value,/^[a-f0-9]{64}$/);
+  assert.equal(release.google_application_embedded,Object.hasOwn(apps,'google'));
 });

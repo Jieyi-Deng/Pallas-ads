@@ -331,10 +331,22 @@ def rollback(project):
         target.parent.mkdir(parents=True, exist_ok=True)
         (backup / "directories" / row["path"]).rename(target)
     pointer.unlink()
+    legacy_restored = False
+    for relative, key in ((".mcp.json", "mcpServers"), (".codex/config.toml", "mcp_servers")):
+        path = safe(project, relative)
+        if path.is_file():
+            raw = path.read_text()
+            configuration = json.loads(raw) if relative.endswith("json") else tomllib.loads(raw)
+            server = configuration.get(key, {}).get("pallas", {})
+            legacy_restored |= bool(server) and "pallas.mjs" not in json.dumps(server)
     print(
         "Previous project configuration restored. "
-        "Disable the native plugin before reloading a restored npm installation. "
-        "Analysis data was retained."
+        + (
+            "Disable the native plugin before reloading a restored npm installation. "
+            if legacy_restored
+            else ""
+        )
+        + "Analysis data was retained."
     )
 
 
