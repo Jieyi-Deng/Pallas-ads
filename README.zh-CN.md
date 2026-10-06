@@ -101,7 +101,7 @@ Pallas 会先预览数据的解释方式，由你确认分析口径后再保存�
 
 ## 更新 Pallas
 
-GitHub 分发已包含原生插件 **0.2.4** 与 runtime **0.2.0a6**。npm **0.2.0-alpha.6** 暂缓发布，`npm latest` 仍为 **0.2.0-alpha.5**。本次报告语言更新请使用原生插件渠道。
+GitHub 分发已包含原生插件 **0.2.4** 与 runtime **0.2.0a6**。npm **0.2.0-alpha.6** 现已发布，并设为 `latest`。两个渠道均已提供本次报告语言更新。
 
 通过 Agent 的插件管理器更新，再为每个 Pallas 项目运行 setup Skill，随后开始新任务。详见[插件更新与恢复](PLUGIN_INSTALL.md#update)。
 

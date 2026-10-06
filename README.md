@@ -101,7 +101,7 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 ## Keep Pallas up to date
 
-The GitHub distribution now includes native plugin **0.2.4** and runtime **0.2.0a6**. npm **0.2.0-alpha.6** publication is deferred; `npm latest` remains **0.2.0-alpha.5**. Use the native plugin channel for this report-language update.
+The GitHub distribution includes native plugin **0.2.4** and runtime **0.2.0a6**. npm **0.2.0-alpha.6** is now published and is the `latest` version. Both channels include this report-language update.
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
