@@ -1,7 +1,7 @@
 {
-  "version": "0.2.0a3",
-  "wheel": "pallas_ads-0.2.0a3-py3-none-any.whl",
-  "sha256": "6a98675203932f026764b204ec8bb5b2c25026a3a7b9c468c53f82e478575f68",
+  "version": "0.2.0a4",
+  "wheel": "pallas_ads-0.2.0a4-py3-none-any.whl",
+  "sha256": "9c5070e6474fa290e2fd5b5c6dbeffbbc4db10c7b0e84c577dd90cc77bb3e609",
   "target": "macOS + Codex / Claude Code",
   "default_mode": "core",
   "google_application_embedded": false,

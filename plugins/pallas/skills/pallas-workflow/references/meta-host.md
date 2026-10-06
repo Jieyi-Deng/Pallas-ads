@@ -9,6 +9,22 @@ It installs both Skills and the report template; no source checkout is required 
 
 1. Inspect Pallas `source_connect_or_import(action=options)` and the host's callable tools.
    Pallas cannot see the host's OAuth state. Existing Pallas-native connections are separate.
+   Decide the Claude Code state in this order, using `connect(platform=meta)`'s `state`:
+   - Server not registered (`not_registered`), or guard missing (`registered_guard_missing`):
+     in a native plugin project use the pallas-setup Skill's `connect-meta --project PROJECT`
+     (idempotent; keeps unrelated servers and hooks). A legacy core project cannot add Meta in
+     place: migrate it with pallas-setup `setup --migrate`, then connect-meta. Then reload/start a new session and trust the
+     project MCP server and hooks. `configuration_conflict` means a custom configuration
+     exists; do not overwrite it, ask for manual review.
+   - Registered but no `meta_official` tools in this session: not authenticated (or not yet
+     loaded/trusted). Reload and trust if needed, then `/mcp` -> `meta_official` -> Authenticate.
+   - Tools present but `ads_get_ad_accounts` not yet successful: tools are loaded; current
+     authentication and account access remain unverified. With the read guard loaded, call it
+     and follow any host authentication prompt; a permission error is an access result, not a reason to reauthorize
+     blindly or switch connectors.
+   - `ads_get_ad_accounts` returned accounts: existing usable connection. Do not reauthorize.
+   Pallas checks only this project's `.mcp.json`/`.claude/settings.json`; a user-scope
+   registration is invisible to it, so working host tools take precedence over that report.
 2. If Meta tools are available, read accounts directly; do not demand a new authorization.
    If authentication is needed, direct the user to the host's `/mcp` connection UI.
    `connect(platform=meta)` is a host instruction result, without a Pallas session ID.

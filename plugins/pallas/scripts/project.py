@@ -375,7 +375,9 @@ def connect_meta(project):
     )
     hook = {"matcher": "mcp__meta_official__.*", "hooks": [{"type": "command", "command": command}]}
     hooks = settings.setdefault("hooks", {}).setdefault("PreToolUse", [])
-    # Preserve other hooks. Only add our read guard if it is not already present.
+    # Preserve other hooks. Replace only guards Pallas generated for an earlier runtime path,
+    # so a runtime update neither duplicates the guard nor leaves it pointing at a removed path.
+    hooks[:] = [entry for entry in hooks if entry == hook or not generated_guard(entry)]
     if hook not in hooks:
         hooks.append(hook)
     backup = transaction(
@@ -384,14 +386,47 @@ def connect_meta(project):
     print(
         json.dumps(
             {
-                "status": "configuration_ready",
+                "status": "configuration_ready" if backup else "already_configured",
                 "backup": backup,
-                "next": "Reload and trust project MCP and hooks; "
-                "/mcp -> meta_official -> Authenticate. Review consent, then discover accounts. "
-                "No authorization was performed.",
+                "next": "Reload or start a new session in this project and trust its MCP server "
+                "and hooks. If meta_official tools are absent: /mcp -> meta_official -> "
+                "Authenticate and review consent. Then call ads_get_ad_accounts; account access "
+                "is unverified until it succeeds. No authorization was performed.",
             }
         )
     )
+
+
+def generated_guard(entry):
+    """True only for the exact read-guard shape connect-meta writes."""
+    if not isinstance(entry, dict) or set(entry) != {"matcher", "hooks"}:
+        return False
+    hooks = entry["hooks"]
+    if entry["matcher"] != "mcp__meta_official__.*" or not isinstance(hooks, list):
+        return False
+    if len(hooks) != 1 or not isinstance(hooks[0], dict) or set(hooks[0]) != {"type", "command"}:
+        return False
+    try:
+        parts = shlex.split(hooks[0]["command"]) if hooks[0]["type"] == "command" else []
+    except (TypeError, ValueError):
+        return False
+    return (
+        len(parts) == 3
+        and parts[0].endswith("/bin/pallas")
+        and parts[1:]
+        == [
+            "agent",
+            "guard-meta",
+        ]
+    )
+
+
+def doctor(project):
+    """Diagnostics from the bound runtime itself, never from a pallas found on PATH."""
+    from pallas_ads.machine_setup import doctor as check
+
+    result = check(project)
+    print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == "__main__":
@@ -418,6 +453,8 @@ if __name__ == "__main__":
             deactivate(project)
         elif command == "connect-meta":
             connect_meta(project)
+        elif command == "doctor":
+            doctor(project)
         else:
             raise ValueError("Unknown project operation")
     except (ValueError, OSError, KeyError, TypeError) as exc:
