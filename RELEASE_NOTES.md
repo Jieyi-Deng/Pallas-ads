@@ -1,19 +1,38 @@
-For the current GitHub distribution, see [Pallas native plugin 0.2.0](RELEASE_NOTES_PLUGIN_0.2.0.md), which bundles runtime 0.2.0a2. The following notes describe the earlier archive release.
+# Pallas releases
 
-# v0.2.0a1 — Local analysis Alpha
+## Current distribution
 
-The first public distribution of Pallas's local analysis workflow for macOS + Python 3.12–3.13 + Codex / Claude Code.
+The current published distribution is [release-20261006-01](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261006-01):
 
-- Core installation is independent of optional Google application configuration and Meta certificate setup.
-- CSV/XLSX campaign/day imports preview and confirm interpretation before retention; duplicate imports are idempotent.
-- Meta, Google and TikTok file snapshots use the same analysis template and descriptive calculations.
-- Reports preserve missing values, provenance and claim limits. Short date-axis labels avoid overlap.
-- Bundled Skills and samples support a first report without advertising credentials; skill updates retain backups.
+| Component | Version |
+| --- | --- |
+| Native plugin | 0.2.4 |
+| Python runtime | 0.2.0a6 |
+| npm installer | 0.2.0-alpha.6 |
+| Analysis renderer | 2.5.0 |
+| Dashboard renderer | 2.2.0 |
+| Competitor renderer | 2.1.0 |
 
-Validation: 801 automated tests passed; isolated installation, installed CLI/MCP checks, three synthetic media inputs under both generated client configurations, artifact hashes and a browser report check passed. New external users' live authorization, real data reconciliation and natural-language agent adherence remain separate tests.
+npm alpha.6 publication and `latest` were verified on October 6, 2026 (PDT). This is a dated observation: consult [npm](https://www.npmjs.com/package/pallas-ads) for current registry availability and [release.json](release.json) for this checkout's component versions. Channels can update at different times.
 
-For a new installation, follow [INSTALL.md](INSTALL.md) and use `npx pallas-ads install`. The original archive `pallas-0.2.0a1-local-alpha.zip` and its checksum remain available in this release. Do not use the automatically generated Source code archives as installers. The full development repository remains private; the distributed wheel contains readable Python runtime code under Apache-2.0.
+This release adds common Chinese/English report-language handling across analysis, dashboards and competitor research. Existing reports are not rewritten automatically. Update through the [plugin manager](PLUGIN_INSTALL.md#update) or [npm installer](NPM_INSTALLER.md#update), rerun project setup where applicable, and start a new agent task.
 
-Not included: hosted ChatGPT access, arbitrary spreadsheet interpretation, cross-file/media merging, ad writes or unattended account management. Default file analysis needs no OpenAI runtime key. Optional media access is subject to the [media authorization guide](AUTHORIZATION.md).
+This is an engineering Alpha. Pallas-owned Meta login does not yet enable account discovery or reporting. Google production-data validation and complete Meta reconciliation remain outstanding. Installed synthetic tests and maintainer distribution checks do not establish independent external-user or live-account acceptance. See [authorization limits](AUTHORIZATION.md) and each release's validation record.
 
-Product: [pallas-ads.com](https://pallas-ads.com/). Support: [support@pallas-ads.com](mailto:support@pallas-ads.com).
+## Release history
+
+GitHub Release records are the canonical historical notes; versions, validation and limitations in those records describe that release, not the current distribution.
+
+| Release | Main change |
+| --- | --- |
+| [release-20261006-01](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261006-01) | Shared report-language rules; runtime a6, plugin 0.2.4, npm alpha.6 |
+| [release-20261005-02](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261005-02) | Publisher-configured browser authorization; runtime a5, plugin 0.2.3, npm alpha.5 |
+| [release-20261005-01](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261005-01) | Authorization diagnostics and recovery; runtime a4, plugin 0.2.2, npm alpha.4 |
+| [release-20261003-01](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261003-01) | Report, competitor and dashboard updates; runtime a3, plugin 0.2.1, npm alpha.3 |
+| [plugin-v0.2.0](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/plugin-v0.2.0) | Unified command, persistent dashboards and companion Skills; runtime a2, npm alpha.2 |
+| [plugin-v0.1.1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/plugin-v0.1.1) | Campaign-contribution interpretation |
+| [plugin-v0.1.0](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/plugin-v0.1.0) | Initial native plugin |
+| [npm-v0.2.0-alpha.1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/npm-v0.2.0-alpha.1) | Initial npm installer |
+| [v0.2.0a1](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) | Historical local-analysis ZIP |
+
+The original ZIP and checksum remain attached to the historical a1 release. Recent releases attach the reviewed npm tgz and release manifest. Do not use GitHub-generated source archives as installers.

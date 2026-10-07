@@ -17,7 +17,7 @@ Skills or rebuild the npm tgz from the root README.
 3. Run checks appropriate to the change and open a pull request against `main`.
 4. Merge the reviewed branch after required checks pass. Do not commit product or documentation updates directly to `main`.
 
-Keep release identifiers and historical validation details in release notes. Product onboarding follows installation, activation, media authorization, analysis (connected accounts or uploaded files), and recurring checks through the user's agent. File-only analysis does not require media authorization.
+Keep current component versions in `release.json` and the index in `RELEASE_NOTES.md`; preserve historical validation details in GitHub Release records. Keep old documentation URLs as short forwarding pages when consolidating guides. `NPM_INSTALLER.md` owns npm onboarding and maintenance; `FEEDBACK.md` owns setup verification and feedback. Keep release identifiers and historical validation details out of introductory copy. Product onboarding follows installation, activation, media authorization, analysis (connected accounts or uploaded files), and recurring checks through the user's agent. File-only analysis does not require media authorization.
 
 ## Local checks and Actions
 

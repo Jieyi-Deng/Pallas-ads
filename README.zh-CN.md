@@ -8,7 +8,7 @@
 
 [English](README.md) | **简体中文** · [产品官网](https://pallas-ads.com/) · [npm](https://www.npmjs.com/package/pallas-ads)
 
-Pallas 将广告数据分析带入 Codex 和 Claude Code。连接可用的 Meta、Google Ads、TikTok Ads 账户，或提供广告导出文件，通过自然语言提出分析需求。Pallas 检查数据、计算效果指标，并生成可以追溯到来源的分析报告。
+Pallas 将广告数据分析带入 Codex 和 Claude Code。通过受支持的连接读取广告数据，或提供 Meta、Google Ads、TikTok Ads 的广告导出文件，通过自然语言提出分析需求。Pallas 检查数据、计算效果指标，并生成可以追溯到来源的分析报告。
 
 访问 **[pallas-ads.com](https://pallas-ads.com/)**，了解产品与广告分析方法。
 
@@ -19,7 +19,7 @@ Pallas 将广告数据分析带入 Codex 和 Claude Code。连接可用的 Meta�
 - **交付可回看的报告。** 报告包含账户与期间总结、变化拆解，以及主要发现和后续建议。
 - **在 Agent 中持续沟通。** `pallas` 统一入口将分析与持久看板请求交给对应 Skill，并使用经过校验的报告模板。
 
-报告会跟随用户请求的语言：中文请求生成中文报告，其他语言暂统一生成英文报告，适用于分析报告、广告看板和竞品研究。显式指定报告语言时优先采用该要求；后台刷新看板时保留已保存的语言。
+报告会跟随用户请求的语言：中文请求生成中文报告，其他语言暂统一生成英文报告，适用于分析报告、广告看板和竞品研究。显式指定报告语言时优先采用该要求，仍按中文或英文两个分支处理；后台刷新看板时保留已保存的语言。
 
 ## 1. 安装
 
@@ -45,7 +45,7 @@ codex plugin add pallas@pallas-ads
 /plugin install pallas@pallas-ads
 ```
 
-安装与旧项目迁移见[插件指南](PLUGIN_INSTALL.md)。使用项目安装方式的用户仍可通过 [npm 安装器](INSTALL.md)运行 `npx pallas-ads install`。
+安装与旧项目迁移见[插件指南](PLUGIN_INSTALL.md)。使用项目安装方式的用户仍可通过 [npm 安装器](NPM_INSTALLER.md)运行 `npx pallas-ads install`。
 
 ## 2. 在 Agent 中激活
 
@@ -59,9 +59,11 @@ codex plugin add pallas@pallas-ads
 
 告诉 Agent 你要分析的媒体平台：
 
-> 请帮我将 Meta / Google Ads / TikTok Ads 账户连接到 Pallas。先检查当前 Agent 的连接配置，引导我完成浏览器授权，再列出可访问的广告账户。让我选择账户后，再读取效果数据。
+> 请帮我连接需要分析的广告平台。先说明当前连接路线是否支持读取数据，再引导我完成浏览器授权。只有支持账户读取时，才列出可访问的广告账户，让我选择后再读取效果数据。
 
-连接配置就绪后，在媒体平台页面完成登录与同意授权，再回到 Agent 选择账户。如果需要补充连接配置或账户访问权限，请按[媒体授权指南](AUTHORIZATION.md)操作，或联系 [support@pallas-ads.com](mailto:support@pallas-ads.com)。
+Google Ads 和 TikTok Ads 可在授权及平台权限允许后发现账户并读取支持的数据；Google 生产数据验证仍待完成。**Pallas 自有 Meta 连接目前只支持登录授权，尚不支持账户发现和报告取数。** 已有的宿主管理 Meta 连接是独立兼容路线，其证据报告仍有覆盖和对账限制。Meta 用户也可使用广告导出文件分析。
+
+支持取数的连接配置就绪后，在媒体平台页面完成登录与同意授权，再回到 Agent 选择账户。如果需要补充连接配置或账户访问权限，请按[媒体授权指南](AUTHORIZATION.md)操作，或联系 [support@pallas-ads.com](mailto:support@pallas-ads.com)。
 
 如果只分析上传的广告导出文件，可以跳过账户授权，使用下一步的文件分析方式。
 
@@ -113,6 +115,6 @@ Pallas 在本地工作区保存导入证据和报告，不采集遥测。工具�
 
 ## 联系支持
 
-如有使用问题、连接配置或其他需要，请联系 **[support@pallas-ads.com](mailto:support@pallas-ads.com)**。反馈可复现的问题时，可参考[反馈指南](NEW_MACHINE_TESTING.md)。
+如有使用问题、连接配置或其他需要，请联系 **[support@pallas-ads.com](mailto:support@pallas-ads.com)**。反馈可复现的问题时，可参考[反馈指南](FEEDBACK.md)。
 
 [许可证](LICENSE) · [NOTICE](NOTICE) · [商标说明](TRADEMARKS.md)
