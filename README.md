@@ -8,7 +8,7 @@
 
 **English** | [简体中文](README.zh-CN.md) · [Website](https://pallas-ads.com/) · [npm](https://www.npmjs.com/package/pallas-ads)
 
-Pallas brings advertising data analysis to Codex and Claude Code. Connect an available Meta, Google Ads, or TikTok Ads account, or provide an advertising export, and ask questions in natural language. Pallas checks the data, calculates performance metrics, and produces reports with evidence you can trace back to the source.
+Pallas brings advertising data analysis to Codex and Claude Code. Read advertising data through a supported connection, or provide a Meta, Google Ads, or TikTok Ads export, and ask questions in natural language. Pallas checks the data, calculates performance metrics, and produces reports with evidence you can trace back to the source.
 
 Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and its approach to advertising analysis.
 
@@ -19,7 +19,7 @@ Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and i
 - **Get a report you can revisit.** Each report brings together an account and period summary, a breakdown of changes, and findings with recommended next steps.
 - **Keep the conversation in your agent.** The `pallas` entrypoint routes analysis and persistent dashboards to the matching Skills and verified report templates.
 
-Reports follow the language of your request: Chinese requests produce Chinese reports; other languages currently produce English reports. This applies to analysis, dashboards and competitor research. An explicit report-language request takes precedence. Background dashboard refreshes retain the saved language.
+Reports follow the language of your request: Chinese requests produce Chinese reports; other languages currently produce English reports. This applies to analysis, dashboards and competitor research. An explicit report-language request takes precedence within the same Chinese/English mapping. Background dashboard refreshes retain the saved language.
 
 ## 1. Install
 
@@ -45,7 +45,7 @@ codex plugin add pallas@pallas-ads
 /plugin install pallas@pallas-ads
 ```
 
-See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](INSTALL.md), `npx pallas-ads install`, remains available for projects using the project-based installation.
+See the [plugin guide](PLUGIN_INSTALL.md) for installation and migration. The [npm installer](NPM_INSTALLER.md), `npx pallas-ads install`, remains available for projects using the project-based installation.
 
 ## 2. Activate in your agent
 
@@ -59,9 +59,11 @@ Setup prepares the runtime and binds Pallas to your project. Media account autho
 
 Ask your agent to connect the platform you want to analyze:
 
-> Help me connect my Meta / Google Ads / TikTok Ads account to Pallas. Check the connection setup for this agent, guide me through browser authorization, and list the accounts I can access. Let me choose the account before reading its performance data.
+> Help me connect the advertising platform I want to analyze. First explain whether the available connection route supports data reads, then guide me through browser authorization. If account reads are supported, list accessible accounts and let me choose before reading performance data.
 
-For a configured connection, complete the platform's sign-in and consent screens, then return to your agent and select the account. If connection setup or account access is needed, follow the [media authorization guide](AUTHORIZATION.md) or contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
+Google Ads and TikTok Ads can discover accounts and read supported data after authorization, subject to platform permissions; Google production-data validation remains pending. **Pallas-owned Meta connections currently support login only, with account discovery and report reads still pending.** Existing host-managed Meta connections are a separate compatibility route with limited evidence reporting and outstanding reconciliation. Meta exports can also be analyzed as files.
+
+For a connection that supports reads, complete the platform's sign-in and consent screens, then return to your agent and select the account. If connection setup or account access is needed, follow the [media authorization guide](AUTHORIZATION.md) or contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
 
 If you only want to analyze an uploaded export, skip account authorization and use the file option in the next step.
 
@@ -113,6 +115,6 @@ Pallas stores imported evidence and reports in your local workspace and has no t
 
 ## Support
 
-For questions, connection setup, or other needs, contact **[support@pallas-ads.com](mailto:support@pallas-ads.com)**. Use the [feedback guide](NEW_MACHINE_TESTING.md) when sharing a reproducible issue.
+For questions, connection setup, or other needs, contact **[support@pallas-ads.com](mailto:support@pallas-ads.com)**. Use the [feedback guide](FEEDBACK.md) when sharing a reproducible issue.
 
 [License](LICENSE) · [Notice](NOTICE) · [Trademarks](TRADEMARKS.md)

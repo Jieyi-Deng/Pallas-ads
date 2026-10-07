@@ -1,31 +1,9 @@
-# npm installer 0.2.0-alpha.2
+# npm release history
 
-The npm and GitHub packages now bundle runtime 0.2.0a2, the unified Pallas command, and five portable Skills. Native plugin 0.2.0 is a separate entrypoint. See [the release notes](RELEASE_NOTES_PLUGIN_0.2.0.md) and [installer reference](NPM_INSTALLER.md) for update commands and validation.
+Current component versions and the release index are in [RELEASE_NOTES.md](RELEASE_NOTES.md). Check [npm](https://www.npmjs.com/package/pallas-ads) for registry availability and `latest`; historical release records do not establish today's registry state.
 
-Published to npm on October 1, 2026, at 13:45 PDT (20:45 UTC), as [`pallas-ads@0.2.0-alpha.2`](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.2) with `latest` pointing to this version. Install with `npx pallas-ads install`; update an npm-managed project with `npx pallas-ads@latest update --directory /absolute/path/to/project`. The bundled runtime and launcher are unchanged from the verified GitHub release.
+- **alpha.3 and later:** each [distribution release](https://github.com/Jieyi-Deng/Pallas-ads/releases) records its npm channel and integrity evidence.
+- **alpha.2:** the [plugin 0.2.0 release](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/plugin-v0.2.0) includes the October 1, 2026 npm publication follow-up.
+- **alpha.1:** see the [original npm release](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/npm-v0.2.0-alpha.1).
 
-Post-publication verification downloaded the registry tarball anonymously and confirmed byte identity with the reviewed package, the 10-file allowlist, and the wheel SHA-256 recorded in the plugin release notes. A fresh npm cache resolved `latest` to `0.2.0-alpha.2`; the published launcher's `--version` and `--help` commands passed. These are maintainer-run distribution checks, not returned external-user or real-account acceptance. Product regressions and Actions were not repeated for this publication and documentation update.
-
-Registry tarball integrity:
-
-```text
-sha512-uSjsv/VxtK1DvNQyDg6MQkFuO0FGioF7fkE1BaCCcl06AyP3B8WbDqvEivYa/F1WecQv16MWuPKQxYCB/ZXm/A==
-```
-
-# npm installer 0.2.0-alpha.1
-
-One-command installation for macOS Apple Silicon and Intel, using Node.js 22+.
-
-- Interactive Codex/Claude selection and new-project path; explicit flags for agent automation.
-- Reuse supported Python or provision a private Python 3.13 environment with pinned, hash-verified uv.
-- Install runtime 0.2.0a1, MCP configuration, both Skills and synthetic examples.
-- Doctor, idempotent reinstall detection and update with Skills backup; preserve local data.
-- No media login, certificate changes or runtime API key in default setup.
-
-Seven launcher unit tests and 22 Python setup regressions passed. Existing-Python Claude and managed-Python Codex installations produced reports through installed MCP, with 12 separate process operations per project. Update preserved synthetic data and backed up custom Skills. macOS managed Python uses venv symlinks to retain dylib resolution.
-
-This npm installer version wraps the unchanged reviewed Python wheel 0.2.0a1. Original ZIP assets are retained unchanged. The `.tgz` is an npm package, not a source repository export. Full source remains private; distributed runtime code remains readable and Apache-2.0 licensed.
-
-Published on npm as `pallas-ads@0.2.0-alpha.1` with the `latest` tag after publisher security verification. Run `npx pallas-ads install`; no npm account is needed for installation. The GitHub package entry remains available.
-
-Start with [installation and activation](INSTALL.md), then [analyze an export](FILE_IMPORT.md) or [connect a media account](AUTHORIZATION.md). For help, contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
+Installation, update and recovery instructions are maintained in [NPM_INSTALLER.md](NPM_INSTALLER.md). This page preserves historical links without duplicating release records.

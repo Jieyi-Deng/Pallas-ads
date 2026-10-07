@@ -1,6 +1,6 @@
 # Pallas command entrypoint
 
-The unified command is included in plugin 0.2.0 and runtime 0.2.0a2. Existing installations
+The unified command has been available since plugin 0.2.0 and runtime 0.2.0a2. Existing installations
 must update the `pallas` Skill and `pallas_command` MCP tool together, then rerun project setup.
 Updating source files alone does not update a user's installed plugin.
 
@@ -29,7 +29,7 @@ The entrypoint reads only the relevant companion Skill. Explicit subcommands det
 route; natural language supplies the question and scope. It never guesses between accounts
 or dashboards. Help/status do not authorize media, initialize a workspace, fetch account data,
 or create a schedule. `analyze` remains an alias of `analysis`; `update` means dashboard update.
-Competitor research and scheduling are not added as commands in this iteration.
+Competitor research uses its companion Skill; scheduling uses the host. Neither is a subcommand of this entrypoint.
 
 ## Shared request and result
 
@@ -39,11 +39,18 @@ The MCP tool is `pallas_command`. Its schema is published by `pallas operations`
 ```json
 {
   "intent": "analysis",
+  "report_language": "en",
   "workspace": "/absolute/project/.pallas",
   "analysis": {"dataset_id": "file_<64 lowercase hex characters>"},
   "expected_artifacts": ["html"]
 }
 ```
+
+For each requested report or dashboard update, set top-level `report_language`: Chinese
+(including Traditional Chinese) maps to `zh-CN`; every other language maps to `en`. An explicit
+output-language request takes precedence within the same mapping. Carry the field through file
+confirmation and retries. Unattended dashboard refreshes omit it to preserve the saved language.
+These language options are available in runtime 0.2.0a6 / plugin 0.2.4 and later.
 
 IDs in examples are placeholders. `workspace`, when present, asserts the bound workspace;
 it never redirects a running MCP server to another project. An analysis accepts exactly one
