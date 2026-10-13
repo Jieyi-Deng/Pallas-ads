@@ -21,11 +21,14 @@ def check(python: Path, plugin: Path, output: Path):
         capture_output=True,
         text=True,
         check=True,
+        encoding="utf-8",
     ).stdout.strip()
     assert "site-packages" in Path(installed).parts, installed
-    manifest = json.loads((plugin / "resources/npm-runtime.json").read_text())
+    manifest = json.loads((plugin / "resources/npm-runtime.json").read_text(encoding="utf-8"))
     wheel_hash = manifest["files"][manifest["wheel"]]
-    version = json.loads((plugin / ".codex-plugin/plugin.json").read_text())["version"]
+    version = json.loads((plugin / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))[
+        "version"
+    ]
     summaries = {}
     for client in ("codex", "claude"):
         project = output / client
@@ -47,10 +50,11 @@ def check(python: Path, plugin: Path, output: Path):
             capture_output=True,
             text=True,
             check=True,
+            encoding="utf-8",
         )
         skill_root = ".agents/skills" if client == "codex" else ".claude/skills"
-        alias = (project / skill_root / "pallas/SKILL.md").read_text()
-        assert str(plugin / "skills/pallas/SKILL.md") in alias
+        alias = (project / skill_root / "pallas/SKILL.md").read_text(encoding="utf-8")
+        assert json.dumps(str(plugin / "skills/pallas/SKILL.md")) in alias
 
         def invoke(payload, *, project=project):
             frames = [
@@ -81,6 +85,7 @@ def check(python: Path, plugin: Path, output: Path):
                 capture_output=True,
                 check=True,
                 timeout=60,
+                encoding="utf-8",
             )
             assert not process.stderr, process.stderr
             replies = [json.loads(line) for line in process.stdout.splitlines()]
@@ -204,7 +209,9 @@ def check(python: Path, plugin: Path, output: Path):
         "evidence": "installed wheel + plugin scripts/MCP, synthetic only",
         "clients": summaries,
     }
-    (output / "RESULTS.json").write_text(json.dumps(summary, indent=2) + "\n")
+    (output / "RESULTS.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     print(json.dumps(summary))
 
 

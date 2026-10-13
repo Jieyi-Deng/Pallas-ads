@@ -23,7 +23,7 @@ Pallas 将广告数据分析带入 Codex 和 Claude Code。通过受支持的连
 
 ## 1. 安装
 
-准备好 **macOS、Node.js 22 或更高版本，以及支持插件的 Codex 或 Claude Code**。
+准备好 **macOS 或 Windows 11 x64、Node.js 22 或更高版本，以及支持插件的 Codex 或 Claude Code**。Windows 为 Alpha 预览适配：Windows Server CI 已通过，Windows 11 实机、真实宿主会话和 OAuth 仍待验收。Windows 10、ARM64、WSL/Linux 安装不在本版范围内。
 
 直接告诉 Agent：
 
@@ -103,7 +103,7 @@ Pallas 会先预览数据的解释方式，由你确认分析口径后再保存�
 
 ## 更新 Pallas
 
-GitHub 分发已包含原生插件 **0.2.4** 与 runtime **0.2.0a6**。npm **0.2.0-alpha.6** 现已发布，并设为 `latest`。两个渠道均已提供本次报告语言更新。
+本次 Windows Alpha 分发包含原生插件 **0.2.6**、runtime **0.2.0a8**，对应 npm 安装器 **0.2.0-alpha.8**。保留 macOS 与报告语言功能，新增 Windows 安装/运行适配，并包含看板表头修复。GitHub 与 npm 分步发布，实际渠道状态见[发行记录](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261012-01)和[npm 固定版本](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.8)。Windows 11 实机验收仍待完成。
 
 通过 Agent 的插件管理器更新，再为每个 Pallas 项目运行 setup Skill，随后开始新任务。详见[插件更新与恢复](PLUGIN_INSTALL.md#update)。
 

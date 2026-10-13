@@ -3,7 +3,8 @@
 This route has two separate servers: `pallas` (local runtime) and `meta_official`
 (`https://mcp.facebook.com/ads`, host-owned authentication). Never move credentials between them.
 The installer is `pallas agent setup --client claude|codex --directory /new/project`.
-It installs both Skills and the report template; no source checkout is required after wheel install.
+It installs the five portable Skills and their report resources; no source checkout is required
+after wheel install. Native plugin projects use the setup Skill instead of this legacy installer.
 
 This reference applies only when `options.meta_authorization.authorization_owner` is
 `host_client`. Publisher-configured releases use Pallas-owned browser login in both hosts,
@@ -22,7 +23,8 @@ for that route. Never copy a host grant into Pallas or claim a different connect
      project MCP server and hooks. `configuration_conflict` means a custom configuration
      exists; do not overwrite it, ask for manual review.
    - Registered but no `meta_official` tools in this session: not authenticated (or not yet
-     loaded/trusted). Reload and trust if needed, then `/mcp` -> `meta_official` -> Authenticate.
+     loaded/trusted). Reload and trust if needed. In an interactive Claude Code terminal, use
+     `/mcp` -> `meta_official` -> Authenticate; the desktop Code tab does not expose `/mcp`.
    - Tools present but `ads_get_ad_accounts` not yet successful: tools are loaded; current
      authentication and account access remain unverified. With the read guard loaded, call it
      and follow any host authentication prompt; a permission error is an access result, not a reason to reauthorize
@@ -32,12 +34,16 @@ for that route. Never copy a host grant into Pallas or claim a different connect
    Pallas checks only this project's `.mcp.json`/`.claude/settings.json`; a user-scope
    registration is invisible to it, so working host tools take precedence over that report.
 2. If Meta tools are available, read accounts directly; do not demand a new authorization.
-   If authentication is needed, direct the user to the host's `/mcp` connection UI.
+   If authentication is needed, use the host's available connection controls; `/mcp` applies to
+   the interactive Claude Code terminal, not the desktop Code tab.
    `connect(platform=meta)` is a host instruction result, without a Pallas session ID.
    Claude Code direct authorization is verified. Codex DCR was rejected on 2026-09-14, but the
    Pallas pre-registered client route succeeded. In a project installed with `--meta-client-id`,
    use `pallas agent login-meta --directory PROJECT` so the packaged HTTPS callback stays alive.
-   Run `agent doctor` for missing installation prerequisites. Never impersonate
+   Run `agent doctor` for missing installation prerequisites. Only for this explicitly selected
+   legacy Codex route, a missing localhost certificate can require `agent prepare-meta --directory
+   PROJECT`; `--trust-local-certificate` changes current-user localhost trust and must be explained
+   before the user authorizes that step. It is not part of Pallas-owned browser login. Never impersonate
    another client, inspect host keychains, request a token, or silently switch to self-app OAuth.
 3. Only call `ads_get_ad_accounts`, `ads_get_field_context`, `ads_get_ad_entities`.
    Do not run write tools, act on returned `next_actions`, or scrape Ads Manager.

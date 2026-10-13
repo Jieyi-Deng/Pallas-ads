@@ -1,8 +1,10 @@
 # Install the Pallas plugin
 
-Pallas brings its workflow and analysis Skills, project setup, and local advertising-analysis runtime to Codex and Claude Code. Use macOS, Node.js 22 or newer, and a current version of your agent with plugin support. Python is prepared automatically when needed.
+Pallas brings its workflow and analysis Skills, project setup, and local advertising-analysis runtime to Codex and Claude Code. Use macOS or Windows 11 x64, Node.js 22 or newer, and a current version of your agent with plugin support. Python is prepared automatically when needed.
 
 This guide installs from Pallas's public Git repository. It does not require access to the private development repository, an OpenAI API key, or an npm publisher account. Adding this source does not mean Pallas is listed in your agent's default public directory.
+
+Windows compatibility is an Alpha preview in plugin 0.2.6 / runtime 0.2.0a8. Windows Server CI passed; Windows 11 machine, host and real OAuth acceptance remain pending. Windows 10, ARM64 and WSL/Linux setup are not supported. Use a private local drive, not network, redirected or junction paths. Windows defaults to `%LOCALAPPDATA%\Pallas` for managed runtimes; `PALLAS_DATA_HOME` can select another private local folder. macOS retains `~/.local/share/pallas`. Existing grants and user overrides are retained.
 
 ## 1. Install
 
@@ -49,7 +51,7 @@ The agent resolves the installed plugin path and runs its setup helper for your 
 
 Codex setup creates one project MCP entry with an explicit launcher and workspace path; the native plugin provides its Skills and setup helper. Claude Code uses the plugin's bundled MCP entry and the current project binding. Use separate project folders for separate clients or customers. Open the prepared project root when starting your agent.
 
-Plugin 0.2.0 contains **six Skills** (`pallas`, `pallas-setup`, `pallas-workflow`, `pallas-analysis`, `pallas-competitors`, `pallas-dashboard`) and **eleven Pallas tools**, including `pallas_command`. Older installations can have a smaller inventory and must update before using the unified commands. The helper's `doctor` command checks the binding and runtime; your agent must also verify that the tools load. A connected local Pallas server does not imply that a media account is authorized.
+Since plugin 0.2.0, Pallas includes **six Skills** (`pallas`, `pallas-setup`, `pallas-workflow`, `pallas-analysis`, `pallas-competitors`, `pallas-dashboard`) and **eleven Pallas tools**, including `pallas_command`. Older installations can have a smaller inventory and must update before using the unified commands. The helper's `doctor` command checks the binding and runtime; your agent must also verify that the tools load. A connected local Pallas server does not imply that a media account is authorized.
 
 ### Unified commands (command-capable builds)
 
@@ -64,7 +66,7 @@ reloading an older release alone cannot add the feature.
 
 ## 3. Authorize
 
-> Connect my Meta / Google Ads / TikTok Ads account to Pallas. Check the required connection setup, guide me through browser authorization, list accessible accounts, and let me select one before reading performance data.
+> Connect the advertising platform I want to analyze. First explain whether the selected connection supports data reads, then guide me through browser authorization. If account reads are supported, list accessible accounts and let me select one before reading performance data.
 
 Complete the platform's login and consent screens. Your agent uses the [authorization guide](AUTHORIZATION.md) and preserves existing connections.
 
@@ -80,7 +82,7 @@ For uploaded CSV/XLSX analysis, skip media authorization.
 
 ## 4. Analyze
 
-For an authorized account:
+For an authorized connection with a supported data adapter:
 
 > Use Pallas to analyze the last seven complete days for the account I selected. Confirm the reporting scope and data coverage, explain performance changes, and generate an HTML report with evidence and recommended next steps.
 
@@ -133,3 +135,16 @@ Before disabling or uninstalling in Codex, **deactivate each prepared project** 
 A busy result means another operation holds the project lock. Let it finish. If the previous process crashed, inspect `.pallas/plugin.lock/owner.json` and confirm that its PID is no longer running before removing that lock directory. Startup and tool discovery can coexist across sessions; data operations are serialized. Run scheduled jobs in the prepared project without concurrent setup or migration.
 
 For other needs, contact [support@pallas-ads.com](mailto:support@pallas-ads.com). Share errors and client versions, never passwords, access tokens, API keys or advertising data you did not intend to disclose.
+
+## Windows paths and recovery
+
+In PowerShell, quote full paths and run Node explicitly, for example:
+
+```powershell
+node "C:\plugin-cache\pallas\scripts\pallas.mjs" setup --client codex --project "C:\Users\Person\Pallas Project"
+node "C:\plugin-cache\pallas\scripts\pallas.mjs" doctor --project "C:\Users\Person\Pallas Project"
+```
+
+Resolve the real plugin root from the installed setup Skill; these paths are examples. No administrator access, shell-profile edits or certificate installation are needed for the normal browser-login route. Close Pallas sessions before updating or rolling back. After a forced process termination, inspect the recorded PID before removing a stale project lock. Windows files inherit the project's directory ACL: keep projects in a private user directory. Analysis data are not encrypted by Pallas.
+
+Legacy Meta host hooks and the macOS localhost-certificate route are not supported on Windows. The publisher-configured Google/Meta browser flows use the same protocols and Skills; Windows Credential Manager replaces Keychain. Host plugin availability, reload behavior, menus and browser consent must be checked on the actual Windows host version.

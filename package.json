@@ -1,11 +1,11 @@
 {
   "name": "pallas-ads",
-  "version": "0.2.0-alpha.6",
+  "version": "0.2.0-alpha.8",
   "description": "Install Pallas local advertising analysis for Codex and Claude Code",
   "type": "module",
   "bin": {"pallas-ads": "bin/pallas-ads.mjs"},
   "engines": {"node": ">=22"},
-  "os": ["darwin"],
+  "os": ["darwin", "win32"],
   "cpu": ["arm64", "x64"],
   "files": ["bin/", "lib/", "resources/", "LICENSE", "NOTICE", "README.md"],
   "scripts": {"test": "node --test test/*.test.mjs"},

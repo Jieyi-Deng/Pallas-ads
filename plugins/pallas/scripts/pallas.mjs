@@ -4,7 +4,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync, realpathSync, lstatS
 import {dirname, join, resolve, relative, isAbsolute} from 'node:path';
 import {homedir} from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {canonicalDirectory, findPython, managedPython, verifiedResources} from './installer.mjs';
+import {canonicalDirectory, findPython, managedPython, verifiedResources, supportedPlatform, runtimeExecutable, venvCode} from './installer.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const RECEIPT = '.pallas/plugin-install.json';
@@ -53,22 +53,22 @@ export function lock(path) {
 }
 async function run(command,args,{protocol=false,cwd}={}) {
   return new Promise((done,fail)=>{
-    const child=spawn(command,args,{cwd,shell:false,stdio:protocol ? 'inherit' : ['ignore','inherit','inherit']});
-    const signals=['SIGINT','SIGTERM','SIGHUP'];
-    const handlers=signals.map(signal=>{ const handler=()=>child.kill(signal); process.on(signal,handler); return [signal,handler]; });
+    const child=spawn(command,['-X','utf8',...args],{cwd,shell:false,stdio:protocol ? 'inherit' : ['ignore','inherit','inherit']});
+    const signals=process.platform==='win32'?['SIGINT','SIGTERM','SIGBREAK']:['SIGINT','SIGTERM','SIGHUP'];
+    const handlers=signals.map(signal=>{ const handler=()=>child.kill(process.platform==='win32'?'SIGTERM':signal); process.on(signal,handler); return [signal,handler]; });
     const cleanup=()=>handlers.forEach(([signal,handler])=>process.off(signal,handler));
     child.once('error',()=>{cleanup();fail(Error(`Cannot start ${command}. Run plugin setup to repair the runtime.`));});
     child.once('exit',(code,signal)=>{cleanup();code===0?done():fail(Error(`Pallas exited ${signal || code}. See the preceding diagnostic.`));});
   });
 }
 function cacheRoot() {
-  return canonicalDirectory(process.env.PALLAS_DATA_HOME || join(homedir(),'.local/share/pallas'));
+  return canonicalDirectory(process.env.PALLAS_DATA_HOME || (process.platform==='win32'?join(process.env.LOCALAPPDATA || join(homedir(),'AppData','Local'),'Pallas'):join(homedir(),'.local/share/pallas')));
 }
 async function prepareRuntime(resources,manifest,explicitPython) {
   const base=join(cacheRoot(),'runtimes'); mkdirSync(base,{recursive:true,mode:0o700});
   const runtime=join(base,manifest.files[manifest.wheel]);
   if (existsSync(runtime) && lstatSync(runtime).isSymbolicLink()) throw Error('Runtime must not be a symlink.');
-  const ready=join(runtime,'pallas-runtime.json'), python=join(runtime,'bin/python');
+  const ready=join(runtime,'pallas-runtime.json'), python=runtimeExecutable(runtime,'python');
   if (existsSync(ready)) {
     const record=JSON.parse(readFileSync(ready));
     if (record.wheelSha256!==manifest.files[manifest.wheel] || !existsSync(python)) throw Error('Runtime receipt mismatch. Preserve the directory and repair the installation.');
@@ -78,7 +78,7 @@ async function prepareRuntime(resources,manifest,explicitPython) {
   try {
     if (!existsSync(python)) {
       const interpreter=findPython(explicitPython) || await managedPython(runtime);
-      await run(interpreter,['-I','-c','import sys,venv; venv.EnvBuilder(with_pip=True,symlinks=True).create(sys.argv[1])',runtime]);
+      await run(interpreter,['-I','-c',venvCode(),runtime]);
     }
     await run(python,['-m','pip','install',join(resources,manifest.wheel)]);
     await run(python,['-I','-c',"from importlib.metadata import version; print('Pallas ' + version('pallas-ads'))"]);
@@ -103,7 +103,7 @@ export async function main(args=process.argv.slice(2)) {
     console.log('Pallas native plugin\nsetup --client codex|claude --project PATH [--python EXECUTABLE] [--migrate] [--install-command]\nserve [--project PATH]\ndoctor --project PATH\nrollback --project PATH\ndeactivate --project PATH\nconnect-meta --project PATH (Claude Code only)\nSetup prepares a runtime and binds this project. --install-command adds a project pallas skill without overwriting user commands. It does not authorize media.'); return;
   }
   if(Number(process.versions.node.split('.')[0])<22) throw Error('Pallas requires Node.js 22 or newer.');
-  if(process.platform!=='darwin') throw Error('Pallas setup and runtime support macOS.');
+  supportedPlatform();
   const project=projectPath(opts.project);
   if(opts.command==='setup') {
     mkdirSync(join(project,'.pallas'),{recursive:true,mode:0o700});
@@ -111,7 +111,7 @@ export async function main(args=process.argv.slice(2)) {
     try {
       const {directory,manifest}=verifiedResources(ROOT);
       const runtime=await prepareRuntime(directory,manifest,opts.python);
-      await run(join(runtime,'bin/python'),[join(ROOT,'scripts/project.py'),'setup',project,opts.client,runtime,VERSION,manifest.files[manifest.wheel],process.execPath,...(opts.migrate?['--migrate']:[]),...(opts.installCommand?['--install-command']:[])]);
+      await run(runtimeExecutable(runtime,'python'),[join(ROOT,'scripts/project.py'),'setup',project,opts.client,runtime,VERSION,manifest.files[manifest.wheel],process.execPath,...(opts.migrate?['--migrate']:[]),...(opts.installCommand?['--install-command']:[])]);
       console.log('Pallas is prepared. Reload plugins or start a new agent session in this project. Then authorize a media account or provide an advertising export.');
     } finally {release();}
     return;
@@ -121,19 +121,19 @@ export async function main(args=process.argv.slice(2)) {
     const {manifest}=verifiedResources(ROOT);
     const runtimeCurrent=binding.wheelSha256===manifest.files[manifest.wheel];
     console.log(JSON.stringify({project,client:binding.client,pluginVersion:binding.pluginVersion,installedPluginVersion:VERSION,runtime:binding.runtime,runtimeCurrent,workspace:join(project,'.pallas'),mediaAuthorization:'Verify in the host; setup does not grant access.',...(runtimeCurrent?{}:{next:'Plugin runtime changed. Run setup once for this project, then reload.'})}));
-    await run(join(binding.runtime,'bin/python'),['-I','-c',"from importlib.metadata import version; print('Pallas ' + version('pallas-ads'))"]);
+    await run(runtimeExecutable(binding.runtime,'python'),['-I','-c',"from importlib.metadata import version; print('Pallas ' + version('pallas-ads'))"]);
     // Readiness comes from the bound runtime's own checks, never from a pallas found on PATH.
-    await run(join(binding.runtime,'bin/python'),[join(ROOT,'scripts/project.py'),'doctor',project]); return;
+    await run(runtimeExecutable(binding.runtime,'python'),[join(ROOT,'scripts/project.py'),'doctor',project]); return;
   }
   if(opts.command==='serve') {
     const {manifest}=verifiedResources(ROOT);
     if(binding.wheelSha256!==manifest.files[manifest.wheel]) throw Error('Plugin runtime changed. Run setup once to update this project, then reload.');
-    await run(join(binding.runtime,'bin/python'),[join(ROOT,'scripts/serve.py'),join(project,'.pallas')],{protocol:true,cwd:project});
+    await run(runtimeExecutable(binding.runtime,'python'),[join(ROOT,'scripts/serve.py'),join(project,'.pallas')],{protocol:true,cwd:project});
     return;
   }
   const release=lock(join(project,'.pallas/plugin.lock'));
   try {
-    await run(join(binding.runtime,'bin/python'),[join(ROOT,'scripts/project.py'),opts.command,project]);
+    await run(runtimeExecutable(binding.runtime,'python'),[join(ROOT,'scripts/project.py'),opts.command,project]);
   } finally {release();}
 }
-if(process.argv[1] && realpathSync(process.argv[1])===fileURLToPath(import.meta.url)) main().catch(error=>{console.error(`Pallas: ${error.message}`);process.exitCode=1;});
+if(process.argv[1] && realpathSync(process.argv[1])===realpathSync(fileURLToPath(import.meta.url))) main().catch(error=>{console.error(`Pallas: ${error.message}`);process.exitCode=1;});
