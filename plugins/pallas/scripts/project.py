@@ -11,6 +11,8 @@ import tomllib
 from datetime import UTC, datetime
 from pathlib import Path
 
+from pallas_ads.platform_support import is_link, runtime_executable
+
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
@@ -23,7 +25,7 @@ def safe(project, relative):
     for item in [path, *path.parents]:
         if item == project:
             break
-        if item.is_symlink():
+        if is_link(item):
             raise ValueError("Configuration or state paths must not be symlinks")
     return path
 
@@ -31,7 +33,7 @@ def safe(project, relative):
 def tree_digest(path):
     files = []
     for item in sorted(path.rglob("*")):
-        if item.is_symlink():
+        if is_link(item):
             raise ValueError("Skill symlinks require manual migration")
         if item.is_file():
             files.append((str(item.relative_to(path)), digest(item.read_bytes())))
@@ -171,9 +173,9 @@ def setup(
     config = {}
     if config_path.exists():
         config = (
-            json.loads(config_path.read_text())
+            json.loads(config_path.read_text(encoding="utf-8"))
             if client == "claude"
-            else tomllib.loads(config_path.read_text())
+            else tomllib.loads(config_path.read_text(encoding="utf-8"))
         )
     server = config.get("mcpServers" if client == "claude" else "mcp_servers", {}).get("pallas")
     skill_root = ".claude/skills" if client == "claude" else ".agents/skills"
@@ -188,7 +190,7 @@ def setup(
         if path.exists():
             moves.append(relative)
     binding_path = safe(project, ".pallas/plugin-install.json")
-    binding = json.loads(binding_path.read_text()) if binding_path.exists() else {}
+    binding = json.loads(binding_path.read_text(encoding="utf-8")) if binding_path.exists() else {}
     if binding and (binding.get("client") != client or binding.get("project") != str(project)):
         raise ValueError("This binding belongs to another client/path; keep separate projects.")
     alias_updates, alias = command_alias(project, client, binding, install_command)
@@ -205,13 +207,13 @@ def setup(
         receipt_path = safe(project, ".pallas/npm-install.json")
         if not receipt_path.exists():
             raise ValueError("Custom Pallas MCP config: migrate it manually after review.")
-        receipt = json.loads(receipt_path.read_text())
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
         expected_runtime = str(project) + "-runtime"
         if (
             receipt.get("project") != str(project)
             or receipt.get("client") != client
             or receipt.get("runtime") != expected_runtime
-            or server.get("command") != expected_runtime + "/bin/pallas"
+            or server.get("command") != str(runtime_executable("pallas", Path(expected_runtime)))
             or server.get("args") != ["mcp", "serve", "--workspace", str(project / ".pallas")]
             or set(server) - {"command", "args", "type", "tool_timeout_sec"}
             or server.get("type", "stdio") != "stdio"
@@ -224,7 +226,9 @@ def setup(
             del config["mcpServers"]["pallas"]
             updates[config_name] = encode(config)
         else:
-            updates[config_name] = remove_codex_server(config_path.read_text()).encode()
+            updates[config_name] = remove_codex_server(
+                config_path.read_text(encoding="utf-8")
+            ).encode()
     mcp = None
     if client == "codex":
         # Codex legacy plugin MCP does not expand Claude's package-root variable.
@@ -237,7 +241,7 @@ def setup(
             "startup_timeout_sec": 15,
             "tool_timeout_sec": 180,
         }
-        raw = config_path.read_text() if config_path.exists() else ""
+        raw = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
         if server:
             raw = remove_codex_server(raw)
         section = (
@@ -255,11 +259,13 @@ def setup(
             b"pallas-analysis Skills; use pallas-dashboard for persistent dashboards and updates. "
             b"Report requests must deliver the generated HTML link. "
             b"Keep data in this project's .pallas workspace. "
-            b"Authorize media through the configured host connection. Never copy tokens or "
-            b"modify campaigns. File analysis can skip authorization.\n"
+            b"Inspect options and the connection authorization owner. Configured releases use "
+            b"Pallas browser OAuth; legacy host connections remain separate. Never copy tokens "
+            b"or modify campaigns. File analysis can skip authorization. "
+            b"Pallas-owned Meta data access is pending even after login.\n"
         )
     else:
-        old = instructions.read_text()
+        old = instructions.read_text(encoding="utf-8")
         new = re.sub(
             r"For Pallas work, read `[^`]+/pallas-workflow/SKILL.md`\.",
             "For Pallas work, use the installed plugin's pallas-workflow Skill.",
@@ -268,7 +274,7 @@ def setup(
         if new != old:
             updates[instruction_name] = new.encode()
     gitignore = safe(project, ".gitignore")
-    content = gitignore.read_text() if gitignore.exists() else ""
+    content = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
     if ".pallas/" not in content.splitlines():
         updates[".gitignore"] = (content.rstrip() + "\n.pallas/\n").lstrip("\n").encode()
     updates[".pallas/plugin-install.json"] = encode(
@@ -304,11 +310,11 @@ def setup(
 
 def rollback(project):
     pointer = safe(project, ".pallas/plugin-last-change.json")
-    stamp = json.loads(pointer.read_text())["backup"]
+    stamp = json.loads(pointer.read_text(encoding="utf-8"))["backup"]
     if not re.fullmatch(r"\d{8}T\d{12}Z", stamp):
         raise ValueError("Invalid backup identifier")
     backup = safe(project, ".pallas/plugin-backups/" + stamp)
-    records = json.loads((backup / "changes.json").read_text())
+    records = json.loads((backup / "changes.json").read_text(encoding="utf-8"))
     for row in records["files"]:
         path = safe(project, row["path"])
         if not path.is_file() or digest(path.read_bytes()) != row["after"]:
@@ -335,7 +341,7 @@ def rollback(project):
     for relative, key in ((".mcp.json", "mcpServers"), (".codex/config.toml", "mcp_servers")):
         path = safe(project, relative)
         if path.is_file():
-            raw = path.read_text()
+            raw = path.read_text(encoding="utf-8")
             configuration = json.loads(raw) if relative.endswith("json") else tomllib.loads(raw)
             server = configuration.get(key, {}).get("pallas", {})
             legacy_restored |= bool(server) and "pallas.mjs" not in json.dumps(server)
@@ -351,10 +357,10 @@ def rollback(project):
 
 
 def deactivate(project):
-    binding = json.loads(safe(project, ".pallas/plugin-install.json").read_text())
+    binding = json.loads(safe(project, ".pallas/plugin-install.json").read_text(encoding="utf-8"))
     if binding["client"] == "codex":
         path = safe(project, ".codex/config.toml")
-        raw = path.read_text() if path.exists() else ""
+        raw = path.read_text(encoding="utf-8") if path.exists() else ""
         server = tomllib.loads(raw).get("mcp_servers", {}).get("pallas")
         if server:
             if server != binding.get("mcp"):
@@ -367,24 +373,26 @@ def deactivate(project):
 
 
 def connect_meta(project):
-    binding = json.loads(safe(project, ".pallas/plugin-install.json").read_text())
+    if os.name == "nt":
+        raise ValueError("Windows uses Pallas browser OAuth; legacy Meta hooks are not supported.")
+    binding = json.loads(safe(project, ".pallas/plugin-install.json").read_text(encoding="utf-8"))
     if binding["client"] != "claude":
         raise ValueError(
             "Codex Meta needs the supported preregistered setup. "
             "Contact support@pallas-ads.com; existing host authorization is not changed."
         )
     config_path, settings_path = safe(project, ".mcp.json"), safe(project, ".claude/settings.json")
-    config = json.loads(config_path.read_text()) if config_path.exists() else {}
-    settings = json.loads(settings_path.read_text()) if settings_path.exists() else {}
+    config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}
+    settings = (
+        json.loads(settings_path.read_text(encoding="utf-8")) if settings_path.exists() else {}
+    )
     servers = config.setdefault("mcpServers", {})
     expected = {"type": "http", "url": "https://mcp.facebook.com/ads"}
     if "meta_official" in servers and servers["meta_official"] != expected:
         raise ValueError("Existing Meta configuration differs; retain it and review manually.")
     servers["meta_official"] = expected
 
-    command = (
-        shlex.quote(str(Path(sys.executable).absolute().with_name("pallas"))) + " agent guard-meta"
-    )
+    command = shlex.quote(str(runtime_executable("pallas"))) + " agent guard-meta"
     hook = {"matcher": "mcp__meta_official__.*", "hooks": [{"type": "command", "command": command}]}
     hooks = settings.setdefault("hooks", {}).setdefault("PreToolUse", [])
     # Preserve other hooks. Replace only guards Pallas generated for an earlier runtime path,

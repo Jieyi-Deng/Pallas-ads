@@ -14,7 +14,7 @@
 
 /* Table identity columns are fixed; offsets share the exact colgroup widths. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-#campaign-table{--select-w:40px;--platform-w:100px;--name-w:280px;table-layout:fixed;border-collapse:separate;border-spacing:0;width:calc(var(--select-w) + var(--platform-w) + var(--name-w) + 1260px)}
+#campaign-table{--select-w:40px;--platform-w:100px;--name-w:280px;table-layout:fixed;border-collapse:separate;border-spacing:0;width:calc(var(--select-w) + var(--platform-w) + var(--name-w) + 1316px)}
 #creative-table{--preview-w:72px;--select-w:36px;--name-w:260px;--platform-w:100px;table-layout:fixed;border-collapse:separate;border-spacing:0;width:calc(var(--preview-w) + var(--select-w) + var(--name-w) + var(--platform-w) + 1530px)}
 .select-col{width:var(--select-w)}.platform-col{width:var(--platform-w)}.name-col{width:var(--name-w)}.preview-col{width:var(--preview-w)}
 #campaign-table tr,#creative-table tr{--row-bg:white;background:var(--row-bg)}
@@ -51,8 +51,10 @@
 @media print{#campaign-table :is(th,td),#creative-table :is(th,td){position:static!important}}
 
 #campaign-table .status-col{width:100px}#campaign-table .objective-col{width:160px}
+#campaign-table .wide-metric-col{width:128px}
 #creative-table .campaign-name-col{width:240px}#creative-table .format-col{width:90px}
 #campaign-table th,#creative-table th{white-space:normal}
+#campaign-table th.num button{white-space:nowrap}
 #creative-table td:nth-child(5),#campaign-table td:nth-child(5){white-space:normal;overflow-wrap:anywhere}
 .table-scroll:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
 

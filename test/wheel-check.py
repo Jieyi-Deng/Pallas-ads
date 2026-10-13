@@ -9,7 +9,8 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 plugin = root / "plugins/pallas"
 manifests = [
-    json.loads((path / "resources/npm-runtime.json").read_text()) for path in (root, plugin)
+    json.loads((path / "resources/npm-runtime.json").read_text(encoding="utf-8"))
+    for path in (root, plugin)
 ]
 assert manifests[0] == manifests[1], "Installer/plugin runtime manifests differ"
 manifest = manifests[0]
@@ -27,7 +28,7 @@ validator = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(validator)
 validator.verify_wheel(
     (root / "resources" / manifest["wheel"]).read_bytes(),
-    json.loads((root / "resources/release-manifest.json").read_text()),
+    json.loads((root / "resources/release-manifest.json").read_text(encoding="utf-8")),
 )
 
 with zipfile.ZipFile(root / "resources" / manifest["wheel"]) as wheel:
@@ -51,19 +52,19 @@ with zipfile.ZipFile(root / "resources" / manifest["wheel"]) as wheel:
     ):
         for file in (plugin / "skills" / skill).rglob("*"):
             if file.is_file():
-                member = "pallas_ads/resources/" + str(file.relative_to(plugin))
+                member = "pallas_ads/resources/" + file.relative_to(plugin).as_posix()
                 assert wheel.read(member) == file.read_bytes(), f"Skill/wheel mismatch: {member}"
     status = json.loads(wheel.read("pallas_ads/resources/release-status.json"))
-    package = json.loads((root / "package.json").read_text())
+    package = json.loads((root / "package.json").read_text(encoding="utf-8"))
     assert manifest["runtimeVersion"] == status["package_version"]
     assert not status["advertising_writes"] and not status["default_telemetry"]
 
-release = json.loads((root / "release.json").read_text())
+release = json.loads((root / "release.json").read_text(encoding="utf-8"))
 assert release["schema_version"] == 1
 assert release["components"]["runtime"] == status["package_version"]
 assert release["components"]["npm"] == package["version"]
 for host in (".codex-plugin", ".claude-plugin"):
-    metadata = json.loads((plugin / host / "plugin.json").read_text())
+    metadata = json.loads((plugin / host / "plugin.json").read_text(encoding="utf-8"))
     assert release["components"]["plugin"] == metadata["version"]
 for name, expected in release["files"].items():
     path = Path(name)

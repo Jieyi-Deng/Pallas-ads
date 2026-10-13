@@ -29,7 +29,7 @@ Google/Meta setup does not block file analysis. For an explicitly requested Goog
 connection, use the publisher-configured release; a core-only build reports operator_setup_required.
 Obtain the correct release if needed; do not ask users for JSON or secrets.
 Use `agent doctor --media google/meta/tiktok/all` only for the requested live route.
-The macOS test bundle's install_macos.py installs the wheel and project settings. System prompts
+The test bundle's install_macos.py (historical filename) installs the wheel and project settings on macOS or Windows 11 x64. Windows native-machine/host/OAuth acceptance remains pending for the development build. Windows uses Credential Manager and the Pallas browser flow; legacy Meta host hooks and local certificates are unsupported there. System prompts
 and official consent stay with the user. Existing explicit operator configurations take precedence;
 only change them when asked. Never copy user OAuth credentials from another machine.
 
@@ -95,32 +95,27 @@ read tools in the Meta host workflow. An API/MCP error is a source compatibility
 permission problem, not permission to browse Ads Manager, scrape dashboards, export data, or use
 another advertising connector. Browser interaction is for OAuth. Manual backend reconciliation
 is a separate user-requested test step and must never replace a failed Pallas source read.
-Developer App/OAuth-client settings are operator prerequisites, not product facts. Google Ads
-uses Cloud project access; never ask for a Developer Token. Public packages (npm, plugin, public
-wheel) contain no Google application identity, so a fresh install reports Google
-`operator_setup_required`; that never blocks file analysis, Meta or TikTok. Google live access
-needs the operator's Desktop application (`pallas providers google-desktop`, run by the operator)
-or an operator-built wheel; hand missing setup to the operator. Keep the stages separate:
+Developer App/OAuth-client settings are publisher/operator prerequisites, not product facts.
+Google Ads uses Cloud project access; never ask for a Developer Token. Publisher-configured
+releases include a Google Desktop application and a public Meta application. Inspect `options`
+for the effective configuration and connection owner; existing workspace/user overrides remain
+authoritative. Only a build or override without an effective Google application reports
+`operator_setup_required`. Hand that result to the publisher for a configured release; do not
+ask an advertiser to create an app or supply a file. The optional `pallas providers google-desktop`
+command is for operators who explicitly choose their own application. Keep the stages separate:
 operator setup required, application configured, OAuth consent completed, production data
 returned, and reconciled data. Configured is not authorization, a successful consent is not data
 access, and returned data is not reconciliation. Users only consent and choose accounts. Never
 ask for secrets, JSON files or tokens in chat.
 
-Meta defaults to the host client's official MCP (`https://mcp.facebook.com/ads`).
-`connect(platform=meta)` returns host instructions, not a Pallas OAuth session. Never poll
-`source_auth_status` for this route or ask for App ID, Configuration ID, secret or certificate.
-The host owns credentials, reauthorization and disconnect. Pallas reports only the project
-registration `state` (`not_registered`, `registered_guard_missing`, `configuration_conflict`,
-`registered_authentication_unknown`); authentication and account access come from the host's
-tools. Follow the four-state decision in the Meta host workflow. Claude Code authorization has been verified;
-Codex DCR was rejected by Meta on 2026-09-14, but Pallas's pre-registered client login was verified.
-For Codex projects installed with `--meta-client-id`, run `pallas agent login-meta --directory PROJECT`
-to start the packaged HTTPS forwarder and host login. If the localhost certificate is missing,
-finish the authorized installation with `agent prepare-meta --directory PROJECT`; trust changes use
-`--trust-local-certificate` after explaining the current-user localhost trust change. No manual JSON,
-certificate file selection, or App ID questions belong in the advertiser flow.
-Do not substitute Claude's client identity or tokens.
-The operator-owned OAuth implementation remains an explicit-config fallback, never automatic.
+Publisher-configured Meta uses the Pallas-owned browser session described above. Poll
+`source_auth_status` for that session; do not register a host MCP server or prepare localhost
+certificates for it. Its data adapter remains pending even after consent succeeds.
+Only when the returned route is `host_client_managed`, use the
+[Meta host workflow](references/meta-host.md). In that compatibility route, `connect` returns
+host instructions rather than a Pallas session; the host owns credentials, reauthorization
+and disconnect. Follow the returned registration/guard state and verify account access with
+the host's allowed read tools. Never substitute another client's identity or copy its tokens.
 
 ## Profile and scope
 
@@ -144,8 +139,9 @@ preserve failed packages for inspection; do not invent missing source metadata.
 
 Native connections use local environment/OS-keychain references. Browser `action=connect` stays
 alive in the MCP process; poll `source_auth_status`, or cancel when requested. For a terminal
-use `pallas source connect --input FILE`, which waits for its callback. HTTPS callback certificate
-paths are process startup options. Never ask the user to paste Token/App Secret into chat or JSON.
+use `pallas source connect --input FILE`, which waits for its callback. Publisher-configured
+Google/Meta browser sessions need no user-supplied certificate. Certificate startup options apply
+only to explicitly selected legacy/custom routes. Never ask for Token/App Secret in chat or JSON.
 A restarted MCP process loses pending sessions; connected references persist. Use `source_status`
 to inspect them. Refresh/disconnect only within the user's requested connection-management scope.
 

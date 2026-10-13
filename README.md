@@ -23,7 +23,7 @@ Reports follow the language of your request: Chinese requests produce Chinese re
 
 ## 1. Install
 
-You need **macOS, Node.js 22 or later, and Codex or Claude Code** with plugin support.
+You need **macOS or Windows 11 x64, Node.js 22 or later, and Codex or Claude Code** with plugin support. Windows is an Alpha preview: Windows Server CI passed, while Windows 11 desktop, actual host sessions and real OAuth acceptance remain pending. Windows 10, ARM64 and WSL/Linux installation are outside this release.
 
 Ask your agent:
 
@@ -103,7 +103,7 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 ## Keep Pallas up to date
 
-The GitHub distribution includes native plugin **0.2.4** and runtime **0.2.0a6**. npm **0.2.0-alpha.6** is now published and is the `latest` version. Both channels include this report-language update.
+This Windows Alpha distribution includes native plugin **0.2.6** and runtime **0.2.0a8**; its npm installer is **0.2.0-alpha.8**. It retains macOS compatibility and report-language support, adds Windows installation/runtime boundaries and fixes dashboard header layout. Check the [release record](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261012-01) and [npm version](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.8) for channel availability; GitHub and npm publish separately. Windows 11 real-machine acceptance remains pending.
 
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 

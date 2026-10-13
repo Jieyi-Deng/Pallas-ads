@@ -22,7 +22,9 @@ class LockedRuntime(Runtime):
                 "if a process crashed, inspect plugin.lock/owner.json before recovery.",
             )
         try:
-            (lock / "owner.json").write_text(json.dumps({"pid": os.getpid()}))
+            (lock / "owner.json").write_text(
+                json.dumps({"pid": os.getpid()}), encoding="utf-8", newline="\n"
+            )
             return super().invoke(name, arguments)
         finally:
             shutil.rmtree(lock)

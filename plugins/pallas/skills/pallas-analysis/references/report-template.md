@@ -93,9 +93,8 @@ Use localized section names and ordinals rather than decimalized section numberi
 
 Cole Nussbaumer Knaflic, *Storytelling with Data* (Wiley, 2015): context (chapter 1), choosing visuals
 (chapter 2), reducing clutter (chapter 3), directing attention (chapter 4), and narrative structure
-(chapter 7). Consulted the user's local English PDF, particularly printed pages 21, 45, 73, 103 and
-168 (PDF pages 37, 61, 89, 119 and 184). These principles are paraphrased; no book graphics or long
-excerpts are copied into the template. The two-decimal/integer convention is the user's explicit product
-requirement, not a recommendation attributed to the book.
+(chapter 7). These principles are paraphrased; no book graphics or long excerpts are copied into
+the template. The two-decimal/integer convention is a Pallas product requirement, not a
+recommendation attributed to the book.
 
 Presentation details: left-align text columns and right-align numeric columns, including their headers. Place units visibly inside every chart (axis/header or value labels), not only in tooltips or captions. Label intermediate dates at readable intervals based on the time span; retain endpoints, avoid crowding, and show a single tick for a single-day range. These numeric rules also apply to chat/Markdown summaries.

@@ -1,4 +1,6 @@
-"""Install a self-contained Pallas test bundle on a new Mac. Run with Python 3.12 or 3.13.
+"""Install Pallas on macOS or Windows 11 x64 with Python 3.12 or 3.13.
+
+The historical filename is retained for existing bundle manifests.
 
 Core installation needs no media application identity. Live connections are optional.
 No old workspaces, certificates or user OAuth tokens are imported.
@@ -7,6 +9,8 @@ No old workspaces, certificates or user OAuth tokens are imported.
 import argparse
 import hashlib
 import json
+import os
+import platform
 import subprocess
 import sys
 import venv
@@ -15,10 +19,21 @@ from pathlib import Path
 
 
 def install(args):
-    if sys.platform != "darwin" or sys.version_info[:2] not in ((3, 12), (3, 13)):
-        raise ValueError(
-            "Use Python 3.12 or 3.13 on macOS. The agent can install that prerequisite."
-        )
+    windows = sys.platform == "win32"
+    supported = sys.platform == "darwin" or (
+        windows
+        and sys.maxsize > 2**32
+        and sys.getwindowsversion().build >= 22000
+        and platform.machine().lower() in ("amd64", "x86_64")
+        and "arm"
+        not in (
+            os.environ.get("PROCESSOR_ARCHITEW6432") or os.environ.get("PROCESSOR_ARCHITECTURE", "")
+        ).lower()
+    )
+    if not supported or sys.version_info[:2] not in ((3, 12), (3, 13)):
+        raise ValueError("Use Python 3.12 or 3.13 on macOS or Windows 11 x64.")
+    if windows and (args.meta_client_id or args.enable_meta or args.trust_local_certificate):
+        raise ValueError("Windows uses Pallas browser OAuth; legacy Meta setup is not supported.")
     if args.meta_client_id and args.client != "codex":
         raise ValueError("Pre-registered Meta setup requires Codex.")
     if args.enable_meta and args.client == "codex" and not args.meta_client_id:
@@ -30,13 +45,20 @@ def install(args):
     if len(wheels) != 1:
         raise ValueError("The test bundle must contain exactly one Pallas wheel.")
     wheel = wheels[0]
-    expected = json.loads((bundle / "release-manifest.json").read_text())
+    expected = json.loads((bundle / "release-manifest.json").read_text(encoding="utf-8"))
     if (
         expected["wheel"] != wheel.name
         or expected["sha256"] != hashlib.sha256(wheel.read_bytes()).hexdigest()
     ):
         raise ValueError("Wheel checksum mismatch; obtain a fresh bundle from the operator.")
     directory = args.directory.expanduser().absolute()
+    if windows and (
+        not directory.drive
+        or directory.drive.startswith("\\\\")
+        or ":" in str(directory)[2:]
+        or any(p.is_symlink() or p.is_junction() for p in (directory, *directory.parents))
+    ):
+        raise ValueError("Use a private local Windows drive without reparse points.")
     if directory.exists() and (not directory.is_dir() or any(directory.iterdir())):
         raise ValueError("Choose a new or empty project directory; no existing state is replaced.")
     runtime = directory.with_name(directory.name + "-runtime")
@@ -54,10 +76,10 @@ def install(args):
                 raise ValueError("Invalid release application configuration.")
     # Managed macOS Python distributions resolve libpython relative to their real
     # executable. Copying that executable into a venv can break its dylib path.
-    venv.EnvBuilder(with_pip=True, symlinks=True).create(runtime)
-    python = runtime / "bin/python"
-    pallas = runtime / "bin/pallas"
-    subprocess.run([str(python), "-m", "pip", "install", str(wheel)], check=True)
+    venv.EnvBuilder(with_pip=True, symlinks=not windows).create(runtime)
+    python = runtime / ("Scripts/python.exe" if windows else "bin/python")
+    pallas = runtime / ("Scripts/pallas.exe" if windows else "bin/pallas")
+    subprocess.run([str(python), "-m", "pip", "install", str(wheel)], check=True, encoding="utf-8")
     command = [
         str(pallas),
         "agent",
@@ -71,13 +93,17 @@ def install(args):
         command.extend(["--mode", "live"])
     if args.meta_client_id:
         command.extend(["--meta-client-id", args.meta_client_id])
-    subprocess.run(command, check=True)
+    subprocess.run(command, check=True, encoding="utf-8")
     if args.meta_client_id:
         command = [str(pallas), "agent", "prepare-meta", "--directory", str(directory)]
         if args.trust_local_certificate:
             command.append("--trust-local-certificate")
-        subprocess.run(command, check=True)
-    subprocess.run([str(pallas), "agent", "doctor", "--directory", str(directory)], check=True)
+        subprocess.run(command, check=True, encoding="utf-8")
+    subprocess.run(
+        [str(pallas), "agent", "doctor", "--directory", str(directory)],
+        check=True,
+        encoding="utf-8",
+    )
     print("Open this project in your Agent and start a new task:", directory)
     print("Local analysis is installed. Live media access is optional and separately verified.")
 
@@ -100,7 +126,7 @@ def main():
     except (ValueError, OSError, KeyError, subprocess.SubprocessError):
         # Third-party errors may contain sensitive input. Do not print traceback or JSON.
         print(
-            "Installation incomplete. Check macOS/Python version, wheel checksum, embedded "
+            "Installation incomplete. Check OS/Python version, wheel checksum, embedded "
             "application configuration, fresh destination and system permissions. Existing files "
             "were not replaced. If a project was created, use its pallas agent doctor to resume "
             "the remaining setup; do not rerun over it.",

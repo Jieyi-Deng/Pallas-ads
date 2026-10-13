@@ -1,8 +1,8 @@
 import {createHash} from 'node:crypto';
 import {spawn, spawnSync} from 'node:child_process';
 import {existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, realpathSync, writeFileSync, chmodSync, rmSync} from 'node:fs';
-import {dirname, join, resolve, basename, parse} from 'node:path';
-import {homedir} from 'node:os';
+import {dirname, join, resolve, basename, parse, posix, win32} from 'node:path';
+import {homedir, release} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {createInterface} from 'node:readline/promises';
 
@@ -12,7 +12,30 @@ export const UV = {
   version: '0.10.8',
   arm64: {target: 'aarch64-apple-darwin', sha256: 'c3a6fff5b6b4abddff863117878194e35dbc6b0267d61ad259ab9896f9b8dcbb'},
   x64: {target: 'x86_64-apple-darwin', sha256: 'e0a1b22b039f8155765f5bc8c13df03a5f994a901901179791572e8e5f053281'},
+  windows: {target: 'x86_64-pc-windows-msvc', sha256: '2e70ecd22196cbd9d14eefb700814bcafc5b75a0d8275b52e8402e5fe256d928'},
 };
+export function supportedPlatform(platform = process.platform, arch = process.arch, version = release(), nativeArch = process.env.PROCESSOR_ARCHITEW6432 || process.env.PROCESSOR_ARCHITECTURE || '') {
+  if (platform === 'darwin' && ['arm64','x64'].includes(arch)) return;
+  const [major,,build] = version.split('.').map(Number);
+  if (platform === 'win32' && arch === 'x64' && !/arm/i.test(nativeArch) && major >= 10 && build >= 22000) return;
+  throw Error('Pallas supports macOS (Apple Silicon/Intel) and Windows 11 x64. Windows ARM64, older Windows and WSL/Linux installers are not supported.');
+}
+export function runtimeExecutable(runtime, name, platform = process.platform) {
+  return platform === 'win32' ? win32.join(runtime,'Scripts',name+'.exe') : posix.join(runtime,'bin',name);
+}
+export function within(root, path, platform = process.platform) {
+  const paths = platform === 'win32' ? win32 : posix;
+  const rel = paths.relative(root, path);
+  return !!rel && rel !== '..' && !rel.startsWith('..'+paths.sep) && !paths.isAbsolute(rel);
+}
+export function venvCode(platform = process.platform) {
+  return `import sys,venv; venv.EnvBuilder(with_pip=True,symlinks=${platform === 'win32' ? 'False' : 'True'}).create(sys.argv[1])`;
+}
+export function bootstrap(platform = process.platform, arch = process.arch) {
+  const item = platform === 'darwin' ? UV[arch] : platform === 'win32' && arch === 'x64' ? UV.windows : null;
+  if (!item?.target) throw Error('No Python bootstrap for this operating system/architecture.');
+  return {...item, extension: platform === 'win32' ? 'zip' : 'tar.gz'};
+}
 export function sha256(data) { return createHash('sha256').update(data).digest('hex'); }
 export function parseArgs(args) {
   const result = {command: args[0] ?? 'help'};
@@ -33,8 +56,15 @@ export function parseArgs(args) {
   return result;
 }
 export function canonicalDirectory(input) {
-  const expanded = input === '~' ? homedir() : input.startsWith('~/') ? join(homedir(), input.slice(2)) : input;
+  const expanded = input === '~' ? homedir() : /^~[\\/]/.test(input) ? join(homedir(), input.slice(2)) : input;
   let current = resolve(expanded);
+  if (process.platform === 'win32') {
+    if (!/^[a-z]:\\/i.test(current) || current.slice(2).includes(':')) throw Error('Use a local Windows drive, not a network/device/stream path.');
+    for (let p = current; ; p = dirname(p)) {
+      if (lstatSafe(p)?.isSymbolicLink()) throw Error('Windows project/cache paths cannot traverse symlinks or junctions.');
+      if (p === dirname(p)) break;
+    }
+  }
   const missing = [];
   // Canonicalize existing parents, including macOS's /tmp alias, before storing paths.
   while (!existsSync(current)) {
@@ -63,21 +93,22 @@ export function verifiedResources(root = ROOT) {
   }
   return {directory, manifest};
 }
-function pythonCandidate(command) {
-  const run = spawnSync(command, ['-I', '-c', 'import sys,json; print(json.dumps({"version":list(sys.version_info[:2]),"executable":sys.executable}))'], {encoding: 'utf8', timeout: 15000});
+function pythonCandidate(command, prefix = []) {
+  const run = spawnSync(command, [...prefix, '-I', '-X', 'utf8', '-c', 'import sys,json; print(json.dumps({"version":list(sys.version_info[:2]),"executable":sys.executable,"bits":64 if sys.maxsize > 2**32 else 32}))'], {encoding: 'utf8', timeout: 15000, windowsHide:true});
   if (run.status !== 0) return null;
   try {
     const result = JSON.parse(run.stdout.trim());
-    return result.version[0] === 3 && [12, 13].includes(result.version[1]) ? result.executable : null;
+    return result.version[0] === 3 && [12, 13].includes(result.version[1]) && (process.platform !== 'win32' || result.bits === 64) ? result.executable : null;
   } catch { return null; }
 }
-export function findPython(explicit, candidate = pythonCandidate) {
+export function findPython(explicit, candidate = pythonCandidate, platform = process.platform) {
   if (explicit) {
     const found = candidate(explicit);
     if (!found) throw Error('--python must point to Python 3.12 or 3.13.');
     return found;
   }
-  for (const name of ['python3.13', 'python3.12', 'python3']) { const found = candidate(name); if (found) return found; }
+  const choices = platform === 'win32' ? [['py',['-3.13']],['py',['-3.12']],['python',[]],['python3',[]]] : ['python3.13','python3.12','python3'].map(name=>[name,[]]);
+  for (const [name,args] of choices) { const found = candidate(name,args); if (found) return found; }
   return null;
 }
 async function run(command, args, options = {}) {
@@ -102,22 +133,25 @@ export async function downloadPinned(url, digest, destination) {
   writeFileSync(destination, data, {flag: 'wx', mode: 0o600});
 }
 export async function managedPython(directory) {
-  const platform = UV[process.arch];
-  if (!platform) throw Error('Managed Python supports Apple Silicon and Intel Macs.');
+  const platform = bootstrap();
   const tools = directory + '-runtime-tools';
   mkdirSync(tools, {recursive: false, mode: 0o700});
   console.log('Preparing a Pallas-local Python 3.13. No system Python or shell profile will be changed.');
-  const archive = join(tools, 'uv.tar.gz');
-  await downloadPinned(`https://github.com/astral-sh/uv/releases/download/${UV.version}/uv-${platform.target}.tar.gz`, platform.sha256, archive);
-  await run('/usr/bin/tar', ['-xzf', archive, '-C', tools]);
-  const uv = join(tools, `uv-${platform.target}`, 'uv');
-  chmodSync(uv, 0o700);
+  const archive = join(tools, 'uv.'+platform.extension);
+  await downloadPinned(`https://github.com/astral-sh/uv/releases/download/${UV.version}/uv-${platform.target}.${platform.extension}`, platform.sha256, archive);
+  if (process.platform === 'win32') {
+    const powershell = join(process.env.SystemRoot || 'C:\\Windows','System32','WindowsPowerShell','v1.0','powershell.exe');
+    await run(powershell, ['-NoProfile','-NonInteractive','-Command',"$ErrorActionPreference='Stop'; Expand-Archive -LiteralPath $env:PALLAS_BOOTSTRAP_ARCHIVE -DestinationPath $env:PALLAS_BOOTSTRAP_DIRECTORY"], {env:{...process.env,PALLAS_BOOTSTRAP_ARCHIVE:archive,PALLAS_BOOTSTRAP_DIRECTORY:tools},windowsHide:true});
+  } else await run('/usr/bin/tar', ['-xzf', archive, '-C', tools]);
+  const uv = process.platform === 'win32' ? join(tools,'uv.exe') : join(tools, `uv-${platform.target}`, 'uv');
+  if (!lstatSafe(uv)?.isFile() || lstatSync(uv).isSymbolicLink()) throw Error('Invalid extracted bootstrap executable.');
+  if (process.platform !== 'win32') chmodSync(uv, 0o700);
   const pythonDir = join(tools, 'python');
   const env = {...process.env, UV_PYTHON_INSTALL_DIR: pythonDir, UV_CACHE_DIR: join(tools, 'cache')};
   await run(uv, ['python', 'install', '3.13', '--no-bin', '--no-config'], {env});
   const found = spawnSync(uv, ['python', 'find', '3.13', '--managed-python', '--no-config'], {env, encoding: 'utf8', timeout: 15000});
   const executable = found.stdout?.trim();
-  if (found.status !== 0 || !executable?.startsWith(pythonDir + '/') || !pythonCandidate(executable)) throw Error('Managed Python is incomplete. Preserve the runtime-tools directory and inspect the download error.');
+  if (found.status !== 0 || !executable || !within(realpathSync(pythonDir),realpathSync(executable)) || !pythonCandidate(executable)) throw Error('Managed Python is incomplete. Preserve the runtime-tools directory and inspect the download error.');
   rmSync(archive);
   return executable;
 }
@@ -130,7 +164,7 @@ function receiptFor(directory) {
 }
 async function doctor(directory) {
   const receipt = receiptFor(directory);
-  await run(join(receipt.runtime, 'bin/pallas'), ['agent', 'doctor', '--directory', directory]);
+  await run(runtimeExecutable(receipt.runtime, 'pallas'), ['agent', 'doctor', '--directory', directory]);
   return receipt;
 }
 async function selectInstall(options) {
@@ -152,10 +186,10 @@ export async function main(args = process.argv.slice(2)) {
   const pkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
   if (options.command === 'version') { console.log(pkg.version); return; }
   if (options.command === 'help') {
-    console.log(`Pallas ${pkg.version} — local analysis installer (macOS, Node.js 22+)\n\nCommands: install | doctor | update\n  install [--client codex|claude] [--directory PATH]\n          [--python EXECUTABLE | --managed-python]\n  doctor --directory PATH\n  update --directory PATH\n\nInstall prompts for client and a new project. Existing projects/global settings are not overwritten.\nA missing supported Python is provisioned locally; downloads require internet.\nDefault setup does not authorize media, install certificates or request API keys.\nReload your agent in the generated project and confirm host trust after installation.`);
+    console.log(`Pallas ${pkg.version} — local analysis installer (macOS / Windows 11 x64, Node.js 22+)\n\nCommands: install | doctor | update\n  install [--client codex|claude] [--directory PATH]\n          [--python EXECUTABLE | --managed-python]\n  doctor --directory PATH\n  update --directory PATH\n\nInstall prompts for client and a new project. Existing projects/global settings are not overwritten.\nA missing supported Python is provisioned locally; downloads require internet.\nDefault setup does not authorize media, install certificates or request API keys.\nReload your agent in the generated project and confirm host trust after installation.`);
     return;
   }
-  if (process.platform !== 'darwin' || !UV[process.arch]) throw Error('This Alpha installer supports macOS on Apple Silicon or Intel.');
+  supportedPlatform();
   if (options.command === 'doctor') { await doctor(canonicalDirectory(options.directory || process.cwd())); return; }
   const {directory: resources, manifest} = verifiedResources();
   if (options.command === 'update') {
@@ -165,8 +199,8 @@ export async function main(args = process.argv.slice(2)) {
       console.log('This project already has the runtime and Skills supplied by this installer version.'); return;
     }
     console.log('Updating the runtime; saved data and MCP configuration remain in place.');
-    await run(join(receipt.runtime, 'bin/python'), ['-m', 'pip', 'install', join(resources, manifest.wheel)]);
-    await run(join(receipt.runtime, 'bin/pallas'), ['agent', 'refresh-skills', '--directory', directory]);
+    await run(runtimeExecutable(receipt.runtime, 'python'), ['-X','utf8','-m', 'pip', 'install', join(resources, manifest.wheel)]);
+    await run(runtimeExecutable(receipt.runtime, 'pallas'), ['agent', 'refresh-skills', '--directory', directory]);
     await doctor(directory);
     writeReceipt(directory, {...receipt, installerVersion: pkg.version, runtimeVersion: manifest.runtimeVersion, wheelSha256: manifest.files[manifest.wheel]});
     console.log('Update complete. Review the Skills backup and restart your agent task.'); return;
@@ -183,7 +217,7 @@ export async function main(args = process.argv.slice(2)) {
   let python = options.managedPython ? null : findPython(options.python);
   console.log(`Installing Pallas ${manifest.runtimeVersion} for ${options.client} in ${directory}`);
   if (!python) python = await managedPython(directory);
-  await run(python, [join(resources, 'install_macos.py'), '--directory', directory, '--client', options.client]);
+  await run(python, ['-X','utf8',join(resources, 'install_macos.py'), '--directory', directory, '--client', options.client]);
   writeReceipt(directory, {project: directory, runtime: directory + '-runtime', client: options.client,
     installerVersion: pkg.version, runtimeVersion: manifest.runtimeVersion, wheelSha256: manifest.files[manifest.wheel]});
   console.log(`\nReady / 安装完成: ${directory}\nOpen this project, confirm host trust and start a new task.\nTry / 试用: 请用 Pallas 预览 samples/meta_campaign_daily.csv，确认后生成分析报告。`);

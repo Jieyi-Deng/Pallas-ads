@@ -8,7 +8,7 @@ The npm launcher prepares the Pallas runtime, local MCP configuration, and five 
 
 ## Install
 
-Requires macOS on Apple Silicon or Intel, Node.js 22+, and internet access.
+Requires macOS on Apple Silicon or Intel, or Windows 11 x64, Node.js 22+, and internet access. Windows is an Alpha preview with Windows Server CI coverage; Windows 11 desktop, host and real OAuth acceptance remain pending. Windows 10, ARM64 (including x64 emulation) and WSL/Linux installers are not supported. Use a private local drive folder, not a network share, redirected folder or junction.
 
 ```sh
 npx pallas-ads install
@@ -74,3 +74,22 @@ Back up reports and imported data first. Remove only the project and adjacent ru
 Only the historical [runtime 0.2.0a1 release](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) provides the installation ZIP and its SHA-256 checksum. It lacks later command, dashboard and browser-authorization updates. New installations should use the native plugin or the npm instructions above.
 
 For recovery of that specific old installation, follow the instructions attached to its release and verify its checksum. Current GitHub Releases provide the reviewed npm tgz and `release.json`; GitHub's automatically generated source archives are not installation bundles. npm maintenance commands require an npm-managed project; they do not manage a manually installed archive.
+
+## Windows PowerShell
+
+Use the Windows-capable version explicitly. `npx.cmd` avoids a blocked PowerShell shim without changing execution policy:
+
+```powershell
+npx.cmd --yes pallas-ads@0.2.0-alpha.8 install --client codex --directory "$env:USERPROFILE\Pallas Codex"
+npx.cmd --yes pallas-ads@0.2.0-alpha.8 doctor --directory "$env:USERPROFILE\Pallas Codex"
+```
+
+Choose `--client claude` and a separate directory for Claude Code. Existing Python 3.12/3.13 must be x64; the Python launcher or PATH is checked. `--managed-python` prepares an isolated Python 3.13; native Windows 11 bootstrap acceptance is still pending. The runtime uses `Scripts\python.exe` and `Scripts\pallas.exe`; administrator access, Developer Mode and execution-policy changes are not required by the installer.
+
+For an npm-managed project, close active tasks and back up its data before maintenance:
+
+```powershell
+npx.cmd --yes pallas-ads@0.2.0-alpha.8 update --directory "$env:USERPROFILE\Pallas Codex"
+```
+
+Browser grants use Windows Credential Manager. Do not copy macOS virtual environments or credentials. The old Meta host-hook/local-certificate route is unsupported on Windows; configured releases use the browser route. Pallas-owned Meta data reads and full reconciliation remain pending independently of successful login.

@@ -1,8 +1,9 @@
 {
-  "version": "0.2.0a6",
-  "wheel": "pallas_ads-0.2.0a6-py3-none-any.whl",
-  "sha256": "ad4e85fb98c64888aec989f259f8863bcb84bd6d7ffb894a7c1fc01d741184c1",
-  "target": "macOS + Codex / Claude Code",
+  "version": "0.2.0a8",
+  "wheel": "pallas_ads-0.2.0a8-py3-none-any.whl",
+  "sha256": "5ebcc03324bbe3ec864101183e10c0fa6d32558105be88cc6f76381f5a7022e2",
+  "target": "macOS / Windows 11 x64 + Codex / Claude Code",
+  "windows_acceptance": "pending_native_windows_11_and_host_validation",
   "default_mode": "core",
   "google_application_embedded": true,
   "oauth_applications": {
