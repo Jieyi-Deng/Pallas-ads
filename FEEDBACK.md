@@ -51,7 +51,7 @@ Send [support@pallas-ads.com](mailto:support@pallas-ads.com) a short description
 - The exact sanitized error and any retries.
 - The extra manual steps you had to take.
 
-You can also open a GitHub issue with a sanitized reproduction. Do not attach tokens, raw account exports, account identifiers, or private reports to a public issue. Version identifiers belong in diagnostics and feedback, not in the product introduction.
+You can also open a GitHub issue with a sanitized reproduction. Do not attach tokens, raw account exports, account identifiers, or private reports to a public issue.
 
 ## Prepare a feedback bundle
 
