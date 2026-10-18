@@ -1,6 +1,6 @@
 # Pallas installer reference
 
-For the native Codex / Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This is the complete guide for npm project installation, activation, updates and recovery. Use one installation method per project; do not run the npm updater on a project migrated to the native plugin.
+For the native Codex or Claude Code plugin, start with [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md). This document is the complete guide for npm project installation, activation, updates, and recovery. Use one installation method per project; do not run the npm updater on a project migrated to the native plugin.
 
 This installer includes the unified Pallas command and dashboard Skills. Check the [npm package](https://www.npmjs.com/package/pallas-ads) for registry availability and `latest`; [release.json](release.json) records the component versions in this GitHub checkout. Channels may update at different times. To pin an installer, use `pallas-ads@<version>` with a published npm version.
 
@@ -8,7 +8,7 @@ The npm launcher prepares the Pallas runtime, local MCP configuration, and five 
 
 ## Install
 
-Requires macOS on Apple Silicon or Intel, or Windows 11 x64, Node.js 22+, and internet access. Windows is an Alpha preview with Windows Server CI coverage; Windows 11 desktop, host and real OAuth acceptance remain pending. Windows 10, ARM64 (including x64 emulation) and WSL/Linux installers are not supported. Use a private local drive folder, not a network share, redirected folder or junction.
+Requires macOS on Apple Silicon or Intel, or Windows 11 x64, Node.js 22+, and internet access. Windows is an Alpha preview with Windows Server CI coverage; Windows 11 desktop, host, and real OAuth acceptance remain pending. Windows 10, ARM64 (including x64 emulation), and WSL/Linux installers are not supported. Use a private local drive folder, not a network share, redirected folder, or junction.
 
 ```sh
 npx pallas-ads install
@@ -28,7 +28,7 @@ Installation runs only when `install` is invoked; the package has no npm install
 
 ## Project files
 
-Keep the project and the adjacent `-runtime` and optional `-runtime-tools` directories in place. Imported data and reports are stored in the project's `.pallas` directory. Each installation uses a new or empty dedicated project; it does not merge arbitrary existing projects.
+Keep the project directory and the adjacent `-runtime` and optional `-runtime-tools` directories in place. Imported data and reports are stored in the project's `.pallas` directory. Each installation uses a new or empty dedicated project; it does not merge into arbitrary existing projects.
 
 ## Activate and create a first report
 
@@ -41,7 +41,7 @@ Keep the project and the adjacent `-runtime` and optional `-runtime-tools` direc
 
 See [FILE_IMPORT.md](FILE_IMPORT.md) for export preparation and [PALLAS_COMMAND.md](PALLAS_COMMAND.md) for command invocation. File-only analysis skips account authorization. For a live connection, first check the platform's supported route and limitations in [AUTHORIZATION.md](AUTHORIZATION.md). Pallas-owned Meta login does not yet enable account discovery or reports.
 
-After a successful analysis, use the [recurring-check workflow](README.md#5-set-up-recurring-checks) if your agent supports scheduling. Scheduled runs need access to this project, runtime and connection; file-based checks require a fresh export. Installation creates no schedule.
+After a successful analysis, use the [recurring-check workflow](README.md#5-set-up-recurring-checks) if your agent supports scheduling. Scheduled runs need access to this project, runtime, and connection; file-based checks require a fresh export. Installation creates no schedule.
 
 ## Diagnose
 
@@ -71,7 +71,7 @@ Back up reports and imported data first. Remove only the project and adjacent ru
 
 ## Historical ZIP installations
 
-Only the historical [runtime 0.2.0a1 release](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) provides the installation ZIP and its SHA-256 checksum. It lacks later command, dashboard and browser-authorization updates. New installations should use the native plugin or the npm instructions above.
+Only the historical [runtime 0.2.0a1 release](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/v0.2.0a1) provides the installation ZIP and its SHA-256 checksum. It lacks later command, dashboard, and browser-authorization updates. New installations should use the native plugin or the npm instructions above.
 
 For recovery of that specific old installation, follow the instructions attached to its release and verify its checksum. Current GitHub Releases provide the reviewed npm tgz and `release.json`; GitHub's automatically generated source archives are not installation bundles. npm maintenance commands require an npm-managed project; they do not manage a manually installed archive.
 
@@ -84,7 +84,7 @@ npx.cmd --yes pallas-ads@0.2.0-alpha.8 install --client codex --directory "$env:
 npx.cmd --yes pallas-ads@0.2.0-alpha.8 doctor --directory "$env:USERPROFILE\Pallas Codex"
 ```
 
-Choose `--client claude` and a separate directory for Claude Code. Existing Python 3.12/3.13 must be x64; the Python launcher or PATH is checked. `--managed-python` prepares an isolated Python 3.13; native Windows 11 bootstrap acceptance is still pending. The runtime uses `Scripts\python.exe` and `Scripts\pallas.exe`; administrator access, Developer Mode and execution-policy changes are not required by the installer.
+Choose `--client claude` and a separate directory for Claude Code. Existing Python 3.12/3.13 must be x64; the Python launcher or PATH is checked. `--managed-python` prepares an isolated Python 3.13; native Windows 11 bootstrap acceptance is still pending. The runtime uses `Scripts\python.exe` and `Scripts\pallas.exe`; administrator access, Developer Mode, and execution-policy changes are not required by the installer.
 
 For an npm-managed project, close active tasks and back up its data before maintenance:
 

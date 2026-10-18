@@ -17,13 +17,13 @@ Visit **[pallas-ads.com](https://pallas-ads.com/)** to explore the product and i
 - **Understand performance.** Review spend, impressions, clicks, and efficiency metrics with clear account and date context.
 - **Explain changes.** Explore campaign mix and the arithmetic drivers of metric changes, with business explanations identified as hypotheses when evidence is missing.
 - **Get a report you can revisit.** Each report brings together an account and period summary, a breakdown of changes, and findings with recommended next steps.
-- **Keep the conversation in your agent.** The `pallas` entrypoint routes analysis and persistent dashboards to the matching Skills and verified report templates.
+- **Keep the conversation in your agent.** The `pallas` entrypoint routes analysis and persistent dashboard requests to the matching Skills and verified report templates.
 
-Reports follow the language of your request: Chinese requests produce Chinese reports; other languages currently produce English reports. This applies to analysis, dashboards and competitor research. An explicit report-language request takes precedence within the same Chinese/English mapping. Background dashboard refreshes retain the saved language.
+Reports follow the language of your request: Chinese requests produce Chinese reports; other languages currently produce English reports. This applies to analysis, dashboards, and competitor research. An explicit report-language request takes precedence within the same Chinese/English mapping. Background dashboard refreshes retain the saved language.
 
 ## 1. Install
 
-You need **macOS or Windows 11 x64, Node.js 22 or later, and Codex or Claude Code** with plugin support. Windows is an Alpha preview: Windows Server CI passed, while Windows 11 desktop, actual host sessions and real OAuth acceptance remain pending. Windows 10, ARM64 and WSL/Linux installation are outside this release.
+You need **macOS or Windows 11 x64, Node.js 22 or later, and Codex or Claude Code** with plugin support. Windows is an Alpha preview: Windows Server CI passed, while Windows 11 desktop, actual host sessions, and real OAuth acceptance remain pending. Windows 10, ARM64, and WSL/Linux installation are outside this release.
 
 Ask your agent:
 
@@ -61,7 +61,7 @@ Ask your agent to connect the platform you want to analyze:
 
 > Help me connect the advertising platform I want to analyze. First explain whether the available connection route supports data reads, then guide me through browser authorization. If account reads are supported, list accessible accounts and let me choose before reading performance data.
 
-Google Ads and TikTok Ads can discover accounts and read supported data after authorization, subject to platform permissions; Google production-data validation remains pending. **Pallas-owned Meta connections currently support login only, with account discovery and report reads still pending.** Existing host-managed Meta connections are a separate compatibility route with limited evidence reporting and outstanding reconciliation. Meta exports can also be analyzed as files.
+Google Ads and TikTok Ads can discover accounts and read supported data after authorization, subject to platform permissions. Google production-data validation remains pending. **Pallas-owned Meta connections currently support login only, with account discovery and report reads still pending.** Existing host-managed Meta connections are a separate compatibility route with limited evidence reporting and outstanding reconciliation. Meta exports can also be analyzed as files.
 
 For a connection that supports reads, complete the platform's sign-in and consent screens, then return to your agent and select the account. If connection setup or account access is needed, follow the [media authorization guide](AUTHORIZATION.md) or contact [support@pallas-ads.com](mailto:support@pallas-ads.com).
 
@@ -103,11 +103,11 @@ The agent manages the schedule; Pallas performs the analysis. Confirm that sched
 
 ## Keep Pallas up to date
 
-This Windows Alpha distribution includes native plugin **0.2.6** and runtime **0.2.0a8**; its npm installer is **0.2.0-alpha.8**. It retains macOS compatibility and report-language support, adds Windows installation/runtime boundaries and fixes dashboard header layout. Check the [release record](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261012-01) and [npm version](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.8) for channel availability; GitHub and npm publish separately. Windows 11 real-machine acceptance remains pending.
-
 Update through your agent's plugin manager, then rerun the setup Skill for each Pallas project and start a new task. See [plugin updates and recovery](PLUGIN_INSTALL.md#update).
 
-For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). See [release.json](release.json) for this checkout’s component versions and the [npm package](https://www.npmjs.com/package/pallas-ads) for registry availability. Channels may update at different times. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+For projects still using the npm installation, use the [npm update command](NPM_INSTALLER.md). See [release.json](release.json) for this checkout's component versions and the [npm package](https://www.npmjs.com/package/pallas-ads) for registry availability. Channels may update at different times. See [Releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for change history.
+
+This Windows Alpha distribution includes native plugin **0.2.6** and runtime **0.2.0a8**; its npm installer is **0.2.0-alpha.8**. It retains macOS compatibility and report-language support, adds Windows installation/runtime boundaries, and fixes dashboard header layout. Check the [release record](https://github.com/Jieyi-Deng/Pallas-ads/releases/tag/release-20261012-01) and [npm version](https://www.npmjs.com/package/pallas-ads/v/0.2.0-alpha.8) for channel availability; GitHub and npm publish separately. Windows 11 real-machine acceptance remains pending.
 
 ## Your data
 

@@ -19,13 +19,9 @@ source project. Do not independently patch a shipped Skill or wheel here.
 5. Publish the same tgz to npm. Verify an anonymous registry download, integrity and
    the `latest` tag, then update the release notes with the actual channel status.
 
-`release.json` describes the product artifacts in this checkout. Publisher tooling
-is tracked separately in the upstream frozen candidate and verified against public
-main before publication; tooling-only edits do not change product metadata. It is not proof of npm
-publication. Consult the [npm package](https://www.npmjs.com/package/pallas-ads)
-and [GitHub releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for channel
-availability. Ordinary documentation and publisher-tool changes do not by themselves
-require a new product package or release tag.
+`release.json` describes the product artifacts in this checkout, but it is not proof of npm publication. Consult the [npm package](https://www.npmjs.com/package/pallas-ads) and [GitHub releases](https://github.com/Jieyi-Deng/Pallas-ads/releases) for channel availability.
+
+Publisher tooling is tracked separately in the upstream frozen candidate and verified against public main before publication; tooling-only edits do not change product metadata. Ordinary documentation and publisher-tool changes do not by themselves require a new product package or release tag.
 
 Never reuse a package version for different bytes or move an existing release tag.
 A GitHub release may precede npm availability; say so until registry verification
@@ -54,7 +50,7 @@ local candidate verification and matching artifacts merged into public `main`.
 
 Local checks come first. Product PRs run one Linux distribution job. Publisher-only
 PRs run the small offline publisher suite. Root/docs Markdown changes run neither.
-Shared Skill Markdown remains behavior and requires distribution checks. Hosted
+Shared Skill Markdown counts as product behavior and requires distribution checks. Hosted
 macOS verification is an explicit manual option when local verification is insufficient.
 
 The manual `npm-publish.yml` workflow is initially disabled by its repository-variable
