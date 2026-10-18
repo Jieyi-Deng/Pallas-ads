@@ -2,8 +2,8 @@
 
 Choose one installation method for each project:
 
-- **Native Codex / Claude Code plugin:** follow [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md).
-- **npm project installation:** follow [NPM_INSTALLER.md](NPM_INSTALLER.md), which covers installation, activation, first use, diagnostics, updates and removal.
+- **Native Codex / Claude Code plugin:** Follow [PLUGIN_INSTALL.md](PLUGIN_INSTALL.md).
+- **npm project installation:** Follow [NPM_INSTALLER.md](NPM_INSTALLER.md), which covers installation, activation, first use, diagnostics, updates, and removal.
 
 Existing npm projects can migrate using the [plugin migration guide](PLUGIN_INSTALL.md#existing-npm-projects). Do not run the npm updater on a migrated plugin project.
 

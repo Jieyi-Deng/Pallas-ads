@@ -13,11 +13,15 @@ Skills or rebuild the npm tgz from the root README.
 ## Change workflow
 
 1. Start from the latest `main` and create a branch before editing. Use the `codex/` prefix for agent-created branches.
-2. Make and review changes on that branch. Keep the English and Chinese README aligned; other documentation is maintained in English.
+2. Make and review changes on that branch. Keep the English and Chinese READMEs aligned; other documentation is maintained in English. All commit messages must be in English and signed off.
 3. Run checks appropriate to the change and open a pull request against `main`.
 4. Merge the reviewed branch after required checks pass. Do not commit product or documentation updates directly to `main`.
 
-Keep current component versions in `release.json` and the index in `RELEASE_NOTES.md`; preserve historical validation details in GitHub Release records. Keep old documentation URLs as short forwarding pages when consolidating guides. `NPM_INSTALLER.md` owns npm onboarding and maintenance; `FEEDBACK.md` owns setup verification and feedback. Keep release identifiers and historical validation details out of introductory copy. Product onboarding follows installation, activation, media authorization, analysis (connected accounts or uploaded files), and recurring checks through the user's agent. File-only analysis does not require media authorization.
+Keep current component versions in `release.json` and the index in `RELEASE_NOTES.md`; preserve historical validation details in GitHub Release records. Keep release identifiers and historical validation details out of introductory copy.
+
+Keep old documentation URLs as short forwarding pages when consolidating guides. `NPM_INSTALLER.md` owns npm onboarding and maintenance; `FEEDBACK.md` owns setup verification and feedback.
+
+Product onboarding follows installation, activation, media authorization, analysis (connected accounts or uploaded files), and recurring checks through the user's agent. File-only analysis does not require media authorization.
 
 ## Local checks and Actions
 
@@ -25,4 +29,4 @@ Run `node --test test/*.test.mjs` and `python test/wheel-check.py` locally. For 
 
 Product PRs run one Linux distribution job, including a clean wheel install and command acceptance. Root documentation-only changes skip Actions; Skills and templates still run checks. Automatic runs are PR-only, and concurrency is scoped to this workflow and PR/ref. Use the explicit `include_macos` manual input only when an additional hosted macOS release check is needed.
 
-Publisher-only changes use `python -m unittest discover -s test -p test_npm_publish.py -v` locally and a small Linux publisher job. The publication workflow is manual and gated off until separately configured by the owner. All commit messages must be English and signed off.
+Publisher-only changes use `python -m unittest discover -s test -p test_npm_publish.py -v` locally and a small Linux publisher job. The publication workflow is manual and gated off until separately configured by the owner.
